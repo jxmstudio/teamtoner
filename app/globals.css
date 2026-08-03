@@ -1,0 +1,156 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Team Toner design tokens.
+  Brand palette follows the Arizto Brand Guidelines 2021.
+  To re-skin the whole site, change the hex values in :root below — nothing else.
+*/
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-inter);
+  --font-script: var(--font-caveat);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Brand colours (usable as bg-night, text-teal, border-petrol, etc.) */
+  --color-night: var(--night);
+  --color-petrol: var(--petrol);
+  --color-teal: var(--teal);
+  --color-teal-foreground: var(--teal-foreground);
+  --color-gold: var(--gold);
+
+  /* shadcn semantic tokens */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Arizto brand palette */
+  --night: #033239;
+  --petrol: #0f5a5f;
+  --teal: #20c888;
+  --teal-foreground: #033239;
+  --gold: #c9a227;
+
+  /* Semantic mapping */
+  --background: #ffffff;
+  --foreground: #033239; /* Night */
+  --card: #ffffff;
+  --card-foreground: #033239;
+  --popover: #ffffff;
+  --popover-foreground: #033239;
+  --primary: #0f5a5f; /* Petrol */
+  --primary-foreground: #ffffff;
+  --secondary: #eaf7f1; /* teal tint */
+  --secondary-foreground: #0f5a5f;
+  --muted: #f1f6f6;
+  --muted-foreground: #4d6a6d;
+  --accent: #e6f6ee;
+  --accent-foreground: #0f5a5f;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #dce7e6;
+  --input: #dce7e6;
+  --ring: #0f5a5f;
+  --chart-1: #20c888;
+  --chart-2: #0f5a5f;
+  --chart-3: #033239;
+  --chart-4: #c9a227;
+  --chart-5: #6bbfb0;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #033239;
+  --sidebar-primary: #0f5a5f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaf7f1;
+  --sidebar-accent-foreground: #0f5a5f;
+  --sidebar-border: #dce7e6;
+  --sidebar-ring: #0f5a5f;
+}
+
+.dark {
+  --background: #021f24;
+  --foreground: #f2f7f6;
+  --card: #04292f;
+  --card-foreground: #f2f7f6;
+  --popover: #04292f;
+  --popover-foreground: #f2f7f6;
+  --primary: #20c888;
+  --primary-foreground: #033239;
+  --secondary: #0c3a3f;
+  --secondary-foreground: #f2f7f6;
+  --muted: #0c3a3f;
+  --muted-foreground: #9cb8b7;
+  --accent: #0c3a3f;
+  --accent-foreground: #f2f7f6;
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: #ffffff1a;
+  --input: #ffffff26;
+  --ring: #20c888;
+  --chart-1: #20c888;
+  --chart-2: #6bbfb0;
+  --chart-3: #c9a227;
+  --chart-4: #0f5a5f;
+  --chart-5: #f2f7f6;
+  --sidebar: #04292f;
+  --sidebar-foreground: #f2f7f6;
+  --sidebar-primary: #20c888;
+  --sidebar-primary-foreground: #033239;
+  --sidebar-accent: #0c3a3f;
+  --sidebar-accent-foreground: #f2f7f6;
+  --sidebar-border: #ffffff1a;
+  --sidebar-ring: #20c888;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
