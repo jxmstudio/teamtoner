@@ -48,6 +48,19 @@ Copy `.env.example` → `.env.local` for local dev, and set the same in Vercel.
 | `RESEND_API_KEY` | Enables lead-form emails via [resend.com](https://resend.com). If unset, leads are logged to the server console only. |
 | `LEAD_FROM_EMAIL` | Verified sender, e.g. `Team Toner <hello@teamtoner.co.nz>`. Leads are sent to `thetoners@arizto.co.nz`. |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata (defaults to production). |
+| `SITE_PASSWORD` | Pre-launch gate password. Defaults to `toner123`. |
+| `SITE_PASSWORD_ENABLED` | Set to `false` at launch to make the site public. |
+
+## Pre-launch password gate
+
+The site now runs on the client's own domain, so every route is behind a
+password until launch. Visitors are redirected to `/password`; entering the
+password sets a 30-day cookie and returns them to the page they asked for.
+
+- Password: `toner123` (override with `SITE_PASSWORD`).
+- Logic lives in `proxy.ts` (Next 16's renamed middleware) and `app/password/`.
+- **To go live:** set `SITE_PASSWORD_ENABLED=false` in Vercel and redeploy.
+- Changing `SITE_PASSWORD` invalidates everyone's existing cookie.
 
 ## Deploy to Vercel
 

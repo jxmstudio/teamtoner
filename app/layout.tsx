@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { HideOnGate } from "@/components/hide-on-gate";
 import { siteConfig } from "@/lib/site";
 
 const inter = Inter({
@@ -61,9 +62,13 @@ export default function RootLayout({
       className={`${inter.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <SiteHeader />
+        <HideOnGate>
+          <SiteHeader />
+        </HideOnGate>
         <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <HideOnGate>
+          <SiteFooter />
+        </HideOnGate>
         <Toaster richColors position="top-center" />
       </body>
     </html>
