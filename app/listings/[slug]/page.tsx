@@ -8,14 +8,17 @@ import { ListingGallery } from "@/components/brand/listing-gallery";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { BreadcrumbJsonLd, ListingJsonLd } from "@/components/seo/json-ld";
 import {
+  getAllListingSlugs,
   getListingBySlug,
-  getListingSlugs,
   getSuburbName,
 } from "@/lib/data";
 
+// Sold listings are prerendered too — they stay indexable and are linked from
+// /sold and the suburb pages.
 export function generateStaticParams() {
-  return getListingSlugs().map((slug) => ({ slug }));
+  return getAllListingSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(
@@ -24,9 +27,25 @@ export async function generateMetadata(
   const { slug } = await props.params;
   const listing = getListingBySlug(slug);
   if (!listing) return { title: "Listing not found" };
+
+  const suburbName = getSuburbName(listing.suburb);
+  const sold = listing.status === "sold";
+  const label = sold ? "Sold by Team Toner" : "For Sale";
+
   return {
-    title: `${listing.address} — ${getSuburbName(listing.suburb)}`,
-    description: listing.description[0] ?? listing.title,
+    title: {
+      absolute: `${listing.address}, ${suburbName} — ${label} | Team Toner`,
+    },
+    description:
+      listing.description[0] ??
+      `${listing.beds}-bedroom home at ${listing.address}, ${suburbName}. ${label} with Team Toner.`,
+    alternates: { canonical: `/listings/${listing.slug}` },
+    openGraph: {
+      type: "website",
+      title: `${listing.address}, ${suburbName}`,
+      description: listing.description[0] ?? listing.title,
+      images: listing.images.length ? listing.images : undefined,
+    },
   };
 }
 
@@ -40,10 +59,22 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
 
   return (
     <>
+      <ListingJsonLd listing={listing} suburbName={suburbName} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: sold ? "Recently sold" : "Listings", path: sold ? "/sold" : "/listings" },
+          { name: listing.address, path: `/listings/${listing.slug}` },
+        ]}
+      />
+
       <PageHeader
         eyebrow={
           <span className="flex items-center gap-1.5">
-            <MapPin className="size-3.5" /> {suburbName}
+            <MapPin className="size-3.5" />{" "}
+            <Link href={`/suburbs/${listing.suburb}`} className="hover:underline">
+              {suburbName}
+            </Link>
           </span>
         }
         title={listing.address}
@@ -77,7 +108,12 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
 
           <div className="mt-6 grid gap-10 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <ListingGallery images={listing.images} alt={listing.address} />
+              {/* TODO(client): stand-in photography — replace `images` in
+                  lib/content/listings.ts with the real listing shots. */}
+              <ListingGallery
+                images={listing.images}
+                alt={`${listing.address}, ${suburbName} — ${listing.beds} bedroom home ${sold ? "sold" : "for sale"} with Team Toner`}
+              />
 
               <div className="mt-6 flex flex-wrap gap-6 border-y border-border py-5 text-foreground">
                 <Spec icon={<Bed className="size-5" />} value={listing.beds} label="Beds" />

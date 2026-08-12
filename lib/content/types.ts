@@ -36,6 +36,18 @@ export interface Guide {
   /** Path to the PDF under /public/guides. Empty string = coming soon. */
   pdf: string;
   cover?: string;
+  /**
+   * On-page, Google-indexable version of the guide at /resources/<slug>.
+   * Guides without `body` remain download-only. Adding sections here is all
+   * that's needed to publish a guide as a content page.
+   */
+  body?: GuideSection[];
+}
+
+export interface GuideSection {
+  heading: string;
+  paragraphs: string[];
+  bullets?: string[];
 }
 
 export interface Suburb {
@@ -43,4 +55,16 @@ export interface Suburb {
   name: string;
   blurb: string;
   hero?: string;
+  /**
+   * Slug of the wider area this suburb sits inside (e.g. "palmerston-north").
+   * Top-level areas leave this undefined. Suburbs with a parent are listed
+   * under it on /suburbs and inherit its listings when they have none of
+   * their own.
+   */
+  parent?: string;
+  /**
+   * Local market commentary paragraphs. Agency: extend per suburb over time —
+   * this is what makes each suburb page worth indexing.
+   */
+  commentary?: string[];
 }

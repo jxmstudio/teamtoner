@@ -17,13 +17,17 @@ export function HomeHero() {
             {stats.nationalRank} of {stats.agentPool} Arizto agents nationwide
           </p>
           <h1 className="mt-6 text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            Nobody sells more property than{" "}
-            <span className="font-script font-normal text-teal">Team Toner</span>
+            A smarter way to{" "}
+            <span className="font-script font-normal text-teal">sell your home</span>.
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-lg text-white/80">
-            Allan &amp; Karen Toner deliver premium marketing and{" "}
-            {stats.commission} commission across Palmerston North, Feilding,
-            Ashhurst &amp; the wider Manawatū. No sale, no fee.
+            Premium marketing. Proven results. Two experienced agents working for
+            you — with a fairer {stats.commission} commission and no upfront
+            costs.
+          </p>
+          <p className="mt-3 max-w-xl text-pretty text-white/60">
+            Allan &amp; Karen Toner proudly serving Palmerston North, Feilding,
+            Ashhurst and the wider Manawatū.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink
@@ -42,22 +46,28 @@ export function HomeHero() {
           </div>
 
           <dl className="mt-10 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-6">
-            <Stat value={stats.nationalRank} label="Nationwide ranking" />
+            <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
             <Stat value={stats.regionRank} label={stats.regionName} />
             <Stat value={stats.homesSold} label="Homes sold" />
           </dl>
         </div>
 
         <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-          <div className="absolute inset-x-6 bottom-0 top-10 rounded-3xl bg-gradient-to-b from-petrol/40 to-teal/30" />
-          <Image
-            src="/brand/team-toner-profile.png"
-            alt="Allan and Karen Toner"
-            width={1000}
-            height={1000}
-            priority
-            className="relative z-10 mx-auto w-full max-w-md object-contain drop-shadow-2xl"
+          <div
+            aria-hidden
+            className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-teal/25 to-petrol/30 blur-xl"
           />
+          <div className="relative overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/10">
+            <Image
+              src="/team/allan-karen.jpg"
+              alt="Allan and Karen Toner — Team Toner, Arizto real estate agents in Palmerston North"
+              width={1200}
+              height={1200}
+              priority
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="aspect-[4/5] w-full object-cover object-top"
+            />
+          </div>
         </div>
       </Container>
     </section>

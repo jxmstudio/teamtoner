@@ -3,24 +3,30 @@ import { PageHeader } from "@/components/brand/page-header";
 import { ListingCard } from "@/components/brand/listing-card";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
-import { siteConfig } from "@/lib/site";
+import { seoTitles, siteConfig } from "@/lib/site";
 import { getSoldListings } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Recently Sold",
+  title: { absolute: seoTitles.sold },
   description:
-    "Recent sales by Team Toner across Palmerston North, Feilding, Ashhurst and the Manawatū. Results that speak for themselves.",
+    "Properties recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū — proven results from the region's #1 Arizto team.",
+  alternates: { canonical: "/sold" },
 };
 
 export default function SoldPage() {
   const sold = getSoldListings();
+  const { stats } = siteConfig;
   return (
     <>
       <PageHeader
         eyebrow="Proven results"
-        title="Recently sold"
-        description={`Nobody sells more property than Team Toner. Ranked ${siteConfig.stats.nationalRank} of ${siteConfig.stats.agentPool} Arizto agents nationwide.`}
+        title="Recently sold by Team Toner"
+        description="See some of the properties we've successfully sold across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
       />
+
+      {/* TODO(client): these are sample sales with stand-in photography.
+          Real sold data and photography drop in via lib/content/listings.ts
+          (or the live sold-data feed) with no layout change. */}
       <Section>
         <Container>
           {sold.length > 0 ? (
@@ -36,10 +42,28 @@ export default function SoldPage() {
           )}
         </Container>
       </Section>
-      <CtaSection
-        title="Curious what your home is worth?"
-        description="Get a free, no-obligation appraisal from the region's top team."
-      />
+
+      <Section className="bg-secondary/50 py-12 sm:py-14 lg:py-16">
+        <Container>
+          <dl className="grid gap-8 text-center sm:grid-cols-3">
+            <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
+            <Stat value={stats.regionRank} label={`in ${stats.regionName}`} />
+            <Stat value={stats.homesSold} label="homes sold" />
+          </dl>
+        </Container>
+      </Section>
+
+      <CtaSection />
     </>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div>
+      <dt className="sr-only">{label}</dt>
+      <dd className="text-4xl font-bold text-primary sm:text-5xl">{value}</dd>
+      <p className="mt-2 text-muted-foreground">{label}</p>
+    </div>
   );
 }

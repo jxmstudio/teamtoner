@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
@@ -9,8 +10,15 @@ import { TestimonialCard } from "@/components/brand/testimonial-card";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { RealEstateAgentJsonLd } from "@/components/seo/json-ld";
-import { siteConfig } from "@/lib/site";
-import { getFeaturedListings, getFeaturedTestimonials } from "@/lib/data";
+import { seoTitles, siteConfig } from "@/lib/site";
+import { getAreas, getFeaturedListings, getFeaturedTestimonials } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: { absolute: seoTitles.home },
+  description:
+    "Allan & Karen Toner — Palmerston North real estate agents ranked #7 of 350+ Arizto agents nationwide and #1 in the Manawatū. Two agents working for you, premium marketing, 2% + GST commission and no upfront costs.",
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const featured = getFeaturedListings(3);
@@ -27,9 +35,10 @@ export default function HomePage() {
           <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
             <Image
               src="/brand/top-10-nationwide.jpg"
-              alt="Team Toner — Top 10 nationwide Arizto agents"
+              alt="Team Toner recognised in the top 10 Arizto agents nationwide"
               width={1536}
               height={1024}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="h-full w-full object-cover"
             />
           </div>
@@ -38,7 +47,7 @@ export default function HomePage() {
               align="left"
               eyebrow="Proven results"
               title="Proud to be recognised"
-              description={`Ranked ${siteConfig.stats.nationalRank} of ${siteConfig.stats.agentPool} Arizto agents across New Zealand, and ${siteConfig.stats.regionRank} in ${siteConfig.stats.regionName}. When you list with Team Toner, you list with the best in the region.`}
+              description={`Ranked ${siteConfig.stats.nationalRank} of ${siteConfig.stats.agentPool} Arizto agents across New Zealand, and ${siteConfig.stats.regionRank} in ${siteConfig.stats.regionName}. When you list with Team Toner, you get two experienced agents personally working on your sale.`}
             />
             <Link
               href="/about"
@@ -101,13 +110,13 @@ export default function HomePage() {
           <SectionHeading
             eyebrow="Local experts"
             title="Suburbs we know inside out"
-            description="Deep local knowledge across the Manawatū."
+            description="Deep local knowledge across Palmerston North and the wider Manawatū."
           />
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {siteConfig.suburbs.map((s) => (
+            {getAreas().map((s) => (
               <Link
                 key={s.slug}
-                href="/suburbs"
+                href={`/suburbs/${s.slug}`}
                 className="group rounded-xl border border-border bg-card p-6 text-center transition-colors hover:border-teal hover:bg-secondary/50"
               >
                 <span className="text-lg font-semibold text-foreground group-hover:text-primary">

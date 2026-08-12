@@ -1,75 +1,120 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/brand/page-header";
 import { ValueProps } from "@/components/brand/value-props";
+import { FeePillars } from "@/components/brand/fee-pillars";
 import { MarketingGallery } from "@/components/brand/marketing-gallery";
+import { ProvenResults } from "@/components/brand/proven-results";
 import { CtaSection } from "@/components/brand/cta-section";
+import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
+import { FaqJsonLd } from "@/components/seo/json-ld";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { siteConfig } from "@/lib/site";
+import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Sell with Team Toner",
+  title: { absolute: seoTitles.sell },
   description:
-    "Why pay more when you can get the same result for less? Sell with Team Toner — 2% +GST commission, premium marketing, no sale no fee.",
+    "Sell your home with Allan & Karen Toner — two experienced agents working together, premium marketing and proven Palmerston North results, for a 2% + GST commission with no upfront costs.",
+  alternates: { canonical: "/sell" },
 };
 
 const steps = [
   {
-    title: "Free appraisal",
-    detail: "We visit your home and give you an honest, evidence-based market appraisal.",
+    title: "Free, evidence-based appraisal",
+    detail:
+      "We visit your property, discuss your plans and provide an honest assessment based on current market evidence and recent comparable sales.",
   },
   {
-    title: "Tailored plan",
-    detail: "We agree the right method of sale and a premium marketing plan for your property.",
+    title: "Your selling strategy",
+    detail:
+      "Together we'll choose the right method of sale, pricing strategy and marketing plan for your property.",
   },
   {
-    title: "Premium marketing",
-    detail: "Professional photography, online, print and social — your home seen by the right buyers.",
+    title: "Launch & market",
+    detail:
+      "Professional marketing showcases your property while we manage enquiries, viewings, open homes and buyer follow-up.",
   },
   {
     title: "Negotiate & sell",
-    detail: "We manage enquiries, viewings and negotiation to secure you the best possible price.",
+    detail:
+      "When the offers arrive, we negotiate on your behalf to achieve the strongest possible result — then stay involved right through to settlement.",
   },
 ];
 
 const faqs = [
   {
     q: "How much is your commission?",
-    a: `${siteConfig.stats.commission} — a smarter fee than the traditional model, with no upfront costs and no sale, no fee.`,
+    a: `Our commission is ${siteConfig.stats.commission} of the sale price. There are no upfront costs and no sale, no fee — you only pay when your property sells.`,
   },
   {
-    q: "What does 'no sale, no fee' mean?",
-    a: "You don't pay our commission unless your property sells. There's no risk in listing with us.",
+    q: "Are there any upfront costs?",
+    a: "No. You don't pay anything to list with us. Your premium marketing package is included, so there's nothing to fund before your property goes to market.",
   },
   {
-    q: "Do I still get full marketing?",
-    a: "Absolutely. You get the complete premium marketing package buyers expect — photography, online portals, print and social media.",
+    q: "What does No Sale — No Fee mean?",
+    a: "If your property doesn't sell, you don't pay us a commission. The risk sits with us, not with you — which is exactly why we're honest with you about value from the very first appraisal.",
+  },
+  {
+    q: "What marketing is included?",
+    a: "Professional property photography, free aerial photography, premium placement across the major online property portals, signage, and Team Toner social and video marketing — plus your own seller dashboard to track it all in real time.",
+  },
+  {
+    q: "Which method of sale should I choose?",
+    a: "It depends on your property, your timeframe and the current level of buyer demand. We'll talk you through auction, deadline sale, price by negotiation and asking price, and recommend the approach the evidence supports for your home.",
+  },
+  {
+    q: "How should I prepare my home for sale?",
+    a: "Presentation matters more than most sellers expect, and the highest-impact work is usually the least expensive — decluttering, a deep clean, tidy grounds and small repairs. We'll walk through your property with you and prioritise what's genuinely worth doing.",
+  },
+  {
+    q: "What happens if my property doesn't sell?",
+    a: "We review what the market told us — enquiry numbers, viewings, feedback and buyer objections — and adjust the strategy with you. Because of No Sale, No Fee, we're just as motivated as you are to get it right.",
+  },
+  {
+    q: "What happens once an offer is accepted?",
+    a: "We stay involved right through to settlement: managing conditions, chasing builders' reports and finance dates, keeping your solicitor informed and making sure nothing stalls.",
   },
   {
     q: "What areas do you cover?",
-    a: `We service ${siteConfig.contact.region}.`,
+    a: `We sell throughout ${siteConfig.contact.region}, including the Palmerston North suburbs of Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson and Summerhill.`,
   },
 ];
 
 export default function SellPage() {
   return (
     <>
+      <FaqJsonLd faqs={faqs} />
+
       <PageHeader
         eyebrow="Sell smarter"
-        title="Sell with Team Toner and save"
-        description="Why pay more when you can get the same result for less? Choose the smarter real estate option."
-      />
+        title="Sell your home with confidence"
+        description="Proven results. Premium marketing. Two agents working for you — for a smarter fee."
+      >
+        <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+          With Team Toner, you don&rsquo;t have to choose between great service
+          and a fair commission. Allan &amp; Karen personally work together
+          throughout your sale, backed by premium marketing, proven local
+          results and Arizto&rsquo;s nationwide reach.
+        </p>
+        <FeePillars className="mt-7" />
+        <ButtonLink
+          href="/appraisal"
+          className="mt-7 h-12 bg-teal px-7 text-base text-teal-foreground hover:bg-teal/90"
+        >
+          Book a free appraisal
+        </ButtonLink>
+      </PageHeader>
 
-      <ValueProps />
+      <ValueProps points={siteConfig.sellingPointsSell} />
 
       <Section className="bg-secondary/50">
         <Container>
-          <SectionHeading eyebrow="How it works" title="A simple, proven process" />
+          <SectionHeading eyebrow="How it works" title="The selling process" />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, i) => (
               <div key={step.title} className="rounded-2xl border border-border bg-card p-6">
@@ -83,6 +128,8 @@ export default function SellPage() {
       </Section>
 
       <MarketingGallery />
+
+      <ProvenResults className="bg-secondary/50" />
 
       <Section>
         <Container className="max-w-3xl">

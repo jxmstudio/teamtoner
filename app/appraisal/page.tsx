@@ -4,19 +4,21 @@ import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Card, CardContent } from "@/components/ui/card";
-import { siteConfig } from "@/lib/site";
+import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Book a Free Appraisal",
+  title: { absolute: seoTitles.appraisal },
   description:
-    "Request a free, no-obligation market appraisal from Team Toner and find out what your Manawatū property is worth.",
+    "Curious what your property could sell for? Request a free, evidence-based appraisal from Allan & Karen Toner — Palmerston North & Manawatū's #1 Arizto team.",
+  alternates: { canonical: "/appraisal" },
 };
 
 const reasons = [
-  "A free, no-obligation market appraisal",
+  "A free, evidence-based market appraisal",
+  "Two experienced agents at the appraisal, not one",
   "Honest advice on your best method of sale",
   "A premium marketing plan tailored to your property",
-  "2% +GST commission — no sale, no fee",
+  `${siteConfig.stats.commission} commission — no upfront costs, No Sale — No Fee`,
 ];
 
 export default function AppraisalPage() {
@@ -24,14 +26,14 @@ export default function AppraisalPage() {
     <>
       <PageHeader
         eyebrow="No obligation"
-        title="Book a free appraisal"
-        description="Thinking of selling? Find out what your home is worth. Fill in the form and Allan or Karen will be in touch."
+        title="Curious what your property could sell for?"
+        description="Get an honest, evidence-based appraisal from Palmerston North & Manawatū's #1 Arizto team. Fill in the form and Allan or Karen will be in touch. No pressure. No obligation. Just straightforward advice."
       />
       <Section>
         <Container className="grid gap-12 lg:grid-cols-2">
           <div>
             <h2 className="text-2xl font-bold text-foreground">
-              What you'll get
+              What you&rsquo;ll get
             </h2>
             <ul className="mt-6 space-y-4">
               {reasons.map((r) => (

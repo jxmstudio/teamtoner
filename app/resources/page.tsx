@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { Download, FileText } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, Download, FileText } from "lucide-react";
 import { PageHeader } from "@/components/brand/page-header";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { seoTitles } from "@/lib/site";
 import { getGuides } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Seller Resources & Guides",
+  title: { absolute: seoTitles.resources },
   description:
-    "Free downloadable guides from Team Toner to help you prepare, price and sell your home with confidence.",
+    "Straightforward, practical advice from Team Toner to help you prepare, sell and move with confidence — free property selling guides for Palmerston North and Manawatū homeowners.",
+  alternates: { canonical: "/resources" },
 };
 
 export default function ResourcesPage() {
@@ -19,14 +22,15 @@ export default function ResourcesPage() {
     <>
       <PageHeader
         eyebrow="Free downloads"
-        title="Guides & resources"
-        description="Practical, no-nonsense guides to help you sell your home for the best possible price."
+        title="Free property selling guides"
+        description="Straightforward, practical advice from Team Toner to help you prepare, sell and move with confidence."
       />
       <Section>
         <Container>
           <div className="grid gap-6 md:grid-cols-2">
             {guides.map((guide) => {
               const available = Boolean(guide.pdf);
+              const hasPage = Boolean(guide.body?.length);
               const Wrapper = available ? "a" : "div";
               return (
                 <Card key={guide.slug} className="h-full">
@@ -39,7 +43,7 @@ export default function ResourcesPage() {
                         <h2 className="text-lg font-semibold text-foreground">
                           {guide.title}
                         </h2>
-                        {!available && (
+                        {!available && !hasPage && (
                           <Badge variant="secondary" className="text-xs">
                             Coming soon
                           </Badge>
@@ -48,19 +52,31 @@ export default function ResourcesPage() {
                       <p className="mt-1.5 text-sm text-muted-foreground">
                         {guide.description}
                       </p>
-                      <Wrapper
-                        {...(available
-                          ? { href: guide.pdf, target: "_blank", rel: "noopener" }
-                          : {})}
-                        className={
-                          available
-                            ? "mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-                            : "mt-4 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground"
-                        }
-                      >
-                        <Download className="size-4" />
-                        {available ? "Download PDF" : "Available soon"}
-                      </Wrapper>
+                      <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+                        {hasPage && (
+                          <Link
+                            href={`/resources/${guide.slug}`}
+                            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                          >
+                            <BookOpen className="size-4" /> Read the guide
+                          </Link>
+                        )}
+                        {(available || !hasPage) && (
+                          <Wrapper
+                            {...(available
+                              ? { href: guide.pdf, target: "_blank", rel: "noopener" }
+                              : {})}
+                            className={
+                              available
+                                ? "inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                                : "inline-flex items-center gap-2 text-sm font-medium text-muted-foreground"
+                            }
+                          >
+                            <Download className="size-4" />
+                            {available ? "Download PDF" : "PDF available soon"}
+                          </Wrapper>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

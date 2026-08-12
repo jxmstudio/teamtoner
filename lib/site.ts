@@ -4,15 +4,18 @@
  * These are the "siteSettings" values used across the marketing site. Anything
  * marked TODO(client) is a placeholder awaiting confirmation from Allan & Karen
  * (see the onboarding checklist) and will later be driven by Sanity siteSettings.
+ *
+ * Positioning (client brief, Aug 2026): Team Toner lead as a proven,
+ * high-performing husband-and-wife team — two agents personally working for the
+ * seller. The fee strengthens that proposition; it is not the headline.
  */
 export const siteConfig = {
   name: "Team Toner",
   legalName: "Team Toner — Allan & Karen Toner",
-  // TODO(client): confirm final tagline ("Good Honest Real Estate" vs Arizto "Smarter Real Estate")
-  tagline: "Smarter Real Estate",
-  strapline: "Nobody sells more property than Team Toner.",
+  tagline: "Premium service. Proven results. A smarter fee.",
+  strapline: "Premium service. Proven results. A smarter fee.",
   description:
-    "Allan & Karen Toner — a top-ranked Arizto real estate team serving Palmerston North, Feilding, Ashhurst and the wider Manawatū. Premium marketing, low commission, no sale no fee.",
+    "Allan & Karen Toner — a husband-and-wife real estate team ranked #7 of 350+ Arizto agents nationwide and #1 in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with no upfront costs.",
   url: "https://teamtoner.co.nz",
   brand: {
     parent: "Arizto",
@@ -36,12 +39,50 @@ export const siteConfig = {
     regionName: "Palmerston North & Manawatū",
     // TODO(client): confirm exact homes-sold figure (">400+")
     homesSold: "400+",
-    commission: "2% +GST",
+    commission: "2% + GST",
   },
+  /** The three fee pillars, shown as a strip under the Sell/About intros. */
+  feePillars: ["2% + GST Commission", "No Upfront Costs", "No Sale — No Fee"],
+  /**
+   * The four "Why Team Toner" benefits. Home and Sell carry the same four
+   * pillars with slightly different supporting lines (per the client brief).
+   */
   sellingPoints: [
-    { title: "2% +GST Commission", detail: "A smarter fee that keeps more in your pocket." },
-    { title: "Premium Marketing", detail: "The full marketing package buyers expect — and more." },
-    { title: "No Sale, No Fee", detail: "No upfront costs. You only pay when we sell." },
+    {
+      title: "Two agents working for you",
+      detail: "Allan & Karen personally work together throughout your sale.",
+    },
+    {
+      title: "Proven results",
+      detail: "Palmerston North & Manawatū's #1 Arizto team.",
+    },
+    {
+      title: "Premium marketing",
+      detail:
+        "Professional marketing designed to get your property noticed by more buyers.",
+    },
+    {
+      title: "A smarter fee",
+      detail: "2% + GST commission. No upfront costs. No Sale — No Fee.",
+    },
+  ],
+  sellingPointsSell: [
+    {
+      title: "Two agents working for you",
+      detail: "Allan & Karen personally work together throughout your sale.",
+    },
+    {
+      title: "Proven results",
+      detail: "Palmerston North & Manawatū's #1 Arizto team.",
+    },
+    {
+      title: "Premium marketing",
+      detail: "Professional marketing designed to maximise buyer exposure.",
+    },
+    {
+      title: "A smarter fee",
+      detail: "2% + GST. No upfront costs. No Sale — No Fee.",
+    },
   ],
   suburbs: [
     { name: "Palmerston North", slug: "palmerston-north" },
@@ -60,6 +101,22 @@ export const siteConfig = {
 } as const;
 
 export type SiteConfig = typeof siteConfig;
+
+/**
+ * SEO page titles supplied by the client. These are set as `title.absolute`
+ * so they replace (rather than append to) the "| Team Toner" template.
+ */
+export const seoTitles = {
+  home: "Team Toner | Palmerston North Real Estate Agents | Arizto",
+  about: "Allan & Karen Toner | Palmerston North Real Estate Agents",
+  sell: "Sell Your Home | Team Toner Palmerston North Real Estate",
+  suburbs: "Palmerston North & Manawatū Real Estate | Team Toner",
+  resources: "Free Property Selling Guides | Team Toner",
+  contact: "Contact Team Toner | Palmerston North Real Estate Agents",
+  listings: "Homes for Sale | Team Toner Palmerston North & Manawatū",
+  sold: "Recently Sold | Team Toner Palmerston North & Manawatū",
+  appraisal: "Book a Free Property Appraisal | Team Toner Palmerston North",
+} as const;
 
 export const mainNav = [
   { title: "Home", href: "/" },

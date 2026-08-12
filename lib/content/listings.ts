@@ -2,6 +2,12 @@ import type { Listing } from "./types";
 
 /**
  * SAMPLE listings — placeholders so the site is fully functional.
+ *
+ * IMPORTANT: every address, price and photograph below is fabricated demo
+ * content. The images in /public/listings are generic stand-ins, NOT real
+ * Team Toner properties. All of it must be replaced with genuine listing data
+ * and photography before the password gate comes down.
+ *
  * Agency: replace with real listings (address, photos, beds/baths/parking,
  * price/method, description). Set `status` to "sold" and fill soldPrice/soldDate
  * to move a listing to the Sold page automatically.
@@ -29,7 +35,7 @@ export const listings: Listing[] = [
       "Double internal-access garage",
       "Zoned for sought-after schools",
     ],
-    images: [],
+    images: ["/listings/12-rata-street-palmerston-north-1.webp"],
   },
   {
     slug: "8-kowhai-lane-feilding",
@@ -52,7 +58,7 @@ export const listings: Listing[] = [
       "Established, private garden",
       "Walk to town and schools",
     ],
-    images: [],
+    images: ["/listings/8-kowhai-lane-feilding-1.webp"],
   },
   {
     slug: "24-gorge-road-ashhurst",
@@ -75,7 +81,7 @@ export const listings: Listing[] = [
       "Two living areas",
       "Minutes to Te Āpiti tracks",
     ],
-    images: [],
+    images: ["/listings/24-gorge-road-ashhurst-1.webp"],
   },
   {
     slug: "56-kimbolton-road-manawatu",
@@ -97,7 +103,7 @@ export const listings: Listing[] = [
       "Modern open-plan home",
       "Stunning rural views",
     ],
-    images: [],
+    images: ["/listings/56-kimbolton-road-manawatu-1.webp"],
   },
   // Recently sold (drives the /sold page)
   {
@@ -114,7 +120,7 @@ export const listings: Listing[] = [
     soldDate: "2026-06-18",
     description: ["A classic West End bungalow that attracted strong buyer interest and a great result for our vendors."],
     features: [],
-    images: [],
+    images: ["/listings/3-victoria-avenue-palmerston-north-1.webp"],
   },
   {
     slug: "19-manchester-street-feilding",
@@ -130,7 +136,7 @@ export const listings: Listing[] = [
     soldDate: "2026-05-30",
     description: ["Multiple offers and a premium result for this well-presented family home."],
     features: [],
-    images: [],
+    images: ["/listings/19-manchester-street-feilding-1.webp"],
   },
   {
     slug: "7-cambridge-avenue-ashhurst",
@@ -146,6 +152,6 @@ export const listings: Listing[] = [
     soldDate: "2026-05-12",
     description: ["Sold under the asking expectation after a targeted marketing campaign."],
     features: [],
-    images: [],
+    images: ["/listings/7-cambridge-avenue-ashhurst-1.webp"],
   },
 ];

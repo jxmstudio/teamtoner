@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHeader } from "@/components/brand/page-header";
+import { FeePillars } from "@/components/brand/fee-pillars";
 import { CtaSection } from "@/components/brand/cta-section";
-import { Container, Section } from "@/components/brand/primitives";
-import { siteConfig } from "@/lib/site";
+import { Container, Section, SectionHeading } from "@/components/brand/primitives";
+import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About Allan & Karen Toner",
+  title: { absolute: seoTitles.about },
   description:
-    "Meet Team Toner — Allan & Karen Toner, a top-ranked Arizto real estate team serving Palmerston North and the Manawatū.",
+    "Meet Allan & Karen Toner — a husband-and-wife real estate team serving Palmerston North, Feilding, Ashhurst and the wider Manawatū. Two experienced agents personally working on your sale.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
@@ -16,55 +18,99 @@ export default function AboutPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Meet the team"
+        eyebrow="Meet Team Toner"
         title="Allan & Karen Toner"
-        description="Good honest real estate, backed by results. We're proud to be one of the country's top Arizto teams — and #1 in our region."
+        description="Two agents. One team."
       />
 
       <Section>
-        <Container className="grid items-center gap-12 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
+        <Container className="grid items-start gap-12 lg:grid-cols-2">
+          <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border lg:sticky lg:top-24">
             <Image
               src="/team/allan-karen.jpg"
-              alt="Allan and Karen Toner"
+              alt="Allan and Karen Toner, husband-and-wife real estate agents in Palmerston North"
               width={1200}
               height={1200}
+              priority
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="h-full w-full object-cover"
             />
           </div>
           <div className="space-y-4 text-lg text-foreground/90">
             <p>
-              Allan and Karen Toner are a husband-and-wife team who bring
-              honesty, energy and genuine care to every sale. Selling your home
-              is one of life's biggest decisions — and we treat it that way.
+              We&rsquo;re Allan and Karen Toner — a husband-and-wife real estate
+              team proudly helping homeowners throughout Palmerston North,
+              Feilding, Ashhurst and the wider Manawatū.
             </p>
             <p>
-              As part of the {brand.parent} network, we pair a premium marketing
-              package with a smarter fee structure: {stats.commission} commission,
-              no upfront costs, and no sale, no fee. You get everything you'd
-              expect from a top agency, without the traditional price tag.
+              Selling your home is one of life&rsquo;s biggest financial
+              decisions. We believe the people you trust with it should treat it
+              that way.
             </p>
             <p>
-              The result? We've helped hundreds of Manawatū families move on to
-              their next chapter — and been recognised as {stats.nationalRank} of{" "}
-              {stats.agentPool} Arizto agents nationwide, and {stats.regionRank} in{" "}
-              {stats.regionName}.
+              As a husband-and-wife team, we work together throughout the entire
+              selling process — from your initial appraisal and marketing
+              strategy through to buyer follow-up, negotiation and settlement.
             </p>
-            <p className="text-base text-muted-foreground">{brand.reaa}.</p>
+            <p>
+              That means you&rsquo;re not simply getting an agent who lists your
+              property. You&rsquo;re getting two experienced agents personally
+              invested in achieving the best possible outcome.
+            </p>
+            <p>
+              Our approach is straightforward: honest advice, regular
+              communication, strong marketing, thorough buyer follow-up and hard
+              work.
+            </p>
+            <p>
+              We&rsquo;ll tell you what we believe your property is worth based
+              on the evidence — not simply tell you what you want to hear to win
+              the listing.
+            </p>
+            <p className="font-semibold text-foreground">
+              That&rsquo;s the Team Toner difference.
+            </p>
           </div>
         </Container>
       </Section>
 
+      {/* The Arizto model and the fee — deliberately after the team story. */}
       <Section className="bg-secondary/50">
+        <Container className="max-w-3xl text-center">
+          <SectionHeading
+            eyebrow={`Part of ${brand.parent}`}
+            title="A smarter model behind the service"
+            description={`We're part of ${brand.parent}, a nationwide agency built on a simpler, fairer fee structure. It lets us deliver the full premium service — and pass the difference on to you.`}
+          />
+          <FeePillars className="mt-8 justify-center" />
+          <p className="mt-8 text-muted-foreground">
+            {brand.reaa}.
+          </p>
+        </Container>
+      </Section>
+
+      <Section>
         <Container>
-          <div className="grid gap-8 text-center sm:grid-cols-3">
+          <dl className="grid gap-8 text-center sm:grid-cols-3">
             <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
             <Stat value={stats.regionRank} label={`in ${stats.regionName}`} />
             <Stat value={stats.homesSold} label="homes sold" />
-          </div>
+          </dl>
           <p className="mt-10 text-center text-sm text-muted-foreground">
-            Talk to us: {agents.allan.name} {agents.allan.phone} · {agents.karen.name}{" "}
-            {agents.karen.phone}
+            Talk to us:{" "}
+            <a
+              className="font-semibold text-primary hover:underline"
+              href={`tel:${agents.allan.phone.replace(/\s/g, "")}`}
+            >
+              {agents.allan.name} {agents.allan.phone}
+            </a>{" "}
+            ·{" "}
+            <a
+              className="font-semibold text-primary hover:underline"
+              href={`tel:${agents.karen.phone.replace(/\s/g, "")}`}
+            >
+              {agents.karen.name} {agents.karen.phone}
+            </a>
           </p>
         </Container>
       </Section>
@@ -77,7 +123,8 @@ export default function AboutPage() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <p className="text-5xl font-bold text-primary">{value}</p>
+      <dt className="sr-only">{label}</dt>
+      <dd className="text-5xl font-bold text-primary">{value}</dd>
       <p className="mt-2 text-muted-foreground">{label}</p>
     </div>
   );

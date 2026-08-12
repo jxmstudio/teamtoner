@@ -28,6 +28,11 @@ export function getListingSlugs(): string[] {
   return listings.filter((l) => l.status !== "sold").map((l) => l.slug);
 }
 
+/** Every listing slug, sold included — used for prerendering and the sitemap. */
+export function getAllListingSlugs(): string[] {
+  return listings.map((l) => l.slug);
+}
+
 export function getSoldListings(): Listing[] {
   return listings
     .filter((l) => l.status === "sold")
@@ -36,6 +41,16 @@ export function getSoldListings(): Listing[] {
 
 export function getSuburbs(): Suburb[] {
   return suburbs;
+}
+
+/** The four top-level areas shown as cards on /suburbs. */
+export function getAreas(): Suburb[] {
+  return suburbs.filter((s) => !s.parent);
+}
+
+/** Individual suburbs sitting inside an area (e.g. the Palmerston North suburbs). */
+export function getSuburbChildren(parentSlug: string): Suburb[] {
+  return suburbs.filter((s) => s.parent === parentSlug);
 }
 
 export function getSuburbBySlug(slug: string): Suburb | undefined {
@@ -50,6 +65,10 @@ export function getListingsBySuburb(slug: string): Listing[] {
   return getListings().filter((l) => l.suburb === slug);
 }
 
+export function getSoldBySuburb(slug: string): Listing[] {
+  return getSoldListings().filter((l) => l.suburb === slug);
+}
+
 export function getTestimonials(): Testimonial[] {
   return testimonials;
 }
@@ -61,4 +80,13 @@ export function getFeaturedTestimonials(limit = 3): Testimonial[] {
 
 export function getGuides(): Guide[] {
   return guides;
+}
+
+export function getGuideBySlug(slug: string): Guide | undefined {
+  return guides.find((g) => g.slug === slug);
+}
+
+/** Guides that publish an indexable content page at /resources/<slug>. */
+export function getGuidesWithPages(): Guide[] {
+  return guides.filter((g) => g.body?.length);
 }

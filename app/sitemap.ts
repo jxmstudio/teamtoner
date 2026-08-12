@@ -1,9 +1,15 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
-import { getListingSlugs, getSuburbs, getSoldListings } from "@/lib/data";
+import {
+  getAllListingSlugs,
+  getSuburbs,
+  getGuidesWithPages,
+} from "@/lib/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
+  const lastModified = new Date();
+
   const staticRoutes = [
     "",
     "/about",
@@ -18,27 +24,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms",
   ].map((path) => ({
     url: `${base}${path}`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : 0.7,
   }));
 
-  const listingRoutes = [
-    ...getListingSlugs(),
-    ...getSoldListings().map((l) => l.slug),
-  ].map((slug) => ({
+  const listingRoutes = getAllListingSlugs().map((slug) => ({
     url: `${base}/listings/${slug}`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   const suburbRoutes = getSuburbs().map((s) => ({
     url: `${base}/suburbs/${s.slug}`,
-    lastModified: new Date(),
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: s.parent ? 0.5 : 0.6,
+  }));
+
+  const guideRoutes = getGuidesWithPages().map((g) => ({
+    url: `${base}/resources/${g.slug}`,
+    lastModified,
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...listingRoutes, ...suburbRoutes];
+  return [...staticRoutes, ...listingRoutes, ...suburbRoutes, ...guideRoutes];
 }

@@ -2,12 +2,18 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/brand/primitives";
 import { siteConfig } from "@/lib/site";
 
+/**
+ * Site-wide appraisal banner (client brief §11). Copy is shared across every
+ * page; pass `title`/`description` only where a page needs a local variant.
+ */
 export function CtaSection({
-  title = "Thinking of selling? Chat to Team Toner.",
-  description = "Book a free, no-obligation appraisal and find out what your property is worth.",
+  title = "Curious what your property could sell for?",
+  description = `Get an honest, evidence-based appraisal from ${siteConfig.stats.regionName}'s ${siteConfig.stats.regionRank} Arizto team.`,
+  note = "No pressure. No obligation. Just straightforward advice.",
 }: {
   title?: string;
   description?: string;
+  note?: string | null;
 }) {
   return (
     <section className="bg-petrol text-white">
@@ -15,8 +21,11 @@ export function CtaSection({
         <div>
           <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
           <p className="mt-2 max-w-2xl text-white/80">{description}</p>
+          {note ? (
+            <p className="mt-3 text-sm text-white/60">{note}</p>
+          ) : null}
         </div>
-        <div className="flex shrink-0 gap-3">
+        <div className="flex shrink-0 flex-wrap justify-center gap-3">
           <ButtonLink
             href="/appraisal"
             className="h-12 bg-teal px-7 text-base text-teal-foreground hover:bg-teal/90"

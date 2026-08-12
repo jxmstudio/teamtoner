@@ -4,12 +4,13 @@ import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Card, CardContent } from "@/components/ui/card";
-import { siteConfig } from "@/lib/site";
+import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: { absolute: seoTitles.contact },
   description:
-    "Get in touch with Team Toner — Allan & Karen Toner, Arizto real estate agents for Palmerston North and the Manawatū.",
+    "Contact Allan & Karen Toner — Palmerston North real estate agents. Call either of us directly, or send a message and we'll get straight back to you.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
@@ -19,11 +20,14 @@ export default function ContactPage() {
       <PageHeader
         eyebrow="Get in touch"
         title="Contact Team Toner"
-        description="We'd love to hear from you. Send a message or give us a call."
+        description="Thinking of selling, buying, or simply have a property question? We'd love to hear from you. Call Allan or Karen directly, or send us a message below."
       />
       <Section>
         <Container className="grid gap-12 lg:grid-cols-2">
           <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-foreground">
+              Call Allan or Karen directly
+            </h2>
             <ContactRow icon={<Phone className="size-5" />} label={agents.allan.name}>
               <a className="hover:text-primary" href={`tel:${agents.allan.phone.replace(/\s/g, "")}`}>
                 {agents.allan.phone}
@@ -48,7 +52,12 @@ export default function ContactPage() {
           </div>
           <Card>
             <CardContent className="pt-6">
-              <LeadForm kind="contact" />
+              <h2 className="text-2xl font-bold text-foreground">
+                Send us a message
+              </h2>
+              <div className="mt-6">
+                <LeadForm kind="contact" />
+              </div>
             </CardContent>
           </Card>
         </Container>

@@ -9,8 +9,8 @@ export default function NotFound() {
         Page not found
       </h1>
       <p className="mt-3 max-w-md text-muted-foreground">
-        The page you're looking for has moved or no longer exists. Let's get you
-        back on track.
+        The page you&rsquo;re looking for has moved or no longer exists.
+        Let&rsquo;s get you back on track.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <ButtonLink href="/" className="h-11 bg-teal px-6 text-teal-foreground hover:bg-teal/90">

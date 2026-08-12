@@ -5,12 +5,14 @@ import { ListingCard } from "@/components/brand/listing-card";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
 import { cn } from "@/lib/utils";
-import { getListings, getSuburbs } from "@/lib/data";
+import { seoTitles } from "@/lib/site";
+import { getListings, getAreas } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Listings",
+  title: { absolute: seoTitles.listings },
   description:
-    "Current homes for sale with Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū.",
+    "Current homes for sale with Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū. New properties added regularly.",
+  alternates: { canonical: "/listings" },
 };
 
 export default async function ListingsPage(props: PageProps<"/listings">) {
@@ -19,7 +21,7 @@ export default async function ListingsPage(props: PageProps<"/listings">) {
 
   const all = getListings();
   const listings = selected ? all.filter((l) => l.suburb === selected) : all;
-  const suburbs = getSuburbs();
+  const suburbs = getAreas();
 
   return (
     <>

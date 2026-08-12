@@ -3,29 +3,40 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/brand/page-header";
 import { CtaSection } from "@/components/brand/cta-section";
-import { Container, Section } from "@/components/brand/primitives";
+import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { Card, CardContent } from "@/components/ui/card";
-import { getSuburbs } from "@/lib/data";
+import { seoTitles } from "@/lib/site";
+import { getAreas, getSuburbChildren } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Suburbs",
+  title: { absolute: seoTitles.suburbs },
   description:
-    "Local real estate expertise across Palmerston North, Feilding, Ashhurst and the wider Manawatū.",
+    "Local real estate knowledge across Palmerston North and the wider Manawatū — Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson, Summerhill, Feilding and Ashhurst.",
+  alternates: { canonical: "/suburbs" },
 };
 
 export default function SuburbsPage() {
-  const suburbs = getSuburbs();
+  const areas = getAreas();
+  const pnSuburbs = getSuburbChildren("palmerston-north");
+
   return (
     <>
       <PageHeader
         eyebrow="Local experts"
-        title="Areas we know inside out"
-        description="Deep local knowledge across the Manawatū — the difference between a good result and a great one."
-      />
+        title="Local real estate knowledge across Palmerston North & Manawatū"
+        description="From Hokowhitu and Kelvin Grove to Feilding, Ashhurst and the wider Manawatū, we understand the local property markets we sell in — the homes, the buyers and what makes each area different."
+      >
+        <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+          Explore our local areas, current properties and recent Team Toner
+          sales.
+        </p>
+      </PageHeader>
+
+      {/* Four area cards — retained per the client brief. */}
       <Section>
         <Container>
           <div className="grid gap-6 md:grid-cols-2">
-            {suburbs.map((s) => (
+            {areas.map((s) => (
               <Card key={s.slug} className="flex flex-col">
                 <CardContent className="flex flex-1 flex-col pt-6">
                   <h2 className="text-2xl font-bold text-foreground">{s.name}</h2>
@@ -42,6 +53,35 @@ export default function SuburbsPage() {
           </div>
         </Container>
       </Section>
+
+      {/* Individual Palmerston North suburbs — each its own indexable page. */}
+      {pnSuburbs.length > 0 && (
+        <Section className="bg-secondary/50">
+          <Container>
+            <SectionHeading
+              eyebrow="Palmerston North"
+              title="Explore Palmerston North suburbs"
+              description="Local information, current listings, recent Team Toner sales and market commentary for the suburbs we sell in most."
+            />
+            <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {pnSuburbs.map((s) => (
+                <li key={s.slug}>
+                  <Link
+                    href={`/suburbs/${s.slug}`}
+                    className="group flex h-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-teal hover:bg-background"
+                  >
+                    <span className="font-semibold text-foreground group-hover:text-primary">
+                      {s.name}
+                    </span>
+                    <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )}
+
       <CtaSection />
     </>
   );
