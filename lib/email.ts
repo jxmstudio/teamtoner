@@ -1,9 +1,13 @@
 import { Resend } from "resend";
 import { siteConfig } from "@/lib/site";
-import type { LeadInput } from "@/lib/validators";
+import { leadKindLabel, type LeadInput } from "@/lib/validators";
 
 /*
- * Email delivery for lead forms.
+ * Direct email delivery for lead forms (Resend).
+ *
+ * Since the JXM Forms migration this is the FALLBACK path only — lib/leads.ts
+ * calls it when the JXM Forms backend is unreachable or returns an error, so a
+ * backend outage can't silently lose a real enquiry.
  *
  * Set these env vars in Vercel to enable real sending (see .env.example):
  *   RESEND_API_KEY   — from resend.com
@@ -14,16 +18,10 @@ import type { LeadInput } from "@/lib/validators";
  * return success, so forms are testable before the mail account is connected.
  */
 
-const kindLabel: Record<LeadInput["kind"], string> = {
-  appraisal: "Free appraisal request",
-  contact: "Website enquiry",
-  enquiry: "Listing enquiry",
-};
-
 export async function sendLead(lead: LeadInput): Promise<boolean> {
-  const subject = `${kindLabel[lead.kind]} — ${lead.name}`;
+  const subject = `${leadKindLabel[lead.kind]} — ${lead.name}`;
   const lines = [
-    `Type: ${kindLabel[lead.kind]}`,
+    `Type: ${leadKindLabel[lead.kind]}`,
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
     lead.phone ? `Phone: ${lead.phone}` : null,
@@ -47,7 +45,8 @@ export async function sendLead(lead: LeadInput): Promise<boolean> {
     const { error } = await resend.emails.send({
       from,
       to: siteConfig.contact.email,
-      replyTo: lead.email,
+      // Appraisal leads may be phone-only — only set Reply-To when we have one.
+      ...(lead.email ? { replyTo: lead.email } : {}),
       subject,
       text,
     });

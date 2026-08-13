@@ -1,7 +1,7 @@
 "use server";
 
 import { leadSchema, type LeadState } from "@/lib/validators";
-import { sendLead } from "@/lib/email";
+import { deliverLead } from "@/lib/leads";
 
 export async function submitLead(
   _prev: LeadState,
@@ -44,7 +44,7 @@ export async function submitLead(
     };
   }
 
-  const sent = await sendLead(parsed.data);
+  const sent = await deliverLead(parsed.data);
 
   if (!sent) {
     return {
