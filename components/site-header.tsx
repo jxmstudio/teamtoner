@@ -66,7 +66,7 @@ export function SiteHeader() {
             {siteConfig.agents.allan.phone}
           </a>
           <ButtonLink href="/appraisal" className={cn("h-10 px-4", teal)}>
-            Book a free appraisal
+            Get a Free Appraisal
           </ButtonLink>
         </div>
 
@@ -110,7 +110,7 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className={cn("h-10 px-4", teal)}
                 >
-                  Book a free appraisal
+                  Get a Free Appraisal
                 </ButtonLink>
                 <a
                   href={allanTel}

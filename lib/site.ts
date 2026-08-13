@@ -29,6 +29,7 @@ export const siteConfig = {
   contact: {
     // Enquiries route here per the client's onboarding answer.
     email: "thetoners@arizto.co.nz",
+    office: "06 354 4722",
     region: "Palmerston North · Feilding · Ashhurst · Manawatū",
   },
   // Both figures appear in the client's materials — kept together, easy to update.

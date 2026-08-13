@@ -26,6 +26,9 @@ export function LeadForm({
 }) {
   const [state, formAction, pending] = useActionState(submitLead, initialState);
   const formRef = useRef<HTMLFormElement>(null);
+  // Appraisals ask for a phone number and treat email as optional; the other
+  // forms are the other way round.
+  const isAppraisal = kind === "appraisal";
 
   useEffect(() => {
     if (!state.message) return;
@@ -39,8 +42,8 @@ export function LeadForm({
 
   const label =
     submitLabel ??
-    (kind === "appraisal"
-      ? "Request my free appraisal"
+    (isAppraisal
+      ? "Get My Free Property Appraisal"
       : kind === "enquiry"
         ? "Send enquiry"
         : "Send message");
@@ -62,31 +65,37 @@ export function LeadForm({
         <Field label="Name" error={state.errors?.name}>
           <Input name="name" required autoComplete="name" placeholder="Your name" />
         </Field>
-        <Field label="Phone" error={state.errors?.phone} optional>
-          <Input name="phone" type="tel" autoComplete="tel" placeholder="Your phone" />
+        <Field label="Phone" error={state.errors?.phone} optional={!isAppraisal}>
+          <Input
+            name="phone"
+            type="tel"
+            required={isAppraisal}
+            autoComplete="tel"
+            placeholder="Your phone"
+          />
         </Field>
       </div>
 
-      <Field label="Email" error={state.errors?.email}>
+      <Field label="Email" error={state.errors?.email} optional={isAppraisal}>
         <Input
           name="email"
           type="email"
-          required
+          required={!isAppraisal}
           autoComplete="email"
           placeholder="you@example.com"
         />
       </Field>
 
-      {kind === "appraisal" ? (
+      {isAppraisal ? (
         <Field label="Property address" error={state.errors?.address}>
           <Input name="address" autoComplete="street-address" placeholder="Address you'd like appraised" />
         </Field>
       ) : null}
 
       <Field
-        label={kind === "appraisal" ? "Anything else? (optional)" : "Message"}
+        label={isAppraisal ? "Anything you'd like us to know?" : "Message"}
         error={state.errors?.message}
-        optional={kind === "appraisal"}
+        optional={isAppraisal}
       >
         <Textarea
           name="message"
@@ -113,8 +122,10 @@ export function LeadForm({
         )}
       </Button>
 
-      <p className="text-xs text-muted-foreground">
-        By submitting, you agree to be contacted about your enquiry. We never share your details.
+      <p className={cn("text-muted-foreground", isAppraisal ? "text-sm" : "text-xs")}>
+        {isAppraisal
+          ? "Your details stay private. We won't add you to a mailing list or pressure you to sell."
+          : "By submitting, you agree to be contacted about your enquiry. We never share your details."}
       </p>
     </form>
   );
