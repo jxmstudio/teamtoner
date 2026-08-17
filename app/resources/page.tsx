@@ -6,13 +6,14 @@ import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
 import { getGuides } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.resources },
   description:
-    "Straightforward, practical advice from Team Toner to help you prepare, sell and move with confidence — free property selling guides for Palmerston North and Manawatū homeowners.",
+    "Free property selling guides from Team Toner — practical advice to help Palmerston North and Manawatū homeowners prepare, sell and move with confidence.",
   alternates: { canonical: "/resources" },
 };
 
@@ -20,6 +21,15 @@ export default function ResourcesPage() {
   const guides = getGuides();
   return (
     <>
+      <ItemListJsonLd
+        name="Free property selling guides"
+        description="Team Toner's free guides for Palmerston North and Manawatū homeowners."
+        items={guides.map((g) => ({
+          name: g.title,
+          path: g.body?.length ? `/resources/${g.slug}` : "/resources",
+        }))}
+      />
+
       <PageHeader
         eyebrow="Free downloads"
         title="Free property selling guides"

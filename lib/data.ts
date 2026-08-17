@@ -10,6 +10,17 @@ import type { Listing, Suburb, Testimonial, Guide } from "@/lib/content/types";
  * can be swapped in later by changing only this file.
  */
 
+/**
+ * Full display address. Listing addresses usually already carry their suburb
+ * ("19 Manchester Street, Feilding"), so appending it unconditionally produced
+ * "…, Feilding, Feilding" in titles and schema. Only append when it's absent.
+ */
+export function formatListingAddress(address: string, suburbName: string): string {
+  return address.toLowerCase().includes(suburbName.toLowerCase())
+    ? address
+    : `${address}, ${suburbName}`;
+}
+
 export function getListings(): Listing[] {
   return listings.filter((l) => l.status !== "sold");
 }

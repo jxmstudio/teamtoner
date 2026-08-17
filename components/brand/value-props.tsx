@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
+import { FeeText } from "@/components/brand/commission";
 import { siteConfig } from "@/lib/site";
 
 type Point = { title: string; detail: string };
@@ -36,7 +37,9 @@ export function ValueProps({
                 <h3 className="mt-5 text-lg font-semibold text-foreground">
                   {point.title}
                 </h3>
-                <p className="mt-2 text-muted-foreground">{point.detail}</p>
+                <p className="mt-2 text-muted-foreground">
+                  <FeeText>{point.detail}</FeeText>
+                </p>
               </CardContent>
             </Card>
           ))}

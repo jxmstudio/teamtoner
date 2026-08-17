@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { HideOnGate } from "@/components/hide-on-gate";
+import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/lib/site";
 
 const inter = Inter({
@@ -68,6 +69,9 @@ export default function RootLayout({
       className={`${inter.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        {/* Site-wide so every page resolves to the same business entity — the
+            listing and breadcrumb nodes reference this @id. */}
+        <OrganizationJsonLd />
         <HideOnGate>
           <SiteHeader />
         </HideOnGate>

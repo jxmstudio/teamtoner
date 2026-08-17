@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Bed, Bath, Car, Check, MapPin } from "lucide-react";
+import { Bed, Bath, Car, Check, MapPin } from "lucide-react";
+import { fitTitle } from "@/lib/site";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { ListingGallery } from "@/components/brand/listing-gallery";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { BreadcrumbJsonLd, ListingJsonLd } from "@/components/seo/json-ld";
+import { Breadcrumbs } from "@/components/brand/breadcrumbs";
+import { ListingJsonLd } from "@/components/seo/json-ld";
 import {
+  formatListingAddress,
   getAllListingSlugs,
   getListingBySlug,
   getSuburbName,
@@ -30,20 +33,32 @@ export async function generateMetadata(
 
   const suburbName = getSuburbName(listing.suburb);
   const sold = listing.status === "sold";
-  const label = sold ? "Sold by Team Toner" : "For Sale";
+  const full = formatListingAddress(listing.address, suburbName);
+  // "Sold by Team Toner" already names the brand, so the usual "| Team Toner"
+  // suffix duplicated it. Addresses also vary a lot in length, so drop the
+  // brand rather than let Google truncate the street address.
+  const title = fitTitle(
+    sold
+      ? [`${full} — Sold by Team Toner`, `${full} — Sold | Team Toner`, `${full} — Sold`]
+      : [`${full} — For Sale | Team Toner`, `${full} — For Sale`]
+  );
+
+  // Listing blurbs run short; pad to a useful SERP length with the concrete
+  // details a buyer scans for rather than leaving a 70-character description.
+  const spec = `${listing.beds} bed, ${listing.baths} bath, ${listing.parking} car. ${listing.priceDisplay}.`;
+  const description = [listing.description[0], spec]
+    .filter(Boolean)
+    .join(" ")
+    .slice(0, 158);
 
   return {
-    title: {
-      absolute: `${listing.address}, ${suburbName} — ${label} | Team Toner`,
-    },
-    description:
-      listing.description[0] ??
-      `${listing.beds}-bedroom home at ${listing.address}, ${suburbName}. ${label} with Team Toner.`,
+    title: { absolute: title },
+    description,
     alternates: { canonical: `/listings/${listing.slug}` },
     openGraph: {
       type: "website",
-      title: `${listing.address}, ${suburbName}`,
-      description: listing.description[0] ?? listing.title,
+      title: full,
+      description,
       images: listing.images.length ? listing.images : undefined,
     },
   };
@@ -60,13 +75,6 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
   return (
     <>
       <ListingJsonLd listing={listing} suburbName={suburbName} />
-      <BreadcrumbJsonLd
-        items={[
-          { name: "Home", path: "/" },
-          { name: sold ? "Recently sold" : "Listings", path: sold ? "/sold" : "/listings" },
-          { name: listing.address, path: `/listings/${listing.slug}` },
-        ]}
-      />
 
       <PageHeader
         eyebrow={
@@ -99,12 +107,17 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
 
       <Section>
         <Container>
-          <Link
-            href="/listings"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            <ArrowLeft className="size-4" /> Back to listings
-          </Link>
+          <Breadcrumbs
+            items={[
+              { name: "Home", path: "/" },
+              {
+                name: sold ? "Recently sold" : "Listings",
+                path: sold ? "/sold" : "/listings",
+              },
+              { name: suburbName, path: `/suburbs/${listing.suburb}` },
+              { name: listing.address, path: `/listings/${listing.slug}` },
+            ]}
+          />
 
           <div className="mt-6 grid gap-10 lg:grid-cols-3">
             <div className="lg:col-span-2">

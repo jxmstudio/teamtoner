@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site";
 import { getFeaturedTestimonials } from "@/lib/data";
 
 /**
- * Proven Results block — the #7 / #1 / 400+ figures plus one strong five-star
+ * Proven Results block — the #7 / #1 ranking figures plus one strong five-star
  * seller testimonial. Used on the Sell page (before the FAQs) and reusable
  * anywhere the proof needs restating.
  */
@@ -27,13 +27,12 @@ export function ProvenResults({
           description="We're not the cheapest option because we cut corners — we're a top-performing team that has chosen a fairer fee structure."
         />
 
-        <dl className="mt-12 grid gap-8 text-center sm:grid-cols-3">
+        <dl className="mt-12 grid gap-8 text-center sm:grid-cols-2">
           <Stat
             value={stats.nationalRank}
             label={`of ${stats.agentPool} Arizto agents nationwide`}
           />
           <Stat value={stats.regionRank} label={stats.regionName} />
-          <Stat value={stats.homesSold} label="homes sold" />
         </dl>
 
         {showTestimonial && testimonial ? (

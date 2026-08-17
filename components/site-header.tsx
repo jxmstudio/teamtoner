@@ -30,7 +30,9 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      {/* Header height tracks the logo — enlarged at the client's request for
+          readability, so the bar grows with it rather than cropping. */}
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2" aria-label={siteConfig.name}>
           <Image
             src="/brand/team-toner-signature.png"
@@ -38,7 +40,7 @@ export function SiteHeader() {
             width={1512}
             height={1000}
             priority
-            className="h-10 w-auto"
+            className="h-12 w-auto sm:h-14"
           />
         </Link>
 

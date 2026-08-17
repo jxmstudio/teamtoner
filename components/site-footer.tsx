@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail } from "lucide-react";
-import { mainNav, siteConfig } from "@/lib/site";
+import { FeeText, TermsFootnote } from "@/components/brand/commission";
+import { configuredSocials, mainNav, siteConfig } from "@/lib/site";
 
 function Facebook(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -29,14 +30,27 @@ function Youtube(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+const SOCIAL_ICONS = {
+  facebook: Facebook,
+  instagram: Instagram,
+  youtube: Youtube,
+} as const;
+
+const SOCIAL_LABELS = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+  youtube: "YouTube",
+} as const;
+
 export function SiteFooter() {
+  const socials = configuredSocials();
   return (
     <footer className="bg-night text-white/80">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-2">
           <p className="font-script text-3xl text-white">{siteConfig.name}</p>
           <p className="mt-2 max-w-md text-sm text-white/70">
-            {siteConfig.description}
+            <FeeText>{siteConfig.description}</FeeText>
           </p>
           <div className="mt-5 flex items-center gap-3">
             <Image
@@ -96,27 +110,51 @@ export function SiteFooter() {
                 {siteConfig.agents.karen.phone}
               </a>
             </li>
+            <li>
+              Office ·{" "}
+              <a
+                href={`tel:${siteConfig.contact.office.replace(/\s/g, "")}`}
+                className="hover:text-teal"
+              >
+                {siteConfig.contact.office}
+              </a>
+            </li>
             <li className="text-white/60">{siteConfig.contact.region}</li>
           </ul>
-          <div className="mt-4 flex gap-3">
-            <a href={siteConfig.social.facebook} aria-label="Facebook" className="hover:text-teal">
-              <Facebook className="size-5" />
-            </a>
-            <a href={siteConfig.social.instagram} aria-label="Instagram" className="hover:text-teal">
-              <Instagram className="size-5" />
-            </a>
-            <a href={siteConfig.social.youtube} aria-label="YouTube" className="hover:text-teal">
-              <Youtube className="size-5" />
-            </a>
-          </div>
+          {/* Only render icons for profiles that are actually configured —
+              linking to a network's home page is a dead link, and empty
+              entries are also excluded from the schema sameAs graph. */}
+          {socials.length > 0 && (
+            <div className="mt-4 flex gap-3">
+              {socials.map(([network, href]) => {
+                const Icon = SOCIAL_ICONS[network];
+                return (
+                  <a
+                    key={network}
+                    href={href}
+                    aria-label={SOCIAL_LABELS[network]}
+                    className="hover:text-teal"
+                    rel="me noopener"
+                    target="_blank"
+                  >
+                    <Icon className="size-5" />
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-white/50 sm:flex-row sm:px-6 lg:px-8">
-          <p>
-            © {new Date().getFullYear()} {siteConfig.legalName}. {siteConfig.brand.reaa}.
-          </p>
+          <div>
+            <p>
+              © {new Date().getFullYear()} {siteConfig.legalName}. {siteConfig.brand.reaa}.
+            </p>
+            {/* Site-wide landing point for every commission asterisk. */}
+            <TermsFootnote className="mt-1 text-white/50" />
+          </div>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-teal">
               Privacy

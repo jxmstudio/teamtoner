@@ -3,8 +3,9 @@ import { PageHeader } from "@/components/brand/page-header";
 import { ListingCard } from "@/components/brand/listing-card";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
+import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles, siteConfig } from "@/lib/site";
-import { getSoldListings } from "@/lib/data";
+import { formatListingAddress, getSoldListings, getSuburbName } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sold },
@@ -18,6 +19,15 @@ export default function SoldPage() {
   const { stats } = siteConfig;
   return (
     <>
+      <ItemListJsonLd
+        name="Recently sold by Team Toner"
+        description="Properties recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
+        items={sold.map((l) => ({
+          name: formatListingAddress(l.address, getSuburbName(l.suburb)),
+          path: `/listings/${l.slug}`,
+        }))}
+      />
+
       <PageHeader
         eyebrow="Proven results"
         title="Recently sold by Team Toner"
@@ -45,10 +55,9 @@ export default function SoldPage() {
 
       <Section className="bg-secondary/50 py-12 sm:py-14 lg:py-16">
         <Container>
-          <dl className="grid gap-8 text-center sm:grid-cols-3">
+          <dl className="grid gap-8 text-center sm:grid-cols-2">
             <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
             <Stat value={stats.regionRank} label={`in ${stats.regionName}`} />
-            <Stat value={stats.homesSold} label="homes sold" />
           </dl>
         </Container>
       </Section>

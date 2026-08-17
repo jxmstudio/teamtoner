@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/brand/primitives";
+import { CommissionRate } from "@/components/brand/commission";
 import { siteConfig } from "@/lib/site";
 
 export function HomeHero() {
@@ -18,11 +19,12 @@ export function HomeHero() {
           </p>
           <h1 className="mt-6 text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
             A smarter way to{" "}
-            <span className="font-script font-normal text-teal">sell your home</span>.
+            <span className="font-script font-normal text-teal">sell your home</span>{" "}
+            in Palmerston North.
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-lg text-white/80">
             Premium marketing. Proven results. Two experienced agents working for
-            you — with a fairer {stats.commission} commission and no upfront
+            you — with a fairer <CommissionRate /> commission and no upfront
             costs.
           </p>
           <p className="mt-3 max-w-xl text-pretty text-white/60">
@@ -45,10 +47,9 @@ export function HomeHero() {
             </ButtonLink>
           </div>
 
-          <dl className="mt-10 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-6">
+          <dl className="mt-10 grid max-w-lg grid-cols-2 gap-6 border-t border-white/10 pt-6">
             <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
             <Stat value={stats.regionRank} label={stats.regionName} />
-            <Stat value={stats.homesSold} label="Homes sold" />
           </dl>
         </div>
 

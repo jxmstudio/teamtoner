@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Card, CardContent } from "@/components/ui/card";
+import { PageEntityJsonLd } from "@/components/seo/json-ld";
 import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -17,6 +18,13 @@ export default function ContactPage() {
   const { agents, contact } = siteConfig;
   return (
     <>
+      <PageEntityJsonLd
+        type="ContactPage"
+        path="/contact"
+        name="Contact Team Toner"
+        description={`Call Allan on ${agents.allan.phone}, Karen on ${agents.karen.phone}, or the office on ${contact.office}.`}
+      />
+
       <PageHeader
         eyebrow="Get in touch"
         title="Contact Team Toner"
@@ -36,6 +44,11 @@ export default function ContactPage() {
             <ContactRow icon={<Phone className="size-5" />} label={agents.karen.name}>
               <a className="hover:text-primary" href={`tel:${agents.karen.phone.replace(/\s/g, "")}`}>
                 {agents.karen.phone}
+              </a>
+            </ContactRow>
+            <ContactRow icon={<Phone className="size-5" />} label="Office (landline)">
+              <a className="hover:text-primary" href={`tel:${contact.office.replace(/\s/g, "")}`}>
+                {contact.office}
               </a>
             </ContactRow>
             <ContactRow icon={<Mail className="size-5" />} label="Email">

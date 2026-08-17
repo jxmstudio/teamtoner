@@ -4,12 +4,13 @@ import { PageHeader } from "@/components/brand/page-header";
 import { FeePillars } from "@/components/brand/fee-pillars";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
+import { PageEntityJsonLd } from "@/components/seo/json-ld";
 import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.about },
   description:
-    "Meet Allan & Karen Toner — a husband-and-wife real estate team serving Palmerston North, Feilding, Ashhurst and the wider Manawatū. Two experienced agents personally working on your sale.",
+    "Meet Allan & Karen Toner — a husband-and-wife real estate team serving Palmerston North, Feilding, Ashhurst and the wider Manawatū.",
   alternates: { canonical: "/about" },
 };
 
@@ -17,6 +18,13 @@ export default function AboutPage() {
   const { stats, agents, brand } = siteConfig;
   return (
     <>
+      <PageEntityJsonLd
+        type="AboutPage"
+        path="/about"
+        name="About Allan & Karen Toner"
+        description={`Allan & Karen Toner — ${agents.allan.role}s with ${brand.parent}, serving Palmerston North, Feilding, Ashhurst and the wider Manawatū.`}
+      />
+
       <PageHeader
         eyebrow="Meet Team Toner"
         title="Allan & Karen Toner"
@@ -91,10 +99,9 @@ export default function AboutPage() {
 
       <Section>
         <Container>
-          <dl className="grid gap-8 text-center sm:grid-cols-3">
+          <dl className="grid gap-8 text-center sm:grid-cols-2">
             <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
             <Stat value={stats.regionRank} label={`in ${stats.regionName}`} />
-            <Stat value={stats.homesSold} label="homes sold" />
           </dl>
           <p className="mt-10 text-center text-sm text-muted-foreground">
             Talk to us:{" "}

@@ -25,6 +25,9 @@ export const guides: Guide[] = [
       "Everything you need to know about selling with Team Toner — from appraisal to sold sign.",
     category: "Selling",
     pdf: "",
+    published: "2026-08-17",
+    updated: "2026-08-17",
+    process: true,
     body: [
       {
         heading: "Start with an honest appraisal",
@@ -73,6 +76,25 @@ export const guides: Guide[] = [
       "Auction, deadline sale, price by negotiation — understand the options and pick what's right for you.",
     category: "Selling",
     pdf: "",
+    published: "2026-08-17",
+    updated: "2026-08-17",
+    // Summarises the four methods below. Comparison tables are one of the
+    // formats Google lifts directly into a table snippet.
+    comparison: {
+      caption: "Methods of sale compared",
+      columns: [
+        "Method",
+        "Price advertised",
+        "Conditional offers",
+        "Best suited to",
+      ],
+      rows: [
+        ["Auction", "No", "No — unconditional on the day", "Strong demand; hard-to-value or unusual homes"],
+        ["Deadline sale", "No", "Yes", "Most well-presented homes in a healthy market"],
+        ["Price by negotiation", "No", "Yes", "Uncertain markets; value genuinely hard to pin down"],
+        ["Asking price", "Yes", "Yes", "Areas with plenty of comparable sales evidence"],
+      ],
+    },
     body: [
       {
         heading: "Auction",

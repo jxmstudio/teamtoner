@@ -33,6 +33,10 @@ export interface Guide {
   title: string;
   description: string;
   category: string;
+  /** ISO date first published — drives Article schema and the visible byline. */
+  published?: string;
+  /** ISO date last substantively revised. Falls back to `published`. */
+  updated?: string;
   /** Path to the PDF under /public/guides. Empty string = coming soon. */
   pdf: string;
   cover?: string;
@@ -42,6 +46,19 @@ export interface Guide {
    * that's needed to publish a guide as a content page.
    */
   body?: GuideSection[];
+  /**
+   * True when `body` describes a sequence of steps rather than a set of
+   * options. Drives HowTo markup, which Google can surface as steps directly.
+   */
+  process?: boolean;
+  /** Optional at-a-glance comparison table — a strong table-snippet candidate. */
+  comparison?: GuideComparison;
+}
+
+export interface GuideComparison {
+  caption: string;
+  columns: string[];
+  rows: string[][];
 }
 
 export interface GuideSection {

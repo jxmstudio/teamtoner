@@ -6,17 +6,17 @@ import { HomeHero } from "@/components/brand/home-hero";
 import { ValueProps } from "@/components/brand/value-props";
 import { CtaSection } from "@/components/brand/cta-section";
 import { ListingCard } from "@/components/brand/listing-card";
-import { TestimonialCard } from "@/components/brand/testimonial-card";
+import { TestimonialCarousel } from "@/components/brand/testimonial-carousel";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
-import { RealEstateAgentJsonLd } from "@/components/seo/json-ld";
 import { seoTitles, siteConfig } from "@/lib/site";
 import { getAreas, getFeaturedListings, getFeaturedTestimonials } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.home },
+  // Kept under 160 characters so Google shows it whole rather than truncating.
   description:
-    "Allan & Karen Toner — Palmerston North real estate agents ranked #7 of 350+ Arizto agents nationwide and #1 in the Manawatū. Two agents working for you, premium marketing, 2% + GST commission and no upfront costs.",
+    "Palmerston North real estate agents Allan & Karen Toner — ranked #7 of 350+ Arizto agents nationwide and #1 in the Manawatū. Book a free appraisal.",
   alternates: { canonical: "/" },
 };
 
@@ -25,7 +25,6 @@ export default function HomePage() {
   const reviews = getFeaturedTestimonials(3);
   return (
     <>
-      <RealEstateAgentJsonLd />
       <HomeHero />
       <ValueProps />
 
@@ -95,11 +94,7 @@ export default function HomePage() {
               title="Trusted across the Manawatū"
               description="Real feedback from families who've sold with Team Toner."
             />
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {reviews.map((t, i) => (
-                <TestimonialCard key={i} testimonial={t} />
-              ))}
-            </div>
+            <TestimonialCarousel className="mt-10" testimonials={reviews} />
           </Container>
         </Section>
       )}

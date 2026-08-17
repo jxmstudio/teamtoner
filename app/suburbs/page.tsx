@@ -5,13 +5,14 @@ import { PageHeader } from "@/components/brand/page-header";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { Card, CardContent } from "@/components/ui/card";
+import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { getAreas, getSuburbChildren } from "@/lib/data";
+import { getAreas, getSuburbChildren, getSuburbs } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.suburbs },
   description:
-    "Local real estate knowledge across Palmerston North and the wider Manawatū — Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson, Summerhill, Feilding and Ashhurst.",
+    "Local knowledge across Palmerston North and the Manawatū — Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson, Feilding and Ashhurst.",
   alternates: { canonical: "/suburbs" },
 };
 
@@ -21,6 +22,15 @@ export default function SuburbsPage() {
 
   return (
     <>
+      <ItemListJsonLd
+        name="Areas and suburbs served by Team Toner"
+        description="Palmerston North and wider Manawatū suburbs where Allan & Karen Toner sell."
+        items={getSuburbs().map((s) => ({
+          name: s.name,
+          path: `/suburbs/${s.slug}`,
+        }))}
+      />
+
       <PageHeader
         eyebrow="Local experts"
         title="Local real estate knowledge across Palmerston North & Manawatū"

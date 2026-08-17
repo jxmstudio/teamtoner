@@ -8,6 +8,7 @@ import { CtaSection } from "@/components/brand/cta-section";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { FaqJsonLd } from "@/components/seo/json-ld";
+import { FeeText, TermsFootnote } from "@/components/brand/commission";
 import {
   Accordion,
   AccordionContent,
@@ -19,7 +20,7 @@ import { seoTitles, siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sell },
   description:
-    "Sell your home with Allan & Karen Toner — two experienced agents working together, premium marketing and proven Palmerston North results, for a 2% + GST commission with no upfront costs.",
+    "Sell your home with Allan & Karen Toner — two agents working together, premium marketing and proven Palmerston North results, for a 2% + GST commission.",
   alternates: { canonical: "/sell" },
 };
 
@@ -49,15 +50,15 @@ const steps = [
 const faqs = [
   {
     q: "How much is your commission?",
-    a: `Our commission is ${siteConfig.stats.commission} of the sale price. There are no upfront costs and no sale, no fee — you only pay when your property sells.`,
+    a: `Our commission is ${siteConfig.stats.commission} of the sale price. There are no upfront costs, and under ${siteConfig.guarantee.name} you only pay when your property sells.`,
   },
   {
     q: "Are there any upfront costs?",
     a: "No. You don't pay anything to list with us. Your premium marketing package is included, so there's nothing to fund before your property goes to market.",
   },
   {
-    q: "What does No Sale — No Fee mean?",
-    a: "If your property doesn't sell, you don't pay us a commission. The risk sits with us, not with you — which is exactly why we're honest with you about value from the very first appraisal.",
+    q: `What is ${siteConfig.guarantee.name}?`,
+    a: `${siteConfig.guarantee.summary} The risk sits with us, not with you — which is exactly why we're honest with you about value from the very first appraisal.`,
   },
   {
     q: "What marketing is included?",
@@ -73,7 +74,7 @@ const faqs = [
   },
   {
     q: "What happens if my property doesn't sell?",
-    a: "We review what the market told us — enquiry numbers, viewings, feedback and buyer objections — and adjust the strategy with you. Because of No Sale, No Fee, we're just as motivated as you are to get it right.",
+    a: `We review what the market told us — enquiry numbers, viewings, feedback and buyer objections — and adjust the strategy with you. Because of ${siteConfig.guarantee.name}, we're just as motivated as you are to get it right.`,
   },
   {
     q: "What happens once an offer is accepted?",
@@ -81,7 +82,7 @@ const faqs = [
   },
   {
     q: "What areas do you cover?",
-    a: `We sell throughout ${siteConfig.contact.region}, including the Palmerston North suburbs of Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson and Summerhill.`,
+    a: `We sell throughout ${siteConfig.contact.region}, including the Palmerston North suburbs of Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson and Summerhill / Fitzherbert.`,
   },
 ];
 
@@ -141,11 +142,12 @@ export default function SellPage() {
                   {faq.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  {faq.a}
+                  <FeeText>{faq.a}</FeeText>
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
+          <TermsFootnote />
         </Container>
       </Section>
 

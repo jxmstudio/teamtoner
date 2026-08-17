@@ -4,9 +4,10 @@ import { PageHeader } from "@/components/brand/page-header";
 import { ListingCard } from "@/components/brand/listing-card";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
+import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { cn } from "@/lib/utils";
 import { seoTitles } from "@/lib/site";
-import { getListings, getAreas } from "@/lib/data";
+import { formatListingAddress, getListings, getAreas, getSuburbName } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.listings },
@@ -25,6 +26,15 @@ export default async function ListingsPage(props: PageProps<"/listings">) {
 
   return (
     <>
+      <ItemListJsonLd
+        name="Homes for sale — Team Toner"
+        description="Current Team Toner listings across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
+        items={listings.map((l) => ({
+          name: formatListingAddress(l.address, getSuburbName(l.suburb)),
+          path: `/listings/${l.slug}`,
+        }))}
+      />
+
       <PageHeader
         eyebrow="Current listings"
         title="Homes for sale"

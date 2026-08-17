@@ -128,8 +128,10 @@ export const suburbs: Suburb[] = [
     ],
   },
   {
+    // Slug stays "summerhill" so the existing /suburbs/summerhill URL keeps
+    // working; only the display name matches Allan's system.
     slug: "summerhill",
-    name: "Summerhill",
+    name: "Summerhill / Fitzherbert",
     parent: "palmerston-north",
     blurb:
       "An elevated, modern hillside suburb known for outlook, newer homes and strong family appeal.",

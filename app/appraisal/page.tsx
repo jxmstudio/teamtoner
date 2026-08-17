@@ -4,12 +4,24 @@ import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  CommissionRate,
+  FeeText,
+  TermsFootnote,
+} from "@/components/brand/commission";
+import { FaqJsonLd } from "@/components/seo/json-ld";
 import { seoTitles, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.appraisal },
   description:
-    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner, Palmerston North & Manawatū's No.1 Arizto agents. No pressure, no obligation.",
+    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner — Palmerston North's No.1 Arizto agents. No obligation.",
   alternates: { canonical: "/appraisal" },
 };
 
@@ -24,11 +36,37 @@ const benefits = [
 
 const tel = (n: string) => `tel:${n.replace(/\s/g, "")}`;
 
+/**
+ * Appraisal FAQs. The appraisal-versus-valuation answer is deliberately written
+ * as a plain definition — that's the shape Google lifts into a featured snippet
+ * and the AI answer engines quote.
+ */
+const faqs = [
+  {
+    q: "Is a Team Toner property appraisal really free?",
+    a: "Yes. The appraisal is completely free and carries no obligation to list with us. There are also no upfront costs if you do decide to sell — under The Toner Guarantee you only pay when your property sells. T's and C's apply.",
+  },
+  {
+    q: "What is the difference between a property appraisal and a registered valuation?",
+    a: "A property appraisal is a licensed salesperson's evidence-based estimate of what your property should sell for in the current market, based on recent comparable sales. It is free and used to guide your pricing and marketing decisions. A registered valuation is a formal, paid assessment carried out by a registered valuer, and is what a lender will usually ask for.",
+  },
+  {
+    q: "What happens at a Team Toner appraisal?",
+    a: "Allan and Karen both visit your property, discuss your plans and timeframe, then look at recent comparable sales, current competition and buyer demand. You get a realistic price range and the evidence behind it — not a number designed to win your listing.",
+  },
+  {
+    q: "Do I have to list my property after getting an appraisal?",
+    a: "No. There is no obligation and no pressure. Plenty of people get an appraisal a year or more before they sell, simply to understand where they stand.",
+  },
+];
+
 export default function AppraisalPage() {
   const { agents, contact } = siteConfig;
 
   return (
     <>
+      <FaqJsonLd faqs={faqs} />
+
       <PageHeader
         compact
         eyebrow="Free appraisal"
@@ -91,9 +129,8 @@ export default function AppraisalPage() {
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   We can also explain our premium marketing approach, No Upfront
-                  Costs, and No Sale &ndash; No Fee &mdash; that&rsquo;s the
-                  Toner guarantee! &mdash; along with our competitive{" "}
-                  {siteConfig.stats.commission} commission<sup>*</sup>.
+                  Costs, and {siteConfig.guarantee.name} &mdash; along with our
+                  competitive <CommissionRate /> commission.
                 </p>
               </div>
 
@@ -122,9 +159,27 @@ export default function AppraisalPage() {
           </div>
 
           {/* Footnote sits under everything, per the client's request. */}
-          <p className="mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
-            <sup>*</sup> T&amp;Cs apply.
-          </p>
+          <TermsFootnote />
+        </Container>
+      </Section>
+
+      <Section className="bg-secondary/50">
+        <Container className="max-w-3xl">
+          <h2 className="text-2xl font-bold text-foreground">
+            Appraisal questions, answered
+          </h2>
+          <Accordion className="mt-8">
+            {faqs.map((faq) => (
+              <AccordionItem key={faq.q} value={faq.q}>
+                <AccordionTrigger className="text-left text-base font-semibold">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <FeeText>{faq.a}</FeeText>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </Container>
       </Section>
     </>

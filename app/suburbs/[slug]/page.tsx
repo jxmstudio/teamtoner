@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/brand/page-header";
 import { ListingCard } from "@/components/brand/listing-card";
 import { TestimonialCard } from "@/components/brand/testimonial-card";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { Breadcrumbs } from "@/components/brand/breadcrumbs";
+import { FaqJsonLd } from "@/components/seo/json-ld";
+import { FeeText } from "@/components/brand/commission";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { fitTitle, siteConfig } from "@/lib/site";
 import {
   getSuburbs,
   getSuburbBySlug,
@@ -16,6 +24,34 @@ import {
   getSoldBySuburb,
   getFeaturedTestimonials,
 } from "@/lib/data";
+
+/**
+ * Per-suburb FAQs. Every answer is drawn from facts already published
+ * elsewhere on the site — nothing here asserts market data we don't hold.
+ * These drive FAQPage markup, which is what makes a suburb page eligible for
+ * People Also Ask and AI answer citations rather than just a listings grid.
+ */
+function suburbFaqs(suburbName: string) {
+  const { agents, contact, stats, guarantee } = siteConfig;
+  return [
+    {
+      q: `Do Team Toner sell houses in ${suburbName}?`,
+      a: `Yes. Allan & Karen Toner sell throughout ${contact.region}, including ${suburbName}. You get two experienced agents personally working on your sale rather than one agent and an assistant.`,
+    },
+    {
+      q: `What does it cost to sell a house in ${suburbName}?`,
+      a: `Team Toner charge a ${stats.commission} commission on the sale price, with no upfront costs. Under ${guarantee.name} you only pay when your property sells. T's and C's apply.`,
+    },
+    {
+      q: `How do I get a free property appraisal in ${suburbName}?`,
+      a: `Book online, or call Allan on ${agents.allan.phone} or Karen on ${agents.karen.phone}. The appraisal is free, based on recent comparable sales near your property, and carries no obligation to list.`,
+    },
+    {
+      q: `What marketing is included when selling in ${suburbName}?`,
+      a: `Professional property photography, free aerial photography, premium placement across the major online property portals, signage, and Team Toner social and video marketing — with no upfront cost to you.`,
+    },
+  ];
+}
 
 export function generateStaticParams() {
   return getSuburbs().map((s) => ({ slug: s.slug }));
@@ -32,8 +68,14 @@ export async function generateMetadata(
   const scope = parent ? `${parent.name}` : "Manawatū";
 
   return {
-    title: { absolute: `${suburb.name} Real Estate | Team Toner ${scope}` },
-    description: `${suburb.name} property market insight, current listings and recent Team Toner sales. Book a free, evidence-based appraisal with Allan & Karen Toner.`,
+    title: {
+      absolute: fitTitle([
+        `${suburb.name} Real Estate | Team Toner ${scope}`,
+        `${suburb.name} Real Estate | Team Toner`,
+        `${suburb.name} Real Estate`,
+      ]),
+    },
+    description: `${suburb.name} property market insight, current listings and recent Team Toner sales. Book a free appraisal with Allan & Karen Toner.`,
     alternates: { canonical: `/suburbs/${suburb.slug}` },
   };
 }
@@ -45,6 +87,12 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
 
   const parent = suburb.parent ? getSuburbBySlug(suburb.parent) : undefined;
   const children = getSuburbChildren(suburb.slug);
+  // Sibling suburbs — without these each suburb page is a dead end that only
+  // links upward, so the local cluster gets no lateral link equity.
+  const siblings = parent
+    ? getSuburbChildren(parent.slug).filter((s) => s.slug !== suburb.slug)
+    : [];
+  const faqs = suburbFaqs(suburb.name);
 
   const listings = getListingsBySuburb(slug);
   const sold = getSoldBySuburb(slug);
@@ -59,14 +107,7 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
 
   return (
     <>
-      <BreadcrumbJsonLd
-        items={[
-          { name: "Home", path: "/" },
-          { name: "Suburbs", path: "/suburbs" },
-          ...(parent ? [{ name: parent.name, path: `/suburbs/${parent.slug}` }] : []),
-          { name: suburb.name, path: `/suburbs/${suburb.slug}` },
-        ]}
-      />
+      <FaqJsonLd faqs={faqs} />
 
       <PageHeader
         eyebrow={parent ? `${parent.name} suburb` : "Local experts"}
@@ -76,12 +117,16 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
 
       <Section>
         <Container>
-          <Link
-            href="/suburbs"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            <ArrowLeft className="size-4" /> All areas
-          </Link>
+          <Breadcrumbs
+            items={[
+              { name: "Home", path: "/" },
+              { name: "Suburbs", path: "/suburbs" },
+              ...(parent
+                ? [{ name: parent.name, path: `/suburbs/${parent.slug}` }]
+                : []),
+              { name: suburb.name, path: `/suburbs/${suburb.slug}` },
+            ]}
+          />
 
           {/* Market commentary */}
           {suburb.commentary?.length ? (
@@ -109,6 +154,27 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
                       className="inline-flex rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-foreground/80 transition-colors hover:border-teal hover:text-primary"
                     >
                       {child.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Sibling suburbs — lateral links across the local cluster. */}
+          {siblings.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold text-foreground">
+                Other {parent?.name} suburbs we sell in
+              </h2>
+              <ul className="mt-6 flex flex-wrap gap-3">
+                {siblings.map((sibling) => (
+                  <li key={sibling.slug}>
+                    <Link
+                      href={`/suburbs/${sibling.slug}`}
+                      className="inline-flex rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-foreground/80 transition-colors hover:border-teal hover:text-primary"
+                    >
+                      {sibling.name} real estate
                     </Link>
                   </li>
                 ))}
@@ -181,6 +247,28 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
           </Container>
         </Section>
       )}
+
+      {/* Localised FAQs — the FAQPage markup above makes these eligible for
+          People Also Ask and AI answer citations. */}
+      <Section>
+        <Container className="max-w-3xl">
+          <h2 className="text-2xl font-bold text-foreground">
+            Selling in {suburb.name} — common questions
+          </h2>
+          <Accordion className="mt-8">
+            {faqs.map((faq) => (
+              <AccordionItem key={faq.q} value={faq.q}>
+                <AccordionTrigger className="text-left text-base font-semibold">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <FeeText>{faq.a}</FeeText>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </Container>
+      </Section>
 
       {/* Free appraisal CTA — site-wide banner copy, localised description. */}
       <CtaSection
