@@ -46,19 +46,22 @@ export default function SuburbsPage() {
       <Section>
         <Container>
           <div className="grid gap-6 md:grid-cols-2">
+            {/* Whole card is the link (brief §9 — "clearly useful and clickable"). */}
             {areas.map((s) => (
-              <Card key={s.slug} className="flex flex-col">
-                <CardContent className="flex flex-1 flex-col pt-6">
-                  <h2 className="text-2xl font-bold text-foreground">{s.name}</h2>
-                  <p className="mt-3 flex-1 text-muted-foreground">{s.blurb}</p>
-                  <Link
-                    href={`/suburbs/${s.slug}`}
-                    className="mt-5 inline-flex items-center gap-2 font-semibold text-primary transition-all hover:gap-3"
-                  >
-                    Explore {s.name} <ArrowRight className="size-4" />
-                  </Link>
-                </CardContent>
-              </Card>
+              <Link key={s.slug} href={`/suburbs/${s.slug}`} className="group flex">
+                <Card className="flex flex-1 flex-col transition-colors group-hover:border-teal">
+                  <CardContent className="flex flex-1 flex-col pt-6">
+                    <h2 className="text-2xl font-bold text-foreground group-hover:text-primary">
+                      {s.name}
+                    </h2>
+                    <p className="mt-3 flex-1 text-muted-foreground">{s.blurb}</p>
+                    <span className="mt-5 inline-flex items-center gap-2 font-semibold text-primary transition-all group-hover:gap-3">
+                      Local market insights &amp; properties{" "}
+                      <ArrowRight className="size-4" />
+                    </span>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </Container>

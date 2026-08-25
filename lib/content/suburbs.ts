@@ -18,7 +18,7 @@ export const suburbs: Suburb[] = [
     slug: "palmerston-north",
     name: "Palmerston North",
     blurb:
-      "The heart of the Manawatū — a vibrant university city with strong buyer demand across family suburbs, city fringe and lifestyle blocks. Team Toner are the #1 Arizto team here.",
+      "The heart of the Manawatū — a vibrant university city with strong buyer demand across family suburbs, city fringe and lifestyle blocks. Team Toner are the No.1 Arizto team here.",
     commentary: [
       "Palmerston North draws buyers from across the lower North Island — students and staff at Massey and UCOL, Defence and health-sector families, and Wellington movers trading commute time for section size.",
       "That breadth of demand is why presentation and reach matter here. A well-marketed home in the right pocket regularly attracts buyers who were not originally looking in that street.",

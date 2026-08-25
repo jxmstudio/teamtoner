@@ -18,8 +18,16 @@ import { siteConfig } from "@/lib/site";
 /** Anchor for the commission disclaimer on the Terms page. */
 export const COMMISSION_TERMS_HREF = "/terms#commission";
 
-/** Matches the commission rate in body copy, tolerating spacing variations. */
-const COMMISSION_PATTERN = /2\s*%\s*\+\s*GST/g;
+/** Anchor for the ranking source/date note on the Terms page (brief §4). */
+export const RANKINGS_TERMS_HREF = "/terms#rankings";
+
+/**
+ * Matches either the commission rate, tolerating spacing variations (a linked
+ * asterisk gets appended after it), or a literal `*` an author placed in copy
+ * (replaced with a linked ranking asterisk). Authors write ranking claims exactly as the client brief does —
+ * "No.1 Arizto team*", "#7 nationwide.*" — and FeeText makes the `*` a link.
+ */
+const NOTE_PATTERN = /2\s*%\s*\+\s*GST|\*/g;
 
 /** The asterisk itself — a link through to the commission T&Cs. */
 export function FeeAsterisk() {
@@ -28,6 +36,20 @@ export function FeeAsterisk() {
       href={COMMISSION_TERMS_HREF}
       aria-label="Terms and conditions apply"
       title="T's & C's apply"
+      className="text-inherit underline-offset-2 hover:underline"
+    >
+      <sup aria-hidden>*</sup>
+    </Link>
+  );
+}
+
+/** Asterisk for the No.1 / #7 ranking claims — links to the source note. */
+export function RankingAsterisk() {
+  return (
+    <Link
+      href={RANKINGS_TERMS_HREF}
+      aria-label="Ranking source and date"
+      title="Ranking source and date"
       className="text-inherit underline-offset-2 hover:underline"
     >
       <sup aria-hidden>*</sup>
@@ -46,18 +68,24 @@ export function CommissionRate() {
 }
 
 /**
- * Renders a plain copy string, appending the asterisk to every commission rate
- * it contains. Strings with no rate in them pass straight through.
+ * Renders a plain copy string, appending the linked asterisk to every
+ * commission rate it contains and converting any literal `*` into a linked
+ * ranking asterisk. Strings with neither pass straight through.
  */
 export function FeeText({ children }: { children: string }) {
   const nodes: React.ReactNode[] = [];
   let cursor = 0;
 
-  for (const match of children.matchAll(COMMISSION_PATTERN)) {
-    const end = match.index + match[0].length;
-    nodes.push(children.slice(cursor, end));
-    nodes.push(<FeeAsterisk key={end} />);
-    cursor = end;
+  for (const match of children.matchAll(NOTE_PATTERN)) {
+    if (match[0] === "*") {
+      nodes.push(children.slice(cursor, match.index));
+      nodes.push(<RankingAsterisk key={match.index} />);
+    } else {
+      const end = match.index + match[0].length;
+      nodes.push(children.slice(cursor, end));
+      nodes.push(<FeeAsterisk key={end} />);
+    }
+    cursor = match.index + match[0].length;
   }
 
   if (cursor === 0) return <>{children}</>;
@@ -74,17 +102,23 @@ export function FeeText({ children }: { children: string }) {
  */
 export function TermsFootnote({ className }: { className?: string }) {
   return (
-    <p
+    <div
       className={
         className ??
         "mt-10 border-t border-border pt-6 text-xs text-muted-foreground"
       }
     >
-      <sup>*</sup> T&rsquo;s &amp; C&rsquo;s apply &mdash;{" "}
-      <Link href={COMMISSION_TERMS_HREF} className="underline hover:opacity-80">
-        see our commission terms
-      </Link>
-      .
-    </p>
+      <p>
+        <sup>*</sup> T&rsquo;s &amp; C&rsquo;s apply &mdash;{" "}
+        <Link href={COMMISSION_TERMS_HREF} className="underline hover:opacity-80">
+          see our commission terms
+        </Link>
+        . Rankings based on Arizto agent sales results &mdash;{" "}
+        <Link href={RANKINGS_TERMS_HREF} className="underline hover:opacity-80">
+          source and date
+        </Link>
+        .
+      </p>
+    </div>
   );
 }

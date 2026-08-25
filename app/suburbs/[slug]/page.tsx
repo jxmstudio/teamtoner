@@ -75,7 +75,7 @@ export async function generateMetadata(
         `${suburb.name} Real Estate`,
       ]),
     },
-    description: `${suburb.name} property market insight, current listings and recent Team Toner sales. Book a free appraisal with Allan & Karen Toner.`,
+    description: `${suburb.name} property market insight, current listings and recent Team Toner sales. Get a free appraisal with Allan & Karen Toner.`,
     alternates: { canonical: `/suburbs/${suburb.slug}` },
   };
 }

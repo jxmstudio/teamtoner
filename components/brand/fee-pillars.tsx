@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site";
 
 /**
  * The three fee pillars as a compact strip: 2% + GST Commission ·
- * No Upfront Costs · The Toner Guarantee. Supports the proposition; never
+ * No Upfront Costs · No Sale — No Fee. Supports the proposition; never
  * leads it. `FeeText` attaches the required asterisk to the commission pillar.
  */
 export function FeePillars({

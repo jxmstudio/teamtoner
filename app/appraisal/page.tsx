@@ -13,6 +13,7 @@ import {
 import {
   CommissionRate,
   FeeText,
+  RankingAsterisk,
   TermsFootnote,
 } from "@/components/brand/commission";
 import { FaqJsonLd } from "@/components/seo/json-ld";
@@ -21,7 +22,7 @@ import { seoTitles, siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: { absolute: seoTitles.appraisal },
   description:
-    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner — Palmerston North's No.1 Arizto agents. No obligation.",
+    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner — Palmerston North's No.1 Arizto team. No obligation.",
   alternates: { canonical: "/appraisal" },
 };
 
@@ -44,7 +45,7 @@ const tel = (n: string) => `tel:${n.replace(/\s/g, "")}`;
 const faqs = [
   {
     q: "Is a Team Toner property appraisal really free?",
-    a: "Yes. The appraisal is completely free and carries no obligation to list with us. There are also no upfront costs if you do decide to sell — under The Toner Guarantee you only pay when your property sells. T's and C's apply.",
+    a: "Yes. The appraisal is completely free and carries no obligation to list with us. There are also no upfront costs if you do decide to sell — with No Sale — No Fee, you only pay when your property sells. T's and C's apply.",
   },
   {
     q: "What is the difference between a property appraisal and a registered valuation?",
@@ -71,7 +72,7 @@ export default function AppraisalPage() {
         compact
         eyebrow="Free appraisal"
         title="What Could Your Property Sell For in Today's Market?"
-        description="Get a clear, evidence-based appraisal from Allan & Karen Toner — Team Toner, Palmerston North & Manawatū's No.1 Arizto agents."
+        description="Get a clear, evidence-based appraisal from Allan & Karen Toner — Team Toner, Palmerston North & Manawatū's No.1 Arizto team."
       >
         <p className="mt-3 max-w-2xl text-muted-foreground">
           We&rsquo;ll personally assess your property, look at recent comparable
@@ -94,10 +95,12 @@ export default function AppraisalPage() {
                   Local experience. Proven results.
                 </p>
                 <p className="mt-2 font-semibold text-foreground">
-                  No.1 Arizto Agents — Palmerston North &amp; Manawatū
+                  No.1 Arizto Team — Palmerston North &amp; Manawatū
+                  <RankingAsterisk />
                 </p>
                 <p className="font-semibold text-foreground">
-                  No.7 Arizto Agents Nationwide
+                  #7 Arizto Agents Nationwide
+                  <RankingAsterisk />
                 </p>
               </div>
 

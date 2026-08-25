@@ -34,13 +34,17 @@ export function SiteHeader() {
           readability, so the bar grows with it rather than cropping. */}
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2" aria-label={siteConfig.name}>
+          {/* team-toner-signature-mark.png is the original signature cropped
+              to its ink with the white background removed — the source PNG is
+              62% empty margin, which is why the mark rendered tiny. The
+              full white-background original stays for JSON-LD/schema use. */}
           <Image
-            src="/brand/team-toner-signature.png"
+            src="/brand/team-toner-signature-mark.png"
             alt={`${siteConfig.name} Real Estate`}
-            width={1512}
-            height={1000}
+            width={1256}
+            height={417}
             priority
-            className="h-12 w-auto sm:h-14"
+            className="h-10 w-auto sm:h-12"
           />
         </Link>
 

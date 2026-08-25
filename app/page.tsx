@@ -7,6 +7,7 @@ import { ValueProps } from "@/components/brand/value-props";
 import { CtaSection } from "@/components/brand/cta-section";
 import { ListingCard } from "@/components/brand/listing-card";
 import { TestimonialCarousel } from "@/components/brand/testimonial-carousel";
+import { FeeText } from "@/components/brand/commission";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { seoTitles, siteConfig } from "@/lib/site";
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   title: { absolute: seoTitles.home },
   // Kept under 160 characters so Google shows it whole rather than truncating.
   description:
-    "Palmerston North real estate agents Allan & Karen Toner — ranked #7 of 350+ Arizto agents nationwide and #1 in the Manawatū. Book a free appraisal.",
+    "Palmerston North real estate agents Allan & Karen Toner — ranked #7 Arizto agents nationwide and No.1 in the Manawatū. Get a free appraisal.",
   alternates: { canonical: "/" },
 };
 
@@ -46,13 +47,39 @@ export default function HomePage() {
               align="left"
               eyebrow="Proven results"
               title="Proud to be recognised"
-              description={`Ranked ${siteConfig.stats.nationalRank} of ${siteConfig.stats.agentPool} Arizto agents across New Zealand, and ${siteConfig.stats.regionRank} in ${siteConfig.stats.regionName}. When you list with Team Toner, you get two experienced agents personally working on your sale.`}
+              description={
+                <FeeText>{`Ranked ${siteConfig.stats.nationalRank} among Arizto agents nationwide and ${siteConfig.stats.regionRank} in ${siteConfig.stats.regionName}.* When you list with Team Toner, you get two experienced agents personally working on your sale.`}</FeeText>
+              }
+            />
+          </div>
+        </Container>
+      </Section>
+
+      {/* Meet Allan & Karen (launch brief §5) — official supplied photo only. */}
+      <Section>
+        <Container className="grid items-center gap-10 lg:grid-cols-[2fr_3fr]">
+          <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl shadow-lg ring-1 ring-border lg:mx-0">
+            <Image
+              src="/team/allan-karen.jpg"
+              alt="Allan and Karen Toner — Team Toner, Arizto real estate agents in Palmerston North"
+              width={1200}
+              height={1200}
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="aspect-[4/5] w-full object-cover object-top"
+            />
+          </div>
+          <div>
+            <SectionHeading
+              align="left"
+              eyebrow="Meet Allan & Karen"
+              title="Two agents. One team. Personally involved from start to finish."
+              description="We're Allan & Karen Toner, a husband-and-wife real estate team helping homeowners throughout Palmerston North, Feilding, Ashhurst and the wider Manawatū. When you list with Team Toner, you deal directly with us throughout your sale."
             />
             <Link
               href="/about"
               className="mt-6 inline-flex items-center gap-2 font-semibold text-primary transition-all hover:gap-3"
             >
-              Meet Allan &amp; Karen <ArrowRight className="size-4" />
+              Meet Team Toner <ArrowRight className="size-4" />
             </Link>
           </div>
         </Container>
@@ -73,7 +100,7 @@ export default function HomePage() {
                 variant="outline"
                 className="hidden h-10 shrink-0 px-4 sm:inline-flex"
               >
-                View all
+                View All Properties
               </ButtonLink>
             </div>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

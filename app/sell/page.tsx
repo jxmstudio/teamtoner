@@ -107,7 +107,7 @@ export default function SellPage() {
           href="/appraisal"
           className="mt-7 h-12 bg-teal px-7 text-base text-teal-foreground hover:bg-teal/90"
         >
-          Book a free appraisal
+          Get a Free Appraisal
         </ButtonLink>
       </PageHeader>
 

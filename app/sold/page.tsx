@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/brand/page-header";
 import { ListingCard } from "@/components/brand/listing-card";
 import { CtaSection } from "@/components/brand/cta-section";
+import { FeeText } from "@/components/brand/commission";
 import { Container, Section } from "@/components/brand/primitives";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles, siteConfig } from "@/lib/site";
@@ -10,7 +11,7 @@ import { formatListingAddress, getSoldListings, getSuburbName } from "@/lib/data
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sold },
   description:
-    "Properties recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū — proven results from the region's #1 Arizto team.",
+    "Properties recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū — proven results from the region's No.1 Arizto team.",
   alternates: { canonical: "/sold" },
 };
 
@@ -56,8 +57,8 @@ export default function SoldPage() {
       <Section className="bg-secondary/50 py-12 sm:py-14 lg:py-16">
         <Container>
           <dl className="grid gap-8 text-center sm:grid-cols-2">
-            <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
-            <Stat value={stats.regionRank} label={`in ${stats.regionName}`} />
+            <Stat value={stats.nationalRank} label="Arizto Agents Nationwide*" />
+            <Stat value={stats.regionRank} label={`Arizto Team — ${stats.regionName}*`} />
           </dl>
         </Container>
       </Section>
@@ -70,9 +71,11 @@ export default function SoldPage() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <dt className="sr-only">{label}</dt>
+      <dt className="sr-only">{label.replace("*", "")}</dt>
       <dd className="text-4xl font-bold text-primary sm:text-5xl">{value}</dd>
-      <p className="mt-2 text-muted-foreground">{label}</p>
+      <p className="mt-2 text-muted-foreground">
+        <FeeText>{label}</FeeText>
+      </p>
     </div>
   );
 }

@@ -71,6 +71,24 @@ export default function TermsPage() {
               under which the agreement may end.
             </p>
           </div>
+          {/*
+            Every asterisk beside a ranking claim (No.1 Arizto team, #7
+            nationwide) links to this section. Keep the `id` stable.
+            TODO(client): Allan & Karen to confirm the exact ranking source
+            and "as at" date before publication (launch brief §4).
+          */}
+          <div id="rankings" className="scroll-mt-24">
+            <h2 className="text-xl font-semibold text-foreground">
+              Ranking claims
+            </h2>
+            <p className="mt-2">
+              References on this site to Team Toner being the No.1 Arizto team
+              in {siteConfig.stats.regionName} and ranked{" "}
+              {siteConfig.stats.nationalRank} among Arizto agents nationwide are
+              based on Arizto agent sales results as at August 2026. Rankings
+              are reviewed periodically and may change.
+            </p>
+          </div>
           <div>
             <h2 className="text-xl font-semibold text-foreground">
               Licensing

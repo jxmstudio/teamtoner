@@ -49,8 +49,11 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-2">
           <p className="font-script text-3xl text-white">{siteConfig.name}</p>
-          <p className="mt-2 max-w-md text-sm text-white/70">
-            <FeeText>{siteConfig.description}</FeeText>
+          <p className="mt-2 text-sm font-semibold text-white">
+            {siteConfig.footerTagline}
+          </p>
+          <p className="mt-1 max-w-md text-sm text-white/70">
+            <FeeText>{siteConfig.footerDescription}</FeeText>
           </p>
           <div className="mt-5 flex items-center gap-3">
             <Image
@@ -69,13 +72,17 @@ export function SiteFooter() {
             Explore
           </h3>
           <ul className="mt-4 space-y-2 text-sm">
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="hover:text-teal">
-                  {item.title}
-                </Link>
-              </li>
-            ))}
+            {/* Footer-only "Free Appraisal" entry (brief §13); the header
+                already carries its own appraisal CTA button. */}
+            {[...mainNav, { title: "Free Appraisal", href: "/appraisal" }].map(
+              (item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="hover:text-teal">
+                    {item.title}
+                  </Link>
+                </li>
+              )
+            )}
           </ul>
         </div>
 

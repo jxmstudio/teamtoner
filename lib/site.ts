@@ -15,7 +15,15 @@ export const siteConfig = {
   tagline: "Premium service. Proven results. A smarter fee.",
   strapline: "Premium service. Proven results. A smarter fee.",
   description:
-    "Allan & Karen Toner — a husband-and-wife real estate team ranked #7 of 350+ Arizto agents nationwide and #1 in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with no upfront costs.",
+    "Allan & Karen Toner — a husband-and-wife real estate team ranked #7 Arizto agents nationwide and No.1 in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with no upfront costs.",
+  /**
+   * Footer blurb (launch brief §13) — deliberately shorter than `description`,
+   * which continues to serve <meta> and JSON-LD. The `*` after "nationwide."
+   * is rendered as a link to the rankings note by <FeeText>.
+   */
+  footerTagline: "Allan & Karen Toner | Team Toner",
+  footerDescription:
+    "Palmerston North & Manawatū's No.1 Arizto team and ranked #7 nationwide.* Two experienced agents, premium marketing and a smarter 2% + GST commission.",
   // Env-driven so preview/staging deployments generate their own canonicals,
   // sitemap and OG URLs instead of pointing at production.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://teamtoner.co.nz",
@@ -73,26 +81,29 @@ export const siteConfig = {
   },
   /**
    * Only *relative* performance figures live here. Absolute counts (e.g. a
-   * running homes-sold total) date the site and need manual upkeep, so they
-   * were removed at the client's request — don't reintroduce one.
+   * running homes-sold total or the "of 350+ agents" pool size) date the site
+   * and need manual upkeep, so they were removed at the client's request —
+   * don't reintroduce one. Launch brief §14 standardises the wording as
+   * "No.1 Arizto team" and "#7 nationwide", each carrying a `*` that links to
+   * the rankings note on /terms#rankings.
    */
   stats: {
     nationalRank: "#7",
-    agentPool: "350+",
-    regionRank: "#1",
+    regionRank: "No.1",
     regionName: "Palmerston North & Manawatū",
     commission: "2% + GST",
   },
   /**
-   * The seller guarantee, formerly "No Sale — No Fee". The name is client-owned
-   * branding: always render `guarantee.name`, never the old wording.
+   * The seller guarantee. Final launch brief (Aug 2026) reverted the earlier
+   * "The Toner Guarantee" branding — always render `guarantee.name`, and keep
+   * it "No Sale — No Fee".
    */
   guarantee: {
-    name: "The Toner Guarantee",
+    name: "No Sale — No Fee",
     summary: "If your property doesn't sell, you don't pay us a commission.",
   },
   /** The three fee pillars, shown as a strip under the Sell/About intros. */
-  feePillars: ["2% + GST Commission", "No Upfront Costs", "The Toner Guarantee"],
+  feePillars: ["2% + GST Commission", "No Upfront Costs", "No Sale — No Fee"],
   /**
    * The four "Why Team Toner" benefits. Home and Sell carry the same four
    * pillars with slightly different supporting lines (per the client brief).
@@ -100,11 +111,12 @@ export const siteConfig = {
   sellingPoints: [
     {
       title: "Two agents working for you",
-      detail: "Allan & Karen personally work together throughout your sale.",
+      detail:
+        "Allan & Karen personally work together throughout your sale — from strategy and marketing to buyer follow-up and negotiation.",
     },
     {
       title: "Proven results",
-      detail: "Palmerston North & Manawatū's #1 Arizto team.",
+      detail: "Palmerston North & Manawatū's No.1 Arizto team.*",
     },
     {
       title: "Premium marketing",
@@ -113,17 +125,18 @@ export const siteConfig = {
     },
     {
       title: "A smarter fee",
-      detail: "2% + GST commission. No upfront costs. The Toner Guarantee.",
+      detail: "2% + GST commission. No upfront costs. No Sale — No Fee.",
     },
   ],
   sellingPointsSell: [
     {
       title: "Two agents working for you",
-      detail: "Allan & Karen personally work together throughout your sale.",
+      detail:
+        "Allan & Karen personally work together throughout your sale — from strategy and marketing to buyer follow-up and negotiation.",
     },
     {
       title: "Proven results",
-      detail: "Palmerston North & Manawatū's #1 Arizto team.",
+      detail: "Palmerston North & Manawatū's No.1 Arizto team.*",
     },
     {
       title: "Premium marketing",
@@ -131,7 +144,7 @@ export const siteConfig = {
     },
     {
       title: "A smarter fee",
-      detail: "2% + GST. No upfront costs. The Toner Guarantee.",
+      detail: "2% + GST. No upfront costs. No Sale — No Fee.",
     },
   ],
   suburbs: [
@@ -221,7 +234,7 @@ export const seoTitles = {
   contact: "Contact Team Toner | Palmerston North Real Estate Agents",
   listings: "Homes for Sale | Team Toner Palmerston North & Manawatū",
   sold: "Recently Sold | Team Toner Palmerston North & Manawatū",
-  appraisal: "Book a Free Property Appraisal | Team Toner Palmerston North",
+  appraisal: "Free Property Appraisal | Team Toner Palmerston North",
 } as const;
 
 export const mainNav = [

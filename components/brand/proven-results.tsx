@@ -1,10 +1,11 @@
 import { Star } from "lucide-react";
+import { FeeText } from "@/components/brand/commission";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { siteConfig } from "@/lib/site";
 import { getFeaturedTestimonials } from "@/lib/data";
 
 /**
- * Proven Results block — the #7 / #1 ranking figures plus one strong five-star
+ * Proven Results block — the #7 / No.1 ranking figures plus one strong five-star
  * seller testimonial. Used on the Sell page (before the FAQs) and reusable
  * anywhere the proof needs restating.
  */
@@ -28,11 +29,11 @@ export function ProvenResults({
         />
 
         <dl className="mt-12 grid gap-8 text-center sm:grid-cols-2">
+          <Stat value={stats.nationalRank} label="Arizto Agents Nationwide*" />
           <Stat
-            value={stats.nationalRank}
-            label={`of ${stats.agentPool} Arizto agents nationwide`}
+            value={stats.regionRank}
+            label={`Arizto Team — ${stats.regionName}*`}
           />
-          <Stat value={stats.regionRank} label={stats.regionName} />
         </dl>
 
         {showTestimonial && testimonial ? (
@@ -65,9 +66,11 @@ export function ProvenResults({
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <dt className="sr-only">{label}</dt>
+      <dt className="sr-only">{label.replace("*", "")}</dt>
       <dd className="text-5xl font-bold text-primary">{value}</dd>
-      <p className="mt-2 text-muted-foreground">{label}</p>
+      <p className="mt-2 text-muted-foreground">
+        <FeeText>{label}</FeeText>
+      </p>
     </div>
   );
 }

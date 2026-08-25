@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHeader } from "@/components/brand/page-header";
 import { FeePillars } from "@/components/brand/fee-pillars";
+import { FeeText } from "@/components/brand/commission";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { PageEntityJsonLd } from "@/components/seo/json-ld";
@@ -100,8 +101,8 @@ export default function AboutPage() {
       <Section>
         <Container>
           <dl className="grid gap-8 text-center sm:grid-cols-2">
-            <Stat value={stats.nationalRank} label={`of ${stats.agentPool} Arizto agents nationwide`} />
-            <Stat value={stats.regionRank} label={`in ${stats.regionName}`} />
+            <Stat value={stats.nationalRank} label="Arizto Agents Nationwide*" />
+            <Stat value={stats.regionRank} label={`Arizto Team — ${stats.regionName}*`} />
           </dl>
           <p className="mt-10 text-center text-sm text-muted-foreground">
             Talk to us:{" "}
@@ -130,9 +131,11 @@ export default function AboutPage() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <dt className="sr-only">{label}</dt>
+      <dt className="sr-only">{label.replace("*", "")}</dt>
       <dd className="text-5xl font-bold text-primary">{value}</dd>
-      <p className="mt-2 text-muted-foreground">{label}</p>
+      <p className="mt-2 text-muted-foreground">
+        <FeeText>{label}</FeeText>
+      </p>
     </div>
   );
 }
