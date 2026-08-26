@@ -276,8 +276,9 @@ export function ListingJsonLd({
         description: listing.description.join(" "),
         url: `${siteConfig.url}/listings/${listing.slug}`,
         image: listing.images.map((src) => `${siteConfig.url}${src}`),
-        numberOfBedrooms: listing.beds,
-        numberOfBathroomsTotal: listing.baths,
+        // Bare-land listings have no rooms; JSON.stringify drops the undefineds.
+        numberOfBedrooms: listing.beds || undefined,
+        numberOfBathroomsTotal: listing.baths || undefined,
         address: {
           "@type": "PostalAddress",
           streetAddress: listing.address,

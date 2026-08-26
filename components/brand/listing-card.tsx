@@ -80,17 +80,20 @@ export function ListingCard({ listing }: { listing: Listing }) {
         <p className="mt-2 text-lg font-bold text-primary">
           {sold ? (listing.soldPrice ?? "Sold") : listing.priceDisplay}
         </p>
-        <div className="mt-4 flex items-center gap-4 border-t border-border pt-4 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Bed className="size-4" /> {listing.beds}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Bath className="size-4" /> {listing.baths}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Car className="size-4" /> {listing.parking}
-          </span>
-        </div>
+        {/* Bare-land listings have no bed/bath/car counts — skip the row. */}
+        {(listing.beds > 0 || listing.baths > 0 || listing.parking > 0) && (
+          <div className="mt-4 flex items-center gap-4 border-t border-border pt-4 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5">
+              <Bed className="size-4" /> {listing.beds}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Bath className="size-4" /> {listing.baths}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Car className="size-4" /> {listing.parking}
+            </span>
+          </div>
+        )}
       </div>
     </Link>
   );

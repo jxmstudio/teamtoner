@@ -35,9 +35,6 @@ export default function SoldPage() {
         description="See some of the properties we've successfully sold across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
       />
 
-      {/* TODO(client): these are sample sales with stand-in photography.
-          Real sold data and photography drop in via lib/content/listings.ts
-          (or the live sold-data feed) with no layout change. */}
       <Section>
         <Container>
           {sold.length > 0 ? (

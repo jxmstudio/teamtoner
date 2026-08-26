@@ -45,7 +45,10 @@ export async function generateMetadata(
 
   // Listing blurbs run short; pad to a useful SERP length with the concrete
   // details a buyer scans for rather than leaving a 70-character description.
-  const spec = `${listing.beds} bed, ${listing.baths} bath, ${listing.parking} car. ${listing.priceDisplay}.`;
+  const spec =
+    listing.beds > 0 || listing.baths > 0 || listing.parking > 0
+      ? `${listing.beds} bed, ${listing.baths} bath, ${listing.parking} car. ${listing.priceDisplay}.`
+      : `${listing.priceDisplay}.`;
   const description = [listing.description[0], spec]
     .filter(Boolean)
     .join(" ")
@@ -121,18 +124,19 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
 
           <div className="mt-6 grid gap-10 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              {/* TODO(client): stand-in photography — replace `images` in
-                  lib/content/listings.ts with the real listing shots. */}
               <ListingGallery
                 images={listing.images}
-                alt={`${listing.address}, ${suburbName} — ${listing.beds} bedroom home ${sold ? "sold" : "for sale"} with Team Toner`}
+                alt={`${listing.address}, ${suburbName} — ${listing.beds > 0 ? `${listing.beds} bedroom home` : "property"} ${sold ? "sold" : "for sale"} with Team Toner`}
               />
 
-              <div className="mt-6 flex flex-wrap gap-6 border-y border-border py-5 text-foreground">
-                <Spec icon={<Bed className="size-5" />} value={listing.beds} label="Beds" />
-                <Spec icon={<Bath className="size-5" />} value={listing.baths} label="Baths" />
-                <Spec icon={<Car className="size-5" />} value={listing.parking} label="Parking" />
-              </div>
+              {/* Bare-land listings have no bed/bath/car counts — skip the row. */}
+              {(listing.beds > 0 || listing.baths > 0 || listing.parking > 0) && (
+                <div className="mt-6 flex flex-wrap gap-6 border-y border-border py-5 text-foreground">
+                  <Spec icon={<Bed className="size-5" />} value={listing.beds} label="Beds" />
+                  <Spec icon={<Bath className="size-5" />} value={listing.baths} label="Baths" />
+                  <Spec icon={<Car className="size-5" />} value={listing.parking} label="Parking" />
+                </div>
+              )}
 
               <div className="mt-8 space-y-4 text-lg text-foreground/90">
                 {listing.description.map((p, i) => (
