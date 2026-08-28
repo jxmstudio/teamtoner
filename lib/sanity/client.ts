@@ -11,7 +11,10 @@ export const sanityClient: SanityClient | null = sanityConfigured
       projectId,
       dataset,
       apiVersion,
-      useCdn: true,
+      // Live API rather than the CDN: pages are already cached by Next (ISR +
+      // the publish webhook), and reading the CDN here meant a webhook-driven
+      // re-render could re-cache a stale value for another revalidate window.
+      useCdn: false,
       perspective: "published",
     })
   : null;
