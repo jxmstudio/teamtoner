@@ -18,6 +18,10 @@ export async function proxy(request: NextRequest) {
   // The gate itself (and the server action that posts to it) must stay open.
   if (pathname === PASSWORD_PATH) return NextResponse.next();
 
+  // Sanity's revalidation webhook has no cookie; it authenticates with its
+  // own HMAC signature inside the route instead.
+  if (pathname === "/api/revalidate") return NextResponse.next();
+
   const cookie = request.cookies.get(ACCESS_COOKIE)?.value;
   if (cookie && safeEqual(cookie, await accessToken(sitePassword()))) {
     return NextResponse.next();
