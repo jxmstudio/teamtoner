@@ -6,6 +6,7 @@ import { fitTitle } from "@/lib/site";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { ListingGallery } from "@/components/brand/listing-gallery";
+import { VideoEmbed } from "@/components/brand/video-embed";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,17 +19,21 @@ import {
   getSuburbName,
 } from "@/lib/data";
 
+// Listings are CMS-managed — refresh the static pages periodically so edits
+// in /studio appear without a redeploy.
+export const revalidate = 60;
+
 // Sold listings are prerendered too — they stay indexable and are linked from
 // /sold and the suburb pages.
-export function generateStaticParams() {
-  return getAllListingSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  return (await getAllListingSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(
   props: PageProps<"/listings/[slug]">
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const listing = getListingBySlug(slug);
+  const listing = await getListingBySlug(slug);
   if (!listing) return { title: "Listing not found" };
 
   const suburbName = getSuburbName(listing.suburb);
@@ -69,7 +74,7 @@ export async function generateMetadata(
 
 export default async function ListingPage(props: PageProps<"/listings/[slug]">) {
   const { slug } = await props.params;
-  const listing = getListingBySlug(slug);
+  const listing = await getListingBySlug(slug);
   if (!listing) notFound();
 
   const suburbName = getSuburbName(listing.suburb);
@@ -143,6 +148,17 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
                   <p key={i}>{p}</p>
                 ))}
               </div>
+
+              {listing.video && (
+                <div className="mt-8">
+                  <h2 className="text-xl font-semibold text-foreground">Video tour</h2>
+                  <VideoEmbed
+                    url={listing.video}
+                    title={`Video tour — ${listing.address}, ${suburbName}`}
+                    className="mt-4"
+                  />
+                </div>
+              )}
 
               {listing.features.length > 0 && (
                 <div className="mt-8">

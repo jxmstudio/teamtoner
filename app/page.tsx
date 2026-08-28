@@ -11,7 +11,11 @@ import { FeeText } from "@/components/brand/commission";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { seoTitles, siteConfig } from "@/lib/site";
-import { getAreas, getFeaturedListings, getFeaturedTestimonials } from "@/lib/data";
+import { VideoEmbed } from "@/components/brand/video-embed";
+import { getAreas, getFeaturedListings, getFeaturedTestimonials, getSiteVideos } from "@/lib/data";
+
+// Listings and videos are CMS-managed — refresh the static page periodically.
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.home },
@@ -21,8 +25,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-export default function HomePage() {
-  const featured = getFeaturedListings(3);
+export default async function HomePage() {
+  const featured = await getFeaturedListings(3);
+  const videos = await getSiteVideos();
   const reviews = getFeaturedTestimonials(3);
   return (
     <>
@@ -108,6 +113,24 @@ export default function HomePage() {
                 <ListingCard key={listing.slug} listing={listing} />
               ))}
             </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* Videos — managed in /studio; the section is hidden while there are none. */}
+      {videos.length > 0 && (
+        <Section className="bg-secondary/60">
+          <Container>
+            <SectionHeading
+              eyebrow="Watch"
+              title={videos[0].title}
+              description={videos[0].caption}
+            />
+            <VideoEmbed
+              url={videos[0].url}
+              title={videos[0].title}
+              className="mx-auto mt-10 max-w-3xl"
+            />
           </Container>
         </Section>
       )}

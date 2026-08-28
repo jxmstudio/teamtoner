@@ -53,6 +53,9 @@ function suburbFaqs(suburbName: string) {
   ];
 }
 
+// Suburb pages list CMS-managed listings — refresh them periodically.
+export const revalidate = 60;
+
 export function generateStaticParams() {
   return getSuburbs().map((s) => ({ slug: s.slug }));
 }
@@ -94,14 +97,14 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
     : [];
   const faqs = suburbFaqs(suburb.name);
 
-  const listings = getListingsBySuburb(slug);
-  const sold = getSoldBySuburb(slug);
+  const listings = await getListingsBySuburb(slug);
+  const sold = await getSoldBySuburb(slug);
 
   // Individual suburbs inherit their area's listings until the live feed
   // carries suburb-level data.
   const areaListings =
-    listings.length === 0 && parent ? getListingsBySuburb(parent.slug) : [];
-  const areaSold = sold.length === 0 && parent ? getSoldBySuburb(parent.slug) : [];
+    listings.length === 0 && parent ? await getListingsBySuburb(parent.slug) : [];
+  const areaSold = sold.length === 0 && parent ? await getSoldBySuburb(parent.slug) : [];
 
   const [testimonial] = getFeaturedTestimonials(1);
 

@@ -13,10 +13,19 @@ export interface Listing {
   priceDisplay: string;
   description: string[];
   features: string[];
-  images: string[]; // paths under /public; empty → branded placeholder
+  images: string[]; // paths under /public (fixtures) or CDN URLs (CMS); empty → branded placeholder
+  /** YouTube URL — rendered as an embed on the listing page when present. */
+  video?: string;
   featured?: boolean;
   soldPrice?: string;
   soldDate?: string; // ISO date
+}
+
+/** A standalone YouTube video managed in the CMS (home-page video section). */
+export interface SiteVideo {
+  title: string;
+  url: string;
+  caption?: string;
 }
 
 export interface Testimonial {

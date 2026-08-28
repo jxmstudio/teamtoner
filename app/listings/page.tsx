@@ -16,11 +16,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/listings" },
 };
 
+// Listings are CMS-managed — refresh the static page periodically.
+export const revalidate = 60;
+
 export default async function ListingsPage(props: PageProps<"/listings">) {
   const { suburb } = await props.searchParams;
   const selected = typeof suburb === "string" ? suburb : undefined;
 
-  const all = getListings();
+  const all = await getListings();
   const listings = selected ? all.filter((l) => l.suburb === selected) : all;
   const suburbs = getAreas();
 

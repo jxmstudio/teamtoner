@@ -1,0 +1,171 @@
+import { defineField, defineType } from "sanity";
+import { suburbs } from "../../lib/content/suburbs";
+
+/**
+ * A property listing. Mirrors the `Listing` type in lib/content/types.ts —
+ * lib/data.ts maps documents of this type onto that shape, so a field added
+ * here needs a matching field there (and in the GROQ projection) to reach
+ * the site.
+ */
+export const listing = defineType({
+  name: "listing",
+  title: "Listing",
+  type: "document",
+  groups: [
+    { name: "details", title: "Details", default: true },
+    { name: "media", title: "Photos & video" },
+    { name: "sold", title: "Sold" },
+  ],
+  fields: [
+    defineField({
+      name: "address",
+      title: "Address",
+      type: "string",
+      description: "Street address shown as the page heading, e.g. “12 Rata Street, Hokowhitu”.",
+      group: "details",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "title",
+      title: "Headline",
+      type: "string",
+      description: "Marketing headline, e.g. “Sunny family home in a sought-after pocket”.",
+      group: "details",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      title: "Web address (slug)",
+      type: "slug",
+      description: "The listing lives at /listings/<this>. Click Generate after entering the address.",
+      options: { source: "address", maxLength: 96 },
+      group: "details",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "status",
+      title: "Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "For sale", value: "for-sale" },
+          { title: "Under offer", value: "under-offer" },
+          { title: "Sold", value: "sold" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "for-sale",
+      group: "details",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "suburb",
+      title: "Suburb / area",
+      type: "string",
+      options: {
+        list: suburbs.map((s) => ({ title: s.name, value: s.slug })),
+      },
+      group: "details",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "beds",
+      title: "Bedrooms",
+      type: "number",
+      group: "details",
+      validation: (rule) => rule.required().min(0).integer(),
+    }),
+    defineField({
+      name: "baths",
+      title: "Bathrooms",
+      type: "number",
+      group: "details",
+      validation: (rule) => rule.required().min(0).integer(),
+    }),
+    defineField({
+      name: "parking",
+      title: "Parking spaces",
+      type: "number",
+      group: "details",
+      validation: (rule) => rule.required().min(0).integer(),
+    }),
+    defineField({
+      name: "priceDisplay",
+      title: "Price / method of sale",
+      type: "string",
+      description: "Shown exactly as written, e.g. “Enquiries over $829,000”, “Deadline Sale”, “By Negotiation”.",
+      group: "details",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "featured",
+      title: "Feature on the home page",
+      type: "boolean",
+      description: "Featured listings fill the “Featured properties” section (first three).",
+      initialValue: false,
+      group: "details",
+    }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "array",
+      of: [{ type: "text", rows: 3 }],
+      description: "One entry per paragraph.",
+      group: "details",
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: "features",
+      title: "Feature bullet points",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "details",
+    }),
+    defineField({
+      name: "images",
+      title: "Photos",
+      type: "array",
+      of: [{ type: "image", options: { hotspot: true } }],
+      description: "First photo is the hero / card image.",
+      group: "media",
+    }),
+    defineField({
+      name: "videoUrl",
+      title: "YouTube video",
+      type: "url",
+      description: "Paste a YouTube link (watch, share or Shorts URL). Shown on the listing page under the photos. Swap or clear it any time.",
+      group: "media",
+      validation: (rule) =>
+        rule.uri({ scheme: ["https", "http"] }).custom((value) => {
+          if (!value) return true;
+          return /(youtube\.com|youtu\.be)\//.test(value)
+            ? true
+            : "Must be a YouTube link";
+        }),
+    }),
+    defineField({
+      name: "soldPrice",
+      title: "Sold price",
+      type: "string",
+      description: "e.g. “$712,000”. Leave blank to show just “Sold”.",
+      group: "sold",
+      hidden: ({ document }) => document?.status !== "sold",
+    }),
+    defineField({
+      name: "soldDate",
+      title: "Sold date",
+      type: "date",
+      description: "Orders the Sold page (newest first).",
+      group: "sold",
+      hidden: ({ document }) => document?.status !== "sold",
+    }),
+  ],
+  preview: {
+    select: { title: "address", subtitle: "priceDisplay", media: "images.0", status: "status" },
+    prepare({ title, subtitle, media, status }) {
+      const label =
+        status === "sold" ? "SOLD" : status === "under-offer" ? "UNDER OFFER" : "FOR SALE";
+      return { title, subtitle: `${label} — ${subtitle ?? ""}`, media };
+    },
+  },
+});

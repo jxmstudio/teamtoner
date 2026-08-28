@@ -18,7 +18,7 @@ import {
  */
 const CONTENT_REVISED = "2026-08-17";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url;
 
   const staticRoutes = [
@@ -40,16 +40,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === "" ? 1 : 0.7,
   }));
 
-  const listingRoutes = getAllListingSlugs().map((slug) => {
-    const listing = getListingBySlug(slug);
-    return {
-      url: `${base}/listings/${slug}`,
-      // A sold listing genuinely last changed on the day it sold.
-      lastModified: listing?.soldDate ?? CONTENT_REVISED,
-      changeFrequency: "weekly" as const,
-      priority: listing?.status === "sold" ? 0.6 : 0.8,
-    };
-  });
+  const listingRoutes = await Promise.all(
+    (await getAllListingSlugs()).map(async (slug) => {
+      const listing = await getListingBySlug(slug);
+      return {
+        url: `${base}/listings/${slug}`,
+        // A sold listing genuinely last changed on the day it sold.
+        lastModified: listing?.soldDate ?? CONTENT_REVISED,
+        changeFrequency: "weekly" as const,
+        priority: listing?.status === "sold" ? 0.6 : 0.8,
+      };
+    })
+  );
 
   const suburbRoutes = getSuburbs().map((s) => ({
     url: `${base}/suburbs/${s.slug}`,

@@ -15,8 +15,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/sold" },
 };
 
-export default function SoldPage() {
-  const sold = getSoldListings();
+// Listings are CMS-managed — refresh the static page periodically.
+export const revalidate = 60;
+
+export default async function SoldPage() {
+  const sold = await getSoldListings();
   const { stats } = siteConfig;
   return (
     <>

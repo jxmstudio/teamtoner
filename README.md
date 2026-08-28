@@ -16,22 +16,50 @@ npm run build      # production build (also type-checks every route)
 npm run start      # serve the production build
 ```
 
+## Sanity CMS (listings + videos)
+
+Listings and YouTube videos are client-editable in an embedded Sanity Studio at
+**`/studio`** (schemas in `sanity/schemaTypes/`, read layer in `lib/data.ts`).
+While `NEXT_PUBLIC_SANITY_PROJECT_ID` is unset — or the dataset is empty or
+unreachable — the site transparently serves the typed fixtures in
+`lib/content/*`, so nothing breaks before the CMS is connected.
+
+The project is **"Team Toner" (`l0i206kw`)** in the `jxm` org, owned by
+**web@jxmstudio.com** (Google login). Dataset `production` (public); CORS is
+configured for `localhost:3000`, `localhost:3100` and `https://teamtoner.co.nz`
+(manage at [sanity.io/manage](https://www.sanity.io/manage)).
+
+Remaining setup:
+
+1. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` + `NEXT_PUBLIC_SANITY_DATASET` in the
+   Vercel project env settings (values in `.env.example`).
+2. Invite Allan & Karen as project members (Manage → Members) so they can log
+   into `/studio` themselves.
+
+To (re-)import the fixture listings so the studio isn't empty:
+`npx sanity login` (Google, web@jxmstudio.com), then `npm run seed:sanity`.
+Idempotent — never duplicates or overwrites studio edits.
+
+Pages that render CMS content revalidate every 60 s, so studio edits go live
+within a minute — no redeploy needed.
+
 ## Editing content (for the agency)
 
-All site content lives in plain TypeScript files — edit, commit, and Vercel
-redeploys automatically. No database, no CMS login.
+Everything else lives in plain TypeScript files — edit, commit, and Vercel
+redeploys automatically.
 
-| What | File |
+| What | Where |
 | --- | --- |
+| **Listings + videos** | **`/studio` (Sanity)** — fixtures in `lib/content/listings.ts` are the pre-CMS fallback |
 | Brand facts, contact, stats, tagline, socials, nav | `lib/site.ts` |
-| Listings (for sale / under offer / **sold**) | `lib/content/listings.ts` |
 | Testimonials (Google / RateMyAgent) | `lib/content/testimonials.ts` |
 | Downloadable guides (PDFs) | `lib/content/guides.ts` |
 | Suburbs | `lib/content/suburbs.ts` |
 
-**Add a listing:** copy an entry in `listings.ts`, fill in the fields, and drop
-photos into `public/listings/<address>/` then reference them in `images: []`.
-Set `status: "sold"` with `soldPrice` + `soldDate` to move it to the Sold page.
+**Add a listing:** in `/studio`, click Listing → new document, fill in the
+fields, drag photos in. Set status "Sold" with sold price + date to move it to
+the Sold page. Paste a YouTube link in the "YouTube video" field for a video
+tour. Videos on the home page live under Video in the studio.
 
 **Add a guide PDF:** put the file in `public/guides/`, then set its `pdf` path
 in `guides.ts` (empty `pdf` shows a "coming soon" badge).
@@ -48,6 +76,9 @@ Copy `.env.example` → `.env.local` for local dev, and set the same in Vercel.
 | `RESEND_API_KEY` | Enables lead-form emails via [resend.com](https://resend.com). If unset, leads are logged to the server console only. |
 | `LEAD_FROM_EMAIL` | Verified sender, e.g. `Team Toner <hello@teamtoner.co.nz>`. Leads are sent to `thetoners@arizto.co.nz`. |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata (defaults to production). |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project id — unset = site runs from fixtures. |
+| `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (default `production`). |
+| `SANITY_API_WRITE_TOKEN` | Local-only, for `npm run seed:sanity`. Never set in Vercel. |
 | `SITE_PASSWORD` | Pre-launch gate password. Defaults to `toner123`. |
 | `SITE_PASSWORD_ENABLED` | Set to `false` at launch to make the site public. |
 
