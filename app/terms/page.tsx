@@ -2,14 +2,19 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Terms of Use",
-  description: `Terms of use for the ${siteConfig.name} website, including the commission and fee terms that apply to ${siteConfig.guarantee.name} and our advertised ${siteConfig.stats.commission} rate.`,
-  alternates: { canonical: "/terms" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSiteConfig();
+  return {
+    title: "Terms of Use",
+    description: `Terms of use for the ${config.name} website, including the commission and fee terms that apply to ${config.guarantee.name} and our advertised ${config.stats.commission} rate.`,
+    alternates: { canonical: "/terms" },
+  };
+}
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const config = await getSiteConfig();
   return (
     <>
       <PageHeader title="Terms of Use" eyebrow="Legal" />
@@ -22,7 +27,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-xl font-semibold text-foreground">Use of this site</h2>
             <p className="mt-2">
-              This website is provided by {siteConfig.legalName} for general
+              This website is provided by {config.legalName} for general
               information about our real estate services. By using it you agree to
               these terms.
             </p>
@@ -47,12 +52,12 @@ export default function TermsPage() {
               Commission and fees &mdash; T&rsquo;s &amp; C&rsquo;s
             </h2>
             <p className="mt-2">
-              The {siteConfig.stats.commission} commission quoted on this site is
+              The {config.stats.commission} commission quoted on this site is
               our standard residential selling fee and is calculated on the final
               sale price. It is indicative only and does not form an offer or an
               agency agreement. The fee that applies to your property is the one
               recorded in the signed agency agreement between you and{" "}
-              {siteConfig.legalName}.
+              {config.legalName}.
             </p>
             <p className="mt-2">
               Marketing inclusions, the fee, and any minimum fee may vary
@@ -63,9 +68,9 @@ export default function TermsPage() {
             </p>
             <p className="mt-2">
               <strong className="font-semibold text-foreground">
-                {siteConfig.guarantee.name}:
+                {config.guarantee.name}:
               </strong>{" "}
-              {siteConfig.guarantee.summary} The guarantee applies to the selling
+              {config.guarantee.summary} The guarantee applies to the selling
               commission only and is subject to the terms of your signed agency
               agreement, including any agreed marketing costs and the conditions
               under which the agreement may end.
@@ -83,8 +88,8 @@ export default function TermsPage() {
             </h2>
             <p className="mt-2">
               References on this site to Team Toner being the No.1 Arizto team
-              in {siteConfig.stats.regionName} and ranked{" "}
-              {siteConfig.stats.nationalRank} among Arizto agents nationwide are
+              in {config.stats.regionName} and ranked{" "}
+              {config.stats.nationalRank} among Arizto agents nationwide are
               based on Arizto agent sales results as at August 2026. Rankings
               are reviewed periodically and may change.
             </p>
@@ -94,7 +99,7 @@ export default function TermsPage() {
               Licensing
             </h2>
             <p className="mt-2">
-              {siteConfig.brand.reaa}. All real estate agency work is carried out
+              {config.brand.reaa}. All real estate agency work is carried out
               in accordance with the Real Estate Agents Act 2008.
             </p>
           </div>
@@ -102,8 +107,8 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-foreground">Contact</h2>
             <p className="mt-2">
               Questions about these terms? Email{" "}
-              <a className="text-primary underline" href={`mailto:${siteConfig.contact.email}`}>
-                {siteConfig.contact.email}
+              <a className="text-primary underline" href={`mailto:${config.contact.email}`}>
+                {config.contact.email}
               </a>
               .
             </p>

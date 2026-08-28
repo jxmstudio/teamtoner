@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 import { leadKindLabel, type LeadInput } from "@/lib/validators";
 
 /*
@@ -41,10 +41,11 @@ export async function sendLead(lead: LeadInput): Promise<boolean> {
   }
 
   try {
+    const { contact } = await getSiteConfig();
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
       from,
-      to: siteConfig.contact.email,
+      to: contact.email,
       // Appraisal leads may be phone-only — only set Reply-To when we have one.
       ...(lead.email ? { replyTo: lead.email } : {}),
       subject,

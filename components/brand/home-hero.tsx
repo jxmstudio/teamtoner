@@ -6,10 +6,10 @@ import {
   FeeText,
   RankingAsterisk,
 } from "@/components/brand/commission";
-import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
-export function HomeHero() {
-  const { stats } = siteConfig;
+export async function HomeHero() {
+  const { stats } = await getSiteConfig();
   return (
     <section className="relative overflow-hidden bg-night text-white">
       <div

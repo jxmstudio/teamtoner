@@ -16,16 +16,17 @@ export const metadata: Metadata = {
   alternates: { canonical: "/suburbs" },
 };
 
-export default function SuburbsPage() {
-  const areas = getAreas();
-  const pnSuburbs = getSuburbChildren("palmerston-north");
+export default async function SuburbsPage() {
+  const areas = await getAreas();
+  const pnSuburbs = await getSuburbChildren("palmerston-north");
+  const allSuburbs = await getSuburbs();
 
   return (
     <>
       <ItemListJsonLd
         name="Areas and suburbs served by Team Toner"
         description="Palmerston North and wider Manawatū suburbs where Allan & Karen Toner sell."
-        items={getSuburbs().map((s) => ({
+        items={allSuburbs.map((s) => ({
           name: s.name,
           path: `/suburbs/${s.slug}`,
         }))}

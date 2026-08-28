@@ -5,8 +5,8 @@ import { CtaSection } from "@/components/brand/cta-section";
 import { FeeText } from "@/components/brand/commission";
 import { Container, Section } from "@/components/brand/primitives";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
-import { seoTitles, siteConfig } from "@/lib/site";
-import { formatListingAddress, getSoldListings, getSuburbName } from "@/lib/data";
+import { seoTitles } from "@/lib/site";
+import { formatListingAddress, getSiteConfig, getSoldListings, getSuburbName } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sold },
@@ -20,16 +20,19 @@ export const revalidate = 60;
 
 export default async function SoldPage() {
   const sold = await getSoldListings();
-  const { stats } = siteConfig;
+  const { stats } = await getSiteConfig();
+  const soldItems = await Promise.all(
+    sold.map(async (l) => ({
+      name: formatListingAddress(l.address, await getSuburbName(l.suburb)),
+      path: `/listings/${l.slug}`,
+    }))
+  );
   return (
     <>
       <ItemListJsonLd
         name="Recently sold by Team Toner"
         description="Properties recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
-        items={sold.map((l) => ({
-          name: formatListingAddress(l.address, getSuburbName(l.suburb)),
-          path: `/listings/${l.slug}`,
-        }))}
+        items={soldItems}
       />
 
       <PageHeader

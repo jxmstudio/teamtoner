@@ -10,9 +10,15 @@ import { TestimonialCarousel } from "@/components/brand/testimonial-carousel";
 import { FeeText } from "@/components/brand/commission";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
-import { seoTitles, siteConfig } from "@/lib/site";
+import { seoTitles } from "@/lib/site";
 import { VideoEmbed } from "@/components/brand/video-embed";
-import { getAreas, getFeaturedListings, getFeaturedTestimonials, getSiteVideos } from "@/lib/data";
+import {
+  getAreas,
+  getFeaturedListings,
+  getFeaturedTestimonials,
+  getSiteConfig,
+  getSiteVideos,
+} from "@/lib/data";
 
 // Listings and videos are CMS-managed — refresh the static page periodically.
 export const revalidate = 60;
@@ -28,7 +34,9 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const featured = await getFeaturedListings(3);
   const videos = await getSiteVideos();
-  const reviews = getFeaturedTestimonials(3);
+  const reviews = await getFeaturedTestimonials(3);
+  const areas = await getAreas();
+  const { stats } = await getSiteConfig();
   return (
     <>
       <HomeHero />
@@ -53,7 +61,7 @@ export default async function HomePage() {
               eyebrow="Proven results"
               title="Proud to be recognised"
               description={
-                <FeeText>{`Ranked ${siteConfig.stats.nationalRank} among Arizto agents nationwide and ${siteConfig.stats.regionRank} in ${siteConfig.stats.regionName}.* When you list with Team Toner, you get two experienced agents personally working on your sale.`}</FeeText>
+                <FeeText>{`Ranked ${stats.nationalRank} among Arizto agents nationwide and ${stats.regionRank} in ${stats.regionName}.* When you list with Team Toner, you get two experienced agents personally working on your sale.`}</FeeText>
               }
             />
           </div>
@@ -158,7 +166,7 @@ export default async function HomePage() {
             description="Deep local knowledge across Palmerston North and the wider Manawatū."
           />
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {getAreas().map((s) => (
+            {areas.map((s) => (
               <Link
                 key={s.slug}
                 href={`/suburbs/${s.slug}`}

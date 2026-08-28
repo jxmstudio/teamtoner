@@ -7,8 +7,7 @@ import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
 import { Breadcrumbs } from "@/components/brand/breadcrumbs";
 import { GuideArticleJsonLd, HowToJsonLd } from "@/components/seo/json-ld";
-import { siteConfig } from "@/lib/site";
-import { getGuideBySlug, getGuidesWithPages } from "@/lib/data";
+import { getGuideBySlug, getGuidesWithPages, getSiteConfig } from "@/lib/data";
 
 const nzDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-NZ", {
@@ -17,15 +16,15 @@ const nzDate = (iso: string) =>
     year: "numeric",
   });
 
-export function generateStaticParams() {
-  return getGuidesWithPages().map((g) => ({ slug: g.slug }));
+export async function generateStaticParams() {
+  return (await getGuidesWithPages()).map((g) => ({ slug: g.slug }));
 }
 
 export async function generateMetadata(
   props: PageProps<"/resources/[slug]">
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const guide = getGuideBySlug(slug);
+  const guide = await getGuideBySlug(slug);
   if (!guide?.body?.length) return { title: "Guide not found" };
   return {
     title: { absolute: `${guide.title} | Team Toner Palmerston North` },
@@ -36,8 +35,10 @@ export async function generateMetadata(
 
 export default async function GuidePage(props: PageProps<"/resources/[slug]">) {
   const { slug } = await props.params;
-  const guide = getGuideBySlug(slug);
+  const guide = await getGuideBySlug(slug);
   if (!guide?.body?.length) notFound();
+
+  const siteConfig = await getSiteConfig();
 
   return (
     <>

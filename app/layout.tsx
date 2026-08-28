@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { HideOnGate } from "@/components/hide-on-gate";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,13 +21,19 @@ const caveat = Caveat({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+// Site settings (tagline, contact details, …) are CMS-managed — refresh the
+// static shell periodically so studio edits reach every page's chrome.
+export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSiteConfig();
+  return {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
-    template: `%s | ${siteConfig.name}`,
+    default: `${config.name} — ${config.tagline}`,
+    template: `%s | ${config.name}`,
   },
-  description: siteConfig.description,
+  description: config.description,
   keywords: [
     "Palmerston North real estate",
     "Palmerston North real estate agents",
@@ -47,22 +54,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_NZ",
     url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
+    siteName: config.name,
+    title: `${config.name} — ${config.tagline}`,
+    description: config.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
+    title: `${config.name} — ${config.tagline}`,
+    description: config.description,
   },
-};
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const config = await getSiteConfig();
   return (
     <html
       lang="en-NZ"
@@ -73,7 +82,7 @@ export default function RootLayout({
             listing and breadcrumb nodes reference this @id. */}
         <OrganizationJsonLd />
         <HideOnGate>
-          <SiteHeader />
+          <SiteHeader phone={config.agents.allan.phone} />
         </HideOnGate>
         <main className="flex-1">{children}</main>
         <HideOnGate>

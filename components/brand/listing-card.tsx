@@ -46,8 +46,9 @@ export function ListingImage({
   );
 }
 
-export function ListingCard({ listing }: { listing: Listing }) {
+export async function ListingCard({ listing }: { listing: Listing }) {
   const sold = listing.status === "sold";
+  const suburbName = await getSuburbName(listing.suburb);
   return (
     <Link
       href={`/listings/${listing.slug}`}
@@ -74,7 +75,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
       <div className="flex flex-1 flex-col p-5">
         <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <MapPin className="size-3.5 shrink-0" />
-          {getSuburbName(listing.suburb)}
+          {suburbName}
         </p>
         <h3 className="mt-1 font-semibold text-foreground">{listing.address}</h3>
         <p className="mt-2 text-lg font-bold text-primary">

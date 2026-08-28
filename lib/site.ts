@@ -179,7 +179,7 @@ export const siteConfig = {
     // TODO(client): the Toners' RateMyAgent profile (they have reviews there).
     rateMyAgent: "",
   },
-} as const;
+};
 
 export type SiteConfig = typeof siteConfig;
 
@@ -187,10 +187,10 @@ export type SiteConfig = typeof siteConfig;
  * Every configured external profile, placeholders removed. Used for schema
  * `sameAs` and anywhere else the entity graph is expressed.
  */
-export function entitySameAs(): string[] {
+export function entitySameAs(config: SiteConfig = siteConfig): string[] {
   return [
-    ...Object.values(siteConfig.social),
-    ...Object.values(siteConfig.externalProfiles),
+    ...Object.values(config.social),
+    ...Object.values(config.externalProfiles),
   ].filter((url) => url.length > 0);
 }
 
@@ -214,8 +214,8 @@ export function fitTitle(candidates: string[]): string {
 }
 
 /** Social links that are actually configured, for rendering the footer icons. */
-export function configuredSocials() {
-  return Object.entries(siteConfig.social).filter(([, url]) => Boolean(url)) as [
+export function configuredSocials(config: SiteConfig = siteConfig) {
+  return Object.entries(config.social).filter(([, url]) => Boolean(url)) as [
     keyof typeof siteConfig.social,
     string,
   ][];

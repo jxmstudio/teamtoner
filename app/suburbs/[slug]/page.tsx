@@ -15,12 +15,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { fitTitle, siteConfig } from "@/lib/site";
+import { fitTitle, type SiteConfig } from "@/lib/site";
 import {
   getSuburbs,
   getSuburbBySlug,
   getSuburbChildren,
   getListingsBySuburb,
+  getSiteConfig,
   getSoldBySuburb,
   getFeaturedTestimonials,
 } from "@/lib/data";
@@ -31,7 +32,7 @@ import {
  * These drive FAQPage markup, which is what makes a suburb page eligible for
  * People Also Ask and AI answer citations rather than just a listings grid.
  */
-function suburbFaqs(suburbName: string) {
+function suburbFaqs(suburbName: string, siteConfig: SiteConfig) {
   const { agents, contact, stats, guarantee } = siteConfig;
   return [
     {
@@ -56,18 +57,18 @@ function suburbFaqs(suburbName: string) {
 // Suburb pages list CMS-managed listings — refresh them periodically.
 export const revalidate = 60;
 
-export function generateStaticParams() {
-  return getSuburbs().map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  return (await getSuburbs()).map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata(
   props: PageProps<"/suburbs/[slug]">
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const suburb = getSuburbBySlug(slug);
+  const suburb = await getSuburbBySlug(slug);
   if (!suburb) return { title: "Suburb not found" };
 
-  const parent = suburb.parent ? getSuburbBySlug(suburb.parent) : undefined;
+  const parent = suburb.parent ? await getSuburbBySlug(suburb.parent) : undefined;
   const scope = parent ? `${parent.name}` : "Manawatū";
 
   return {
@@ -85,17 +86,17 @@ export async function generateMetadata(
 
 export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
   const { slug } = await props.params;
-  const suburb = getSuburbBySlug(slug);
+  const suburb = await getSuburbBySlug(slug);
   if (!suburb) notFound();
 
-  const parent = suburb.parent ? getSuburbBySlug(suburb.parent) : undefined;
-  const children = getSuburbChildren(suburb.slug);
+  const parent = suburb.parent ? await getSuburbBySlug(suburb.parent) : undefined;
+  const children = await getSuburbChildren(suburb.slug);
   // Sibling suburbs — without these each suburb page is a dead end that only
   // links upward, so the local cluster gets no lateral link equity.
   const siblings = parent
-    ? getSuburbChildren(parent.slug).filter((s) => s.slug !== suburb.slug)
+    ? (await getSuburbChildren(parent.slug)).filter((s) => s.slug !== suburb.slug)
     : [];
-  const faqs = suburbFaqs(suburb.name);
+  const faqs = suburbFaqs(suburb.name, await getSiteConfig());
 
   const listings = await getListingsBySuburb(slug);
   const sold = await getSoldBySuburb(slug);
@@ -106,7 +107,7 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
     listings.length === 0 && parent ? await getListingsBySuburb(parent.slug) : [];
   const areaSold = sold.length === 0 && parent ? await getSoldBySuburb(parent.slug) : [];
 
-  const [testimonial] = getFeaturedTestimonials(1);
+  const [testimonial] = await getFeaturedTestimonials(1);
 
   return (
     <>

@@ -1,6 +1,5 @@
 import { entitySameAs, siteConfig } from "@/lib/site";
-import { suburbs } from "@/lib/content/suburbs";
-import { formatListingAddress } from "@/lib/data";
+import { formatListingAddress, getSiteConfig, getSuburbs } from "@/lib/data";
 import type { Guide, Listing } from "@/lib/content/types";
 
 function JsonLd({ data }: { data: unknown }) {
@@ -31,9 +30,11 @@ const ORG_ID = `${siteConfig.url}#organization`;
  * home page — that's what lets Google and the AI answer engines treat the whole
  * domain as one known entity.
  */
-export function OrganizationJsonLd() {
-  const { business, agents, contact, brand } = siteConfig;
-  const sameAs = entitySameAs();
+export async function OrganizationJsonLd() {
+  const config = await getSiteConfig();
+  const { business, agents, contact, brand } = config;
+  const sameAs = entitySameAs(config);
+  const areaSuburbs = await getSuburbs();
 
   const address = defined({
     "@type": "PostalAddress",
@@ -51,10 +52,10 @@ export function OrganizationJsonLd() {
           "@context": "https://schema.org",
           "@type": "RealEstateAgent",
           "@id": ORG_ID,
-          name: siteConfig.name,
-          legalName: siteConfig.legalName,
-          description: siteConfig.description,
-          url: siteConfig.url,
+          name: config.name,
+          legalName: config.legalName,
+          description: config.description,
+          url: config.url,
           email: contact.email,
           telephone: contact.office,
           image: `${siteConfig.url}/team/allan-karen.jpg`,
@@ -63,7 +64,7 @@ export function OrganizationJsonLd() {
           address,
           // Service-area business: the suburbs are the local signal, whether or
           // not a street address is ever published.
-          areaServed: suburbs.map((s) => ({ "@type": "Place", name: s.name })),
+          areaServed: areaSuburbs.map((s) => ({ "@type": "Place", name: s.name })),
           sameAs,
           parentOrganization: {
             "@type": "Organization",
@@ -87,7 +88,7 @@ export function OrganizationJsonLd() {
                 : undefined,
             })
           ),
-          slogan: siteConfig.strapline,
+          slogan: config.strapline,
         })}
       />
       <JsonLd

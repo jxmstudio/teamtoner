@@ -1,28 +1,32 @@
 import { ButtonLink } from "@/components/ui/button-link";
 import { FeeText } from "@/components/brand/commission";
 import { Container } from "@/components/brand/primitives";
-import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 /**
  * Site-wide appraisal banner (client brief §11). Copy is shared across every
  * page; pass `title`/`description` only where a page needs a local variant.
  */
-export function CtaSection({
+export async function CtaSection({
   title = "Curious what your property could sell for?",
-  description = `Get an honest, evidence-based appraisal from ${siteConfig.stats.regionName}'s ${siteConfig.stats.regionRank} Arizto team.*`,
+  description,
   note = "No pressure. No obligation. Just straightforward advice.",
 }: {
   title?: string;
   description?: string;
   note?: string | null;
 }) {
+  const { stats } = await getSiteConfig();
+  const resolvedDescription =
+    description ??
+    `Get an honest, evidence-based appraisal from ${stats.regionName}'s ${stats.regionRank} Arizto team.*`;
   return (
     <section className="bg-petrol text-white">
       <Container className="flex flex-col items-center gap-6 py-14 text-center lg:flex-row lg:justify-between lg:text-left">
         <div>
           <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
           <p className="mt-2 max-w-2xl text-white/80">
-            <FeeText>{description}</FeeText>
+            <FeeText>{resolvedDescription}</FeeText>
           </p>
           {note ? (
             <p className="mt-3 text-sm text-white/60">{note}</p>

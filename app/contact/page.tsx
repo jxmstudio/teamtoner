@@ -5,7 +5,8 @@ import { Container, Section } from "@/components/brand/primitives";
 import { LeadForm } from "@/components/forms/lead-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageEntityJsonLd } from "@/components/seo/json-ld";
-import { seoTitles, siteConfig } from "@/lib/site";
+import { seoTitles } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.contact },
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const siteConfig = await getSiteConfig();
   const { agents, contact } = siteConfig;
   return (
     <>

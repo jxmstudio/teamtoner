@@ -1,21 +1,33 @@
 /**
- * One-off import of the fixture listings into the Sanity dataset, so the CMS
+ * One-off import of the fixture content into the Sanity dataset, so the CMS
  * starts populated instead of the site falling back to fixtures forever.
+ * Seeds listings, testimonials, guides, suburbs and the Site settings
+ * singleton.
  *
  * Run (uses your `npx sanity login` session — no API token needed):
  *
  *   npm run seed:sanity
  *
- * Idempotent: documents are keyed by slug (`listing-<slug>`), so re-running
- * never duplicates. It won't overwrite edits made in the studio either
- * (createIfNotExists).
+ * Idempotent: documents are keyed by slug (`listing-<slug>` etc.), so
+ * re-running never duplicates. It won't overwrite edits made in the studio
+ * either (createIfNotExists).
  */
 import { createReadStream, existsSync } from "node:fs";
 import { basename, join } from "node:path";
 import { getCliClient } from "sanity/cli";
 import { listings } from "../lib/content/listings";
+import { testimonials } from "../lib/content/testimonials";
+import { guides } from "../lib/content/guides";
+import { suburbs } from "../lib/content/suburbs";
+import { siteConfig } from "../lib/site";
 
 const client = getCliClient({ apiVersion: "2026-08-01" });
+
+/** Ids of already-imported documents, so re-runs skip asset re-uploads too. */
+async function existingIds(type: string): Promise<Set<string>> {
+  const ids = await client.fetch<string[]>(`*[_type == $type]._id`, { type });
+  return new Set(ids);
+}
 
 async function uploadImage(publicPath: string) {
   const file = join(process.cwd(), "public", publicPath.replace(/^\//, ""));
@@ -33,9 +45,29 @@ async function uploadImage(publicPath: string) {
   };
 }
 
-async function main() {
+async function uploadPdf(publicPath: string) {
+  const file = join(process.cwd(), "public", publicPath.replace(/^\//, ""));
+  if (!existsSync(file)) {
+    console.warn(`  ! PDF missing on disk, skipped: ${publicPath}`);
+    return null;
+  }
+  const asset = await client.assets.upload("file", createReadStream(file), {
+    filename: basename(file),
+  });
+  return {
+    _type: "file" as const,
+    asset: { _type: "reference" as const, _ref: asset._id },
+  };
+}
+
+async function seedListings() {
+  const existing = await existingIds("listing");
   for (const l of listings) {
-    console.log(`Importing ${l.slug} …`);
+    if (existing.has(`listing-${l.slug}`)) {
+      console.log(`Skipping listing ${l.slug} (already imported)`);
+      continue;
+    }
+    console.log(`Importing listing ${l.slug} …`);
     const images = (await Promise.all(l.images.map(uploadImage))).filter(
       (i) => i !== null
     );
@@ -60,10 +92,140 @@ async function main() {
       ...(l.soldDate ? { soldDate: l.soldDate } : {}),
     });
   }
+  console.log(`  ${listings.length} listings imported.`);
+}
+
+async function seedTestimonials() {
+  for (const [i, t] of testimonials.entries()) {
+    const id = `testimonial-${t.author.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    console.log(`Importing ${id} …`);
+    await client.createIfNotExists({
+      _id: id,
+      _type: "testimonial",
+      author: t.author,
+      source: t.source,
+      rating: t.rating,
+      quote: t.quote,
+      ...(t.suburb ? { suburb: t.suburb } : {}),
+      featured: t.featured ?? false,
+      order: i,
+    });
+  }
+  console.log(`  ${testimonials.length} testimonials imported.`);
+}
+
+async function seedGuides() {
+  const existing = await existingIds("guide");
+  for (const g of guides) {
+    if (existing.has(`guide-${g.slug}`)) {
+      console.log(`Skipping guide ${g.slug} (already imported)`);
+      continue;
+    }
+    console.log(`Importing guide ${g.slug} …`);
+    const pdfFile = g.pdf ? await uploadPdf(g.pdf) : null;
+    await client.createIfNotExists({
+      _id: `guide-${g.slug}`,
+      _type: "guide",
+      title: g.title,
+      slug: { _type: "slug", current: g.slug },
+      description: g.description,
+      category: g.category,
+      ...(pdfFile ? { pdfFile } : {}),
+      ...(g.published ? { published: g.published } : {}),
+      ...(g.updated ? { updated: g.updated } : {}),
+      process: g.process ?? false,
+      ...(g.body
+        ? {
+            body: g.body.map((section, i) => ({
+              _type: "guideSection",
+              _key: `section-${i}`,
+              heading: section.heading,
+              paragraphs: section.paragraphs,
+              ...(section.bullets ? { bullets: section.bullets } : {}),
+            })),
+          }
+        : {}),
+      ...(g.comparison
+        ? {
+            comparison: {
+              caption: g.comparison.caption,
+              columns: g.comparison.columns,
+              rows: g.comparison.rows.map((cells, i) => ({
+                _type: "comparisonRow",
+                _key: `row-${i}`,
+                cells,
+              })),
+            },
+          }
+        : {}),
+    });
+  }
+  console.log(`  ${guides.length} guides imported.`);
+}
+
+async function seedSuburbs() {
+  for (const s of suburbs) {
+    console.log(`Importing suburb ${s.slug} …`);
+    await client.createIfNotExists({
+      _id: `suburb-${s.slug}`,
+      _type: "suburb",
+      name: s.name,
+      slug: { _type: "slug", current: s.slug },
+      ...(s.parent ? { parent: s.parent } : {}),
+      blurb: s.blurb,
+      ...(s.commentary ? { commentary: s.commentary } : {}),
+    });
+  }
+  console.log(`  ${suburbs.length} suburbs imported.`);
+}
+
+async function seedSiteSettings() {
+  console.log("Importing site settings …");
+  await client.createIfNotExists({
+    _id: "siteSettings",
+    _type: "siteSettings",
+    tagline: siteConfig.tagline,
+    description: siteConfig.description,
+    footerTagline: siteConfig.footerTagline,
+    footerDescription: siteConfig.footerDescription,
+    reaa: siteConfig.brand.reaa,
+    guaranteeName: siteConfig.guarantee.name,
+    guaranteeSummary: siteConfig.guarantee.summary,
+    allanPhone: siteConfig.agents.allan.phone,
+    karenPhone: siteConfig.agents.karen.phone,
+    contactEmail: siteConfig.contact.email,
+    officePhone: siteConfig.contact.office,
+    region: siteConfig.contact.region,
+    nationalRank: siteConfig.stats.nationalRank,
+    regionRank: siteConfig.stats.regionRank,
+    regionName: siteConfig.stats.regionName,
+    commission: siteConfig.stats.commission,
+    feePillars: [...siteConfig.feePillars],
+    sellingPoints: siteConfig.sellingPoints.map((p, i) => ({
+      _key: `point-${i}`,
+      title: p.title,
+      detail: p.detail,
+    })),
+    sellingPointsSell: siteConfig.sellingPointsSell.map((p, i) => ({
+      _key: `point-${i}`,
+      title: p.title,
+      detail: p.detail,
+    })),
+    // Socials/profile URLs are left unset until the client supplies real ones.
+  });
+  console.log("  site settings imported.");
+}
+
+async function main() {
+  await seedListings();
+  await seedTestimonials();
+  await seedGuides();
+  await seedSuburbs();
+  await seedSiteSettings();
 
   const { projectId, dataset } = client.config();
-  console.log(`Done — ${listings.length} listings imported into ${projectId}/${dataset}.`);
-  console.log("Open /studio to review, then replace the demo content with real listings.");
+  console.log(`Done — content imported into ${projectId}/${dataset}.`);
+  console.log("Open /studio to review, then replace the demo content with real content.");
 }
 
 main().catch((err) => {

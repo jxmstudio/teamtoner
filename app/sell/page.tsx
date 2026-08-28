@@ -15,7 +15,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { seoTitles, siteConfig } from "@/lib/site";
+import { seoTitles, type SiteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sell },
@@ -47,7 +48,7 @@ const steps = [
   },
 ];
 
-const faqs = [
+const buildFaqs = (siteConfig: SiteConfig) => [
   {
     q: "How much is your commission?",
     a: `Our commission is ${siteConfig.stats.commission} of the sale price. There are no upfront costs, and under ${siteConfig.guarantee.name} you only pay when your property sells.`,
@@ -86,7 +87,9 @@ const faqs = [
   },
 ];
 
-export default function SellPage() {
+export default async function SellPage() {
+  const siteConfig = await getSiteConfig();
+  const faqs = buildFaqs(siteConfig);
   return (
     <>
       <FaqJsonLd faqs={faqs} />

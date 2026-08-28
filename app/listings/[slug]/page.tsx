@@ -36,7 +36,7 @@ export async function generateMetadata(
   const listing = await getListingBySlug(slug);
   if (!listing) return { title: "Listing not found" };
 
-  const suburbName = getSuburbName(listing.suburb);
+  const suburbName = await getSuburbName(listing.suburb);
   const sold = listing.status === "sold";
   const full = formatListingAddress(listing.address, suburbName);
   // "Sold by Team Toner" already names the brand, so the usual "| Team Toner"
@@ -77,7 +77,7 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
   const listing = await getListingBySlug(slug);
   if (!listing) notFound();
 
-  const suburbName = getSuburbName(listing.suburb);
+  const suburbName = await getSuburbName(listing.suburb);
   const sold = listing.status === "sold";
 
   return (

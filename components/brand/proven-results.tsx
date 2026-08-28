@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import { FeeText } from "@/components/brand/commission";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
-import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 import { getFeaturedTestimonials } from "@/lib/data";
 
 /**
@@ -9,15 +9,15 @@ import { getFeaturedTestimonials } from "@/lib/data";
  * seller testimonial. Used on the Sell page (before the FAQs) and reusable
  * anywhere the proof needs restating.
  */
-export function ProvenResults({
+export async function ProvenResults({
   className,
   showTestimonial = true,
 }: {
   className?: string;
   showTestimonial?: boolean;
 }) {
-  const { stats } = siteConfig;
-  const [testimonial] = getFeaturedTestimonials(1);
+  const { stats } = await getSiteConfig();
+  const [testimonial] = await getFeaturedTestimonials(1);
 
   return (
     <Section className={className}>

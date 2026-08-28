@@ -16,10 +16,15 @@ npm run build      # production build (also type-checks every route)
 npm run start      # serve the production build
 ```
 
-## Sanity CMS (listings + videos)
+## Sanity CMS (all site content)
 
-Listings and YouTube videos are client-editable in an embedded Sanity Studio at
-**`/studio`** (schemas in `sanity/schemaTypes/`, read layer in `lib/data.ts`).
+Everything the client needs to touch is editable in an embedded Sanity Studio
+at **`/studio`** (schemas in `sanity/schemaTypes/`, read layer in
+`lib/data.ts`): **listings, YouTube videos, testimonials, guides, suburbs and
+the "Site settings" singleton** (taglines, contact details & phone numbers,
+rankings, commission rate, fee pillars, "Why Team Toner" cards, social links).
+Site settings deep-merge over the typed defaults in `lib/site.ts` — any field
+left empty in the studio falls back to the value shipped in code.
 While `NEXT_PUBLIC_SANITY_PROJECT_ID` is unset — or the dataset is empty or
 unreachable — the site transparently serves the typed fixtures in
 `lib/content/*`, so nothing breaks before the CMS is connected.
@@ -36,7 +41,8 @@ Remaining setup:
 2. Invite Allan & Karen as project members (Manage → Members) so they can log
    into `/studio` themselves.
 
-To (re-)import the fixture listings so the studio isn't empty:
+To (re-)import the fixture content (listings, testimonials, guides, suburbs,
+site settings) so the studio isn't empty:
 `npx sanity login` (Google, web@jxmstudio.com), then `npm run seed:sanity`.
 Idempotent — never duplicates or overwrites studio edits.
 
@@ -45,24 +51,31 @@ within a minute — no redeploy needed.
 
 ## Editing content (for the agency)
 
-Everything else lives in plain TypeScript files — edit, commit, and Vercel
-redeploys automatically.
+Client-facing content is edited in **`/studio`**; the typed files remain as
+the pre-CMS fallback and the source for `npm run seed:sanity`.
 
 | What | Where |
 | --- | --- |
-| **Listings + videos** | **`/studio` (Sanity)** — fixtures in `lib/content/listings.ts` are the pre-CMS fallback |
-| Brand facts, contact, stats, tagline, socials, nav | `lib/site.ts` |
-| Testimonials (Google / RateMyAgent) | `lib/content/testimonials.ts` |
-| Downloadable guides (PDFs) | `lib/content/guides.ts` |
-| Suburbs | `lib/content/suburbs.ts` |
+| **Listings + videos** | **`/studio` → Listings / Videos** (fallback: `lib/content/listings.ts`) |
+| **Taglines, contact, phones, stats, fee, socials** | **`/studio` → Site settings** (defaults: `lib/site.ts`) |
+| **Testimonials (Google / RateMyAgent)** | **`/studio` → Testimonials** (fallback: `lib/content/testimonials.ts`) |
+| **Guides (incl. PDF upload + article pages)** | **`/studio` → Guides** (fallback: `lib/content/guides.ts`) |
+| **Suburb pages (blurbs, market commentary)** | **`/studio` → Suburbs** (fallback: `lib/content/suburbs.ts`) |
+| Nav labels, legal copy templates, page scaffolding | code (`lib/site.ts`, `app/…`) |
+
+Note: the suburb dropdown on a Listing offers the suburbs defined in
+`lib/content/suburbs.ts`; a brand-new suburb page added in the studio gets its
+own page automatically, but linking listings to it needs that list updated in
+code.
 
 **Add a listing:** in `/studio`, click Listing → new document, fill in the
 fields, drag photos in. Set status "Sold" with sold price + date to move it to
 the Sold page. Paste a YouTube link in the "YouTube video" field for a video
 tour. Videos on the home page live under Video in the studio.
 
-**Add a guide PDF:** put the file in `public/guides/`, then set its `pdf` path
-in `guides.ts` (empty `pdf` shows a "coming soon" badge).
+**Add a guide PDF:** in `/studio`, open the guide and upload the PDF to its
+"PDF" field (an empty field shows a "coming soon" badge). Adding "Article
+sections" publishes the guide as a web page at /resources/<slug>.
 
 Brand colours and fonts are defined once in `app/globals.css` (`:root`) — change
 the hex values there to re-skin the whole site.

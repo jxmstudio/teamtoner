@@ -1,23 +1,24 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FeeText } from "@/components/brand/commission";
-import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 /**
  * The three fee pillars as a compact strip: 2% + GST Commission ·
  * No Upfront Costs · No Sale — No Fee. Supports the proposition; never
  * leads it. `FeeText` attaches the required asterisk to the commission pillar.
  */
-export function FeePillars({
+export async function FeePillars({
   className,
   tone = "light",
 }: {
   className?: string;
   tone?: "light" | "dark";
 }) {
+  const { feePillars } = await getSiteConfig();
   return (
     <ul className={cn("flex flex-wrap items-center gap-x-3 gap-y-2", className)}>
-      {siteConfig.feePillars.map((pillar) => (
+      {feePillars.map((pillar) => (
         <li
           key={pillar}
           className={cn(

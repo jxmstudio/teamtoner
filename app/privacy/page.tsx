@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const config = await getSiteConfig();
   return (
     <>
       <PageHeader title="Privacy Policy" eyebrow="Legal" />
@@ -22,7 +24,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="text-xl font-semibold text-foreground">Who we are</h2>
             <p className="mt-2">
-              {siteConfig.legalName} ({siteConfig.brand.reaa}) operates{" "}
+              {config.legalName} ({config.brand.reaa}) operates{" "}
               {siteConfig.url}. We are committed to protecting your privacy in
               accordance with the Privacy Act 2020.
             </p>
@@ -53,8 +55,8 @@ export default function PrivacyPage() {
             <p className="mt-2">
               You may request access to, or correction of, the personal information
               we hold about you by contacting us at{" "}
-              <a className="text-primary underline" href={`mailto:${siteConfig.contact.email}`}>
-                {siteConfig.contact.email}
+              <a className="text-primary underline" href={`mailto:${config.contact.email}`}>
+                {config.contact.email}
               </a>
               .
             </p>

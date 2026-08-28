@@ -53,14 +53,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  const suburbRoutes = getSuburbs().map((s) => ({
+  const suburbRoutes = (await getSuburbs()).map((s) => ({
     url: `${base}/suburbs/${s.slug}`,
     lastModified: CONTENT_REVISED,
     changeFrequency: "monthly" as const,
     priority: s.parent ? 0.5 : 0.6,
   }));
 
-  const guideRoutes = getGuidesWithPages().map((g) => ({
+  const guideRoutes = (await getGuidesWithPages()).map((g) => ({
     url: `${base}/resources/${g.slug}`,
     lastModified: g.updated ?? g.published ?? CONTENT_REVISED,
     changeFrequency: "monthly" as const,

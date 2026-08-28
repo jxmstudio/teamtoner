@@ -25,17 +25,20 @@ export default async function ListingsPage(props: PageProps<"/listings">) {
 
   const all = await getListings();
   const listings = selected ? all.filter((l) => l.suburb === selected) : all;
-  const suburbs = getAreas();
+  const suburbs = await getAreas();
+  const listingItems = await Promise.all(
+    listings.map(async (l) => ({
+      name: formatListingAddress(l.address, await getSuburbName(l.suburb)),
+      path: `/listings/${l.slug}`,
+    }))
+  );
 
   return (
     <>
       <ItemListJsonLd
         name="Homes for sale — Team Toner"
         description="Current Team Toner listings across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
-        items={listings.map((l) => ({
-          name: formatListingAddress(l.address, getSuburbName(l.suburb)),
-          path: `/listings/${l.slug}`,
-        }))}
+        items={listingItems}
       />
 
       <PageHeader

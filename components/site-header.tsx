@@ -18,10 +18,15 @@ import {
 } from "@/components/ui/sheet";
 import { mainNav, siteConfig } from "@/lib/site";
 
-const allanTel = `tel:${siteConfig.agents.allan.phone.replace(/\s/g, "")}`;
 const teal = "bg-teal text-teal-foreground hover:bg-teal/90";
 
-export function SiteHeader() {
+/** `phone` comes from the layout so the CMS-edited number reaches this client component. */
+export function SiteHeader({
+  phone = siteConfig.agents.allan.phone,
+}: {
+  phone?: string;
+}) {
+  const allanTel = `tel:${phone.replace(/\s/g, "")}`;
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -69,7 +74,7 @@ export function SiteHeader() {
             className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
           >
             <Phone className="size-4" />
-            {siteConfig.agents.allan.phone}
+            {phone}
           </a>
           <ButtonLink href="/appraisal" className={cn("h-10 px-4", teal)}>
             Get a Free Appraisal

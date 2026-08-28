@@ -1,36 +1,91 @@
 import { cache } from "react";
 import { listings as fixtureListings } from "@/lib/content/listings";
-import { testimonials } from "@/lib/content/testimonials";
-import { guides } from "@/lib/content/guides";
-import { suburbs } from "@/lib/content/suburbs";
+import { testimonials as fixtureTestimonials } from "@/lib/content/testimonials";
+import { guides as fixtureGuides } from "@/lib/content/guides";
+import { suburbs as fixtureSuburbs } from "@/lib/content/suburbs";
 import type { Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
+import { siteConfig, type SiteConfig } from "@/lib/site";
 import { sanityClient } from "@/lib/sanity/client";
-import { LISTINGS_QUERY, SITE_VIDEOS_QUERY } from "@/lib/sanity/queries";
+import {
+  GUIDES_QUERY,
+  LISTINGS_QUERY,
+  SITE_SETTINGS_QUERY,
+  SITE_VIDEOS_QUERY,
+  SUBURBS_QUERY,
+  TESTIMONIALS_QUERY,
+} from "@/lib/sanity/queries";
 
 /*
- * Central content access. Listings and videos come from Sanity once the
- * project is connected (see README "Sanity CMS"); until then — and if the
- * dataset is empty or unreachable — the typed fixtures in lib/content/* keep
- * the site fully functional. Suburbs, guides and testimonials remain
- * fixture-driven for now.
+ * Central content access. Everything client-editable comes from Sanity once
+ * the project is connected (see README "Sanity CMS"); until then — and if the
+ * dataset is empty or unreachable — the typed fixtures in lib/content/* and
+ * the defaults in lib/site.ts keep the site fully functional.
  *
  * Pages that render CMS content export `revalidate` so client edits in
  * /studio appear without a redeploy.
  */
 
+/** One CMS read per document type per render pass, fixtures as the fallback. */
+function cmsCollection<T>(query: string, fixtures: T[], label: string) {
+  return cache(async (): Promise<T[]> => {
+    if (!sanityClient) return fixtures;
+    try {
+      const docs = await sanityClient.fetch<T[]>(query);
+      return docs.length ? docs : fixtures;
+    } catch (error) {
+      console.error(`[sanity] ${label} fetch failed — serving fixtures`, error);
+      return fixtures;
+    }
+  });
+}
+
+const loadListings = cmsCollection<Listing>(LISTINGS_QUERY, fixtureListings, "listings");
+const loadTestimonials = cmsCollection<Testimonial>(
+  TESTIMONIALS_QUERY,
+  fixtureTestimonials,
+  "testimonials"
+);
+const loadGuides = cmsCollection<Guide>(GUIDES_QUERY, fixtureGuides, "guides");
+const loadSuburbs = cmsCollection<Suburb>(SUBURBS_QUERY, fixtureSuburbs, "suburbs");
+
 /**
- * One listings read per render pass. Falls back to fixtures when the CMS is
- * not configured, still empty (seed real content before launch — the fixtures
- * are fabricated demo data), or unreachable.
+ * Recursively lay the CMS settings document over the typed defaults in
+ * lib/site.ts. Fields left empty in the studio come back null (or empty
+ * strings/arrays) and fall through to the shipped default, so a half-filled
+ * settings document can never blank out part of the site.
  */
-const loadListings = cache(async (): Promise<Listing[]> => {
-  if (!sanityClient) return fixtureListings;
+function withOverrides<T>(base: T, overrides: unknown): T {
+  if (overrides === null || overrides === undefined) return base;
+  if (Array.isArray(overrides)) {
+    return overrides.length ? (overrides as T) : base;
+  }
+  if (typeof overrides === "object") {
+    if (typeof base !== "object" || base === null || Array.isArray(base)) {
+      return overrides as T;
+    }
+    const merged: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+    for (const [key, value] of Object.entries(overrides)) {
+      merged[key] = withOverrides((base as Record<string, unknown>)[key], value);
+    }
+    return merged as T;
+  }
+  if (typeof overrides === "string" && overrides.trim() === "") return base;
+  return overrides as T;
+}
+
+/**
+ * Site-wide settings: the `siteConfig` defaults with the studio's
+ * "Site settings" document merged over the top. Use this (not `siteConfig`
+ * directly) anywhere a client-editable value is rendered.
+ */
+export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
+  if (!sanityClient) return siteConfig;
   try {
-    const docs = await sanityClient.fetch<Listing[]>(LISTINGS_QUERY);
-    return docs.length ? docs : fixtureListings;
+    const settings = await sanityClient.fetch<unknown>(SITE_SETTINGS_QUERY);
+    return withOverrides(siteConfig, settings);
   } catch (error) {
-    console.error("[sanity] listings fetch failed — serving fixtures", error);
-    return fixtureListings;
+    console.error("[sanity] settings fetch failed — serving defaults", error);
+    return siteConfig;
   }
 });
 
@@ -85,26 +140,26 @@ export async function getSoldListings(): Promise<Listing[]> {
     .sort((a, b) => (b.soldDate ?? "").localeCompare(a.soldDate ?? ""));
 }
 
-export function getSuburbs(): Suburb[] {
-  return suburbs;
+export async function getSuburbs(): Promise<Suburb[]> {
+  return loadSuburbs();
 }
 
 /** The four top-level areas shown as cards on /suburbs. */
-export function getAreas(): Suburb[] {
-  return suburbs.filter((s) => !s.parent);
+export async function getAreas(): Promise<Suburb[]> {
+  return (await loadSuburbs()).filter((s) => !s.parent);
 }
 
 /** Individual suburbs sitting inside an area (e.g. the Palmerston North suburbs). */
-export function getSuburbChildren(parentSlug: string): Suburb[] {
-  return suburbs.filter((s) => s.parent === parentSlug);
+export async function getSuburbChildren(parentSlug: string): Promise<Suburb[]> {
+  return (await loadSuburbs()).filter((s) => s.parent === parentSlug);
 }
 
-export function getSuburbBySlug(slug: string): Suburb | undefined {
-  return suburbs.find((s) => s.slug === slug);
+export async function getSuburbBySlug(slug: string): Promise<Suburb | undefined> {
+  return (await loadSuburbs()).find((s) => s.slug === slug);
 }
 
-export function getSuburbName(slug: string): string {
-  return suburbs.find((s) => s.slug === slug)?.name ?? slug;
+export async function getSuburbName(slug: string): Promise<string> {
+  return (await loadSuburbs()).find((s) => s.slug === slug)?.name ?? slug;
 }
 
 export async function getListingsBySuburb(slug: string): Promise<Listing[]> {
@@ -115,24 +170,25 @@ export async function getSoldBySuburb(slug: string): Promise<Listing[]> {
   return (await getSoldListings()).filter((l) => l.suburb === slug);
 }
 
-export function getTestimonials(): Testimonial[] {
-  return testimonials;
+export async function getTestimonials(): Promise<Testimonial[]> {
+  return loadTestimonials();
 }
 
-export function getFeaturedTestimonials(limit = 3): Testimonial[] {
-  const featured = testimonials.filter((t) => t.featured);
-  return (featured.length ? featured : testimonials).slice(0, limit);
+export async function getFeaturedTestimonials(limit = 3): Promise<Testimonial[]> {
+  const all = await loadTestimonials();
+  const featured = all.filter((t) => t.featured);
+  return (featured.length ? featured : all).slice(0, limit);
 }
 
-export function getGuides(): Guide[] {
-  return guides;
+export async function getGuides(): Promise<Guide[]> {
+  return loadGuides();
 }
 
-export function getGuideBySlug(slug: string): Guide | undefined {
-  return guides.find((g) => g.slug === slug);
+export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
+  return (await loadGuides()).find((g) => g.slug === slug);
 }
 
 /** Guides that publish an indexable content page at /resources/<slug>. */
-export function getGuidesWithPages(): Guide[] {
-  return guides.filter((g) => g.body?.length);
+export async function getGuidesWithPages(): Promise<Guide[]> {
+  return (await loadGuides()).filter((g) => g.body?.length);
 }

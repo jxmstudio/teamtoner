@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/resources" },
 };
 
-export default function ResourcesPage() {
-  const guides = getGuides();
+export default async function ResourcesPage() {
+  const guides = await getGuides();
   return (
     <>
       <ItemListJsonLd

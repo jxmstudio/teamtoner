@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import { FeeText, TermsFootnote } from "@/components/brand/commission";
-import { configuredSocials, mainNav, siteConfig } from "@/lib/site";
+import { configuredSocials, mainNav } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 function Facebook(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -42,8 +43,9 @@ const SOCIAL_LABELS = {
   youtube: "YouTube",
 } as const;
 
-export function SiteFooter() {
-  const socials = configuredSocials();
+export async function SiteFooter() {
+  const siteConfig = await getSiteConfig();
+  const socials = configuredSocials(siteConfig);
   return (
     <footer className="bg-night text-white/80">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">

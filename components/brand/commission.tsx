@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { siteConfig } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 /**
  * Commission display helpers.
@@ -58,10 +58,11 @@ export function RankingAsterisk() {
 }
 
 /** The commission rate with its mandatory asterisk, e.g. "2% + GST*". */
-export function CommissionRate() {
+export async function CommissionRate() {
+  const { stats } = await getSiteConfig();
   return (
     <>
-      {siteConfig.stats.commission}
+      {stats.commission}
       <FeeAsterisk />
     </>
   );

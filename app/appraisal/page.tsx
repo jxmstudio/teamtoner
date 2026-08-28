@@ -17,7 +17,8 @@ import {
   TermsFootnote,
 } from "@/components/brand/commission";
 import { FaqJsonLd } from "@/components/seo/json-ld";
-import { seoTitles, siteConfig } from "@/lib/site";
+import { seoTitles } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.appraisal },
@@ -61,8 +62,8 @@ const faqs = [
   },
 ];
 
-export default function AppraisalPage() {
-  const { agents, contact } = siteConfig;
+export default async function AppraisalPage() {
+  const { agents, contact, guarantee } = await getSiteConfig();
 
   return (
     <>
@@ -132,7 +133,7 @@ export default function AppraisalPage() {
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   We can also explain our premium marketing approach, No Upfront
-                  Costs, and {siteConfig.guarantee.name} &mdash; along with our
+                  Costs, and {guarantee.name} &mdash; along with our
                   competitive <CommissionRate /> commission.
                 </p>
               </div>

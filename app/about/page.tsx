@@ -6,7 +6,8 @@ import { FeeText } from "@/components/brand/commission";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { PageEntityJsonLd } from "@/components/seo/json-ld";
-import { seoTitles, siteConfig } from "@/lib/site";
+import { seoTitles } from "@/lib/site";
+import { getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.about },
@@ -15,8 +16,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-export default function AboutPage() {
-  const { stats, agents, brand } = siteConfig;
+export default async function AboutPage() {
+  const { stats, agents, brand } = await getSiteConfig();
   return (
     <>
       <PageEntityJsonLd
