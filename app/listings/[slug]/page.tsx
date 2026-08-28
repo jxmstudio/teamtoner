@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Bed, Bath, Car, Check, MapPin } from "lucide-react";
+import { Bed, Bath, Car, Check, FileText, MapPin } from "lucide-react";
 import { fitTitle } from "@/lib/site";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
@@ -30,7 +30,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: PageProps<"/listings/[slug]">
+  props: PageProps<"/listings/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const listing = await getListingBySlug(slug);
@@ -44,8 +44,12 @@ export async function generateMetadata(
   // brand rather than let Google truncate the street address.
   const title = fitTitle(
     sold
-      ? [`${full} — Sold by Team Toner`, `${full} — Sold | Team Toner`, `${full} — Sold`]
-      : [`${full} — For Sale | Team Toner`, `${full} — For Sale`]
+      ? [
+          `${full} — Sold by Team Toner`,
+          `${full} — Sold | Team Toner`,
+          `${full} — Sold`,
+        ]
+      : [`${full} — For Sale | Team Toner`, `${full} — For Sale`],
   );
 
   // Listing blurbs run short; pad to a useful SERP length with the concrete
@@ -72,7 +76,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function ListingPage(props: PageProps<"/listings/[slug]">) {
+export default async function ListingPage(
+  props: PageProps<"/listings/[slug]">,
+) {
   const { slug } = await props.params;
   const listing = await getListingBySlug(slug);
   if (!listing) notFound();
@@ -88,7 +94,10 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
         eyebrow={
           <span className="flex items-center gap-1.5">
             <MapPin className="size-3.5" />{" "}
-            <Link href={`/suburbs/${listing.suburb}`} className="hover:underline">
+            <Link
+              href={`/suburbs/${listing.suburb}`}
+              className="hover:underline"
+            >
               {suburbName}
             </Link>
           </span>
@@ -105,7 +114,11 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
                   : "bg-teal text-teal-foreground"
             }
           >
-            {sold ? "Sold" : listing.status === "under-offer" ? "Under Offer" : "For Sale"}
+            {sold
+              ? "Sold"
+              : listing.status === "under-offer"
+                ? "Under Offer"
+                : "For Sale"}
           </Badge>
           <p className="text-xl font-bold text-primary">
             {sold ? (listing.soldPrice ?? "Sold") : listing.priceDisplay}
@@ -135,11 +148,25 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
               />
 
               {/* Bare-land listings have no bed/bath/car counts — skip the row. */}
-              {(listing.beds > 0 || listing.baths > 0 || listing.parking > 0) && (
+              {(listing.beds > 0 ||
+                listing.baths > 0 ||
+                listing.parking > 0) && (
                 <div className="mt-6 flex flex-wrap gap-6 border-y border-border py-5 text-foreground">
-                  <Spec icon={<Bed className="size-5" />} value={listing.beds} label="Beds" />
-                  <Spec icon={<Bath className="size-5" />} value={listing.baths} label="Baths" />
-                  <Spec icon={<Car className="size-5" />} value={listing.parking} label="Parking" />
+                  <Spec
+                    icon={<Bed className="size-5" />}
+                    value={listing.beds}
+                    label="Beds"
+                  />
+                  <Spec
+                    icon={<Bath className="size-5" />}
+                    value={listing.baths}
+                    label="Baths"
+                  />
+                  <Spec
+                    icon={<Car className="size-5" />}
+                    value={listing.parking}
+                    label="Parking"
+                  />
                 </div>
               )}
 
@@ -151,7 +178,9 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
 
               {listing.video && (
                 <div className="mt-8">
-                  <h2 className="text-xl font-semibold text-foreground">Video tour</h2>
+                  <h2 className="text-xl font-semibold text-foreground">
+                    Video tour
+                  </h2>
                   <VideoEmbed
                     url={listing.video}
                     title={`Video tour — ${listing.address}, ${suburbName}`}
@@ -162,11 +191,16 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
 
               {listing.features.length > 0 && (
                 <div className="mt-8">
-                  <h2 className="text-xl font-semibold text-foreground">Features</h2>
+                  <h2 className="text-xl font-semibold text-foreground">
+                    Features
+                  </h2>
                   <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                     {listing.features.map((f) => (
                       <li key={f} className="flex items-start gap-2.5">
-                        <Check className="mt-1 size-4 shrink-0 text-teal" strokeWidth={3} />
+                        <Check
+                          className="mt-1 size-4 shrink-0 text-teal"
+                          strokeWidth={3}
+                        />
                         <span>{f}</span>
                       </li>
                     ))}
@@ -176,24 +210,55 @@ export default async function ListingPage(props: PageProps<"/listings/[slug]">) 
             </div>
 
             <aside className="lg:col-span-1">
-              <Card className="lg:sticky lg:top-24">
-                <CardContent className="pt-6">
-                  <h2 className="text-lg font-semibold text-foreground">
-                    {sold ? "Sold something similar?" : "Enquire about this property"}
-                  </h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {sold
-                      ? "Ask us what your home could achieve."
-                      : "Send a message and we'll get straight back to you."}
-                  </p>
-                  <div className="mt-5">
-                    <LeadForm
-                      kind="enquiry"
-                      listing={`${listing.address}, ${suburbName}`}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Both cards stick together — sticky on the Card itself would
+                  let it slide over the documents card below. */}
+              <div className="lg:sticky lg:top-24">
+                <Card>
+                  <CardContent className="pt-6">
+                    <h2 className="text-lg font-semibold text-foreground">
+                      {sold
+                        ? "Sold something similar?"
+                        : "Enquire about this property"}
+                    </h2>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {sold
+                        ? "Ask us what your home could achieve."
+                        : "Send a message and we'll get straight back to you."}
+                    </p>
+                    <div className="mt-5">
+                      <LeadForm
+                        kind="enquiry"
+                        listing={`${listing.address}, ${suburbName}`}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {(listing.documents?.length ?? 0) > 0 && (
+                  <Card className="mt-6">
+                    <CardContent className="pt-6">
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Property documents
+                      </h2>
+                      <ul className="mt-4 space-y-1">
+                        {listing.documents!.map((doc) => (
+                          <li key={doc.url}>
+                            <a
+                              href={doc.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-start gap-2.5 rounded-md px-2 py-2 -mx-2 text-foreground/90 transition-colors hover:bg-muted hover:text-teal"
+                            >
+                              <FileText className="mt-0.5 size-4 shrink-0 text-teal" />
+                              <span>{doc.title}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             </aside>
           </div>
         </Container>

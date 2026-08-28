@@ -14,6 +14,7 @@ export const listing = defineType({
   groups: [
     { name: "details", title: "Details", default: true },
     { name: "media", title: "Photos & video" },
+    { name: "documents", title: "Documents" },
     { name: "sold", title: "Sold" },
   ],
   fields: [
@@ -142,6 +143,58 @@ export const listing = defineType({
             ? true
             : "Must be a YouTube link";
         }),
+    }),
+    defineField({
+      name: "documents",
+      title: "Property documents",
+      type: "array",
+      description:
+        "Shown as a “Property documents” panel on the listing page — e.g. Certificate of Title, rates, LIM, disclosure form. Each entry needs a title plus either an uploaded file or a link.",
+      group: "documents",
+      of: [
+        {
+          type: "object",
+          name: "propertyDocument",
+          title: "Document",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title",
+              type: "string",
+              description: "e.g. “Certificate of Title”, “PNCC Rates”, “Disclosure Form”.",
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "file",
+              title: "File",
+              type: "file",
+              options: { accept: "application/pdf,.doc,.docx" },
+              description: "Upload the document (PDF preferred).",
+            }),
+            defineField({
+              name: "url",
+              title: "Link",
+              type: "url",
+              description:
+                "Use instead of an upload for documents hosted elsewhere, e.g. the REA Sale and Purchase Agreement guide.",
+              validation: (rule) =>
+                rule.uri({ scheme: ["https", "http"] }).custom((value, context) => {
+                  const parent = context.parent as { file?: { asset?: unknown } } | undefined;
+                  if (!value && !parent?.file?.asset) {
+                    return "Add a file upload or a link";
+                  }
+                  return true;
+                }),
+            }),
+          ],
+          preview: {
+            select: { title: "title", url: "url" },
+            prepare({ title, url }) {
+              return { title, subtitle: url ?? "Uploaded file" };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "soldPrice",

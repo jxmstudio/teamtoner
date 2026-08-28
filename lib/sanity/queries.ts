@@ -19,6 +19,10 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
   "features": coalesce(features, []),
   "images": coalesce(images[].asset->url, []),
   "video": videoUrl,
+  "documents": coalesce(documents[defined(file.asset) || defined(url)]{
+    title,
+    "url": coalesce(file.asset->url, url)
+  }, []),
   featured,
   soldPrice,
   soldDate

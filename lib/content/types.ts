@@ -1,5 +1,11 @@
 export type ListingStatus = "for-sale" | "under-offer" | "sold";
 
+/** A per-listing document: an uploaded file's CDN URL or an external link. */
+export interface ListingDocument {
+  title: string;
+  url: string;
+}
+
 export interface Listing {
   slug: string;
   title: string;
@@ -16,6 +22,8 @@ export interface Listing {
   images: string[]; // paths under /public (fixtures) or CDN URLs (CMS); empty → branded placeholder
   /** YouTube URL — rendered as an embed on the listing page when present. */
   video?: string;
+  /** Property documents (title, rates, LIM, disclosures…) shown on the listing page. */
+  documents?: ListingDocument[];
   featured?: boolean;
   soldPrice?: string;
   soldDate?: string; // ISO date
