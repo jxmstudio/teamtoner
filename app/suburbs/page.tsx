@@ -7,7 +7,7 @@ import { Container, Section, SectionHeading } from "@/components/brand/primitive
 import { Card, CardContent } from "@/components/ui/card";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { getAreas, getSuburbChildren, getSuburbs } from "@/lib/data";
+import { getAreas, getSuburbChildren, getSuburbs, getSuburbsCopy } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.suburbs },
@@ -20,6 +20,7 @@ export default async function SuburbsPage() {
   const areas = await getAreas();
   const pnSuburbs = await getSuburbChildren("palmerston-north");
   const allSuburbs = await getSuburbs();
+  const copy = await getSuburbsCopy();
 
   return (
     <>
@@ -33,13 +34,12 @@ export default async function SuburbsPage() {
       />
 
       <PageHeader
-        eyebrow="Local experts"
-        title="Local real estate knowledge across Palmerston North & Manawatū"
-        description="From Hokowhitu and Kelvin Grove to Feilding, Ashhurst and the wider Manawatū, we understand the local property markets we sell in — the homes, the buyers and what makes each area different."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       >
         <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-          Explore our local areas, current properties and recent Team Toner
-          sales.
+          {copy.intro}
         </p>
       </PageHeader>
 
@@ -73,9 +73,9 @@ export default async function SuburbsPage() {
         <Section className="bg-secondary/50">
           <Container>
             <SectionHeading
-              eyebrow="Palmerston North"
-              title="Explore Palmerston North suburbs"
-              description="Local information, current listings, recent Team Toner sales and market commentary for the suburbs we sell in most."
+              eyebrow={copy.pnEyebrow}
+              title={copy.pnTitle}
+              description={copy.pnDescription}
             />
             <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {pnSuburbs.map((s) => (

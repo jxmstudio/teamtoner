@@ -22,7 +22,11 @@ Everything the client needs to touch is editable in an embedded Sanity Studio
 at **`/studio`** (schemas in `sanity/schemaTypes/`, read layer in
 `lib/data.ts`): **listings, YouTube videos, testimonials, guides, suburbs and
 the "Site settings" singleton** (taglines, contact details & phone numbers,
-rankings, commission rate, fee pillars, "Why Team Toner" cards, social links).
+rankings, commission rate, fee pillars, "Why Team Toner" cards, social links,
+the site-wide appraisal banner) — plus a **"Page copy"** document for every
+page (Home, About, Sell, Appraisal, Contact, Listings, Sold, Suburbs,
+Resources, Privacy, Terms) covering headings, intro prose, story paragraphs,
+process steps, FAQs and the legal wording.
 Site settings deep-merge over the typed defaults in `lib/site.ts` — any field
 left empty in the studio falls back to the value shipped in code.
 While `NEXT_PUBLIC_SANITY_PROJECT_ID` is unset — or the dataset is empty or
@@ -61,7 +65,8 @@ the pre-CMS fallback and the source for `npm run seed:sanity`.
 | **Testimonials (Google / RateMyAgent)** | **`/studio` → Testimonials** (fallback: `lib/content/testimonials.ts`) |
 | **Guides (incl. PDF upload + article pages)** | **`/studio` → Guides** (fallback: `lib/content/guides.ts`) |
 | **Suburb pages (blurbs, market commentary)** | **`/studio` → Suburbs** (fallback: `lib/content/suburbs.ts`) |
-| Nav labels, legal copy templates, page scaffolding | code (`lib/site.ts`, `app/…`) |
+| **Page headings, prose, FAQs, legal wording** | **`/studio` → Page copy** (defaults: `lib/content/page-copy.ts`) |
+| Nav labels, per-suburb template sentences, layout | code (`lib/site.ts`, `app/…`) |
 
 Note: the suburb dropdown on a Listing offers the suburbs defined in
 `lib/content/suburbs.ts`; a brand-new suburb page added in the studio gets its

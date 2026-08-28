@@ -6,7 +6,7 @@ import { LeadForm } from "@/components/forms/lead-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageEntityJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { getSiteConfig } from "@/lib/data";
+import { getContactCopy, getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.contact },
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 export default async function ContactPage() {
   const siteConfig = await getSiteConfig();
   const { agents, contact } = siteConfig;
+  const copy = await getContactCopy();
   return (
     <>
       <PageEntityJsonLd
@@ -28,15 +29,15 @@ export default async function ContactPage() {
       />
 
       <PageHeader
-        eyebrow="Get in touch"
-        title="Contact Team Toner"
-        description="Thinking of selling, buying, or simply have a property question? We'd love to hear from you. Call Allan or Karen directly, or send us a message below."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       />
       <Section>
         <Container className="grid gap-12 lg:grid-cols-2">
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-foreground">
-              Call Allan or Karen directly
+              {copy.callHeading}
             </h2>
             <ContactRow icon={<Phone className="size-5" />} label={agents.allan.name}>
               <a className="hover:text-primary" href={`tel:${agents.allan.phone.replace(/\s/g, "")}`}>
@@ -68,7 +69,7 @@ export default async function ContactPage() {
           <Card>
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold text-foreground">
-                Send us a message
+                {copy.formHeading}
               </h2>
               <div className="mt-6">
                 <LeadForm kind="contact" />

@@ -102,6 +102,13 @@ export const siteConfig = {
     name: "No Sale — No Fee",
     summary: "If your property doesn't sell, you don't pay us a commission.",
   },
+  /** Site-wide appraisal banner (client brief §11), shown on every page. */
+  cta: {
+    title: "Curious what your property could sell for?",
+    description:
+      "Get an honest, evidence-based appraisal from Palmerston North & Manawatū's No.1 Arizto team.*",
+    note: "No pressure. No obligation. Just straightforward advice.",
+  },
   /** The three fee pillars, shown as a strip under the Sell/About intros. */
   feePillars: ["2% + GST Commission", "No Upfront Costs", "No Sale — No Fee"],
   /**

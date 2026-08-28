@@ -6,7 +6,7 @@ import { FeeText } from "@/components/brand/commission";
 import { Container, Section } from "@/components/brand/primitives";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { formatListingAddress, getSiteConfig, getSoldListings, getSuburbName } from "@/lib/data";
+import { formatListingAddress, getSiteConfig, getSoldCopy, getSoldListings, getSuburbName } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sold },
@@ -21,6 +21,7 @@ export const revalidate = 60;
 export default async function SoldPage() {
   const sold = await getSoldListings();
   const { stats } = await getSiteConfig();
+  const copy = await getSoldCopy();
   const soldItems = await Promise.all(
     sold.map(async (l) => ({
       name: formatListingAddress(l.address, await getSuburbName(l.suburb)),
@@ -36,9 +37,9 @@ export default async function SoldPage() {
       />
 
       <PageHeader
-        eyebrow="Proven results"
-        title="Recently sold by Team Toner"
-        description="See some of the properties we've successfully sold across Palmerston North, Feilding, Ashhurst and the wider Manawatū."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       />
 
       <Section>

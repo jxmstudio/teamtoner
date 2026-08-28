@@ -7,7 +7,7 @@ import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { PageEntityJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { getSiteConfig } from "@/lib/data";
+import { getAboutCopy, getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.about },
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const { stats, agents, brand } = await getSiteConfig();
+  const copy = await getAboutCopy();
   return (
     <>
       <PageEntityJsonLd
@@ -28,9 +29,9 @@ export default async function AboutPage() {
       />
 
       <PageHeader
-        eyebrow="Meet Team Toner"
-        title="Allan & Karen Toner"
-        description="Two agents. One team."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       />
 
       <Section>
@@ -47,39 +48,18 @@ export default async function AboutPage() {
             />
           </div>
           <div className="space-y-4 text-lg text-foreground/90">
-            <p>
-              We&rsquo;re Allan and Karen Toner — a husband-and-wife real estate
-              team proudly helping homeowners throughout Palmerston North,
-              Feilding, Ashhurst and the wider Manawatū.
-            </p>
-            <p>
-              Selling your home is one of life&rsquo;s biggest financial
-              decisions. We believe the people you trust with it should treat it
-              that way.
-            </p>
-            <p>
-              As a husband-and-wife team, we work together throughout the entire
-              selling process — from your initial appraisal and marketing
-              strategy through to buyer follow-up, negotiation and settlement.
-            </p>
-            <p>
-              That means you&rsquo;re not simply getting an agent who lists your
-              property. You&rsquo;re getting two experienced agents personally
-              invested in achieving the best possible outcome.
-            </p>
-            <p>
-              Our approach is straightforward: honest advice, regular
-              communication, strong marketing, thorough buyer follow-up and hard
-              work.
-            </p>
-            <p>
-              We&rsquo;ll tell you what we believe your property is worth based
-              on the evidence — not simply tell you what you want to hear to win
-              the listing.
-            </p>
-            <p className="font-semibold text-foreground">
-              That&rsquo;s the Team Toner difference.
-            </p>
+            {copy.bodyParagraphs.map((paragraph, i) => (
+              <p
+                key={i}
+                className={
+                  i === copy.bodyParagraphs.length - 1
+                    ? "font-semibold text-foreground"
+                    : undefined
+                }
+              >
+                {paragraph}
+              </p>
+            ))}
           </div>
         </Container>
       </Section>
@@ -89,8 +69,8 @@ export default async function AboutPage() {
         <Container className="max-w-3xl text-center">
           <SectionHeading
             eyebrow={`Part of ${brand.parent}`}
-            title="A smarter model behind the service"
-            description={`We're part of ${brand.parent}, a nationwide agency built on a simpler, fairer fee structure. It lets us deliver the full premium service — and pass the difference on to you.`}
+            title={copy.modelTitle}
+            description={copy.modelDescription}
           />
           <FeePillars className="mt-8 justify-center" />
           <p className="mt-8 text-muted-foreground">

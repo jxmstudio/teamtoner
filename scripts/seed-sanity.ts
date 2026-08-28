@@ -20,6 +20,19 @@ import { testimonials } from "../lib/content/testimonials";
 import { guides } from "../lib/content/guides";
 import { suburbs } from "../lib/content/suburbs";
 import { siteConfig } from "../lib/site";
+import {
+  aboutCopy,
+  appraisalCopy,
+  contactCopy,
+  homeCopy,
+  listingsCopy,
+  privacyCopy,
+  resourcesCopy,
+  sellCopy,
+  soldCopy,
+  suburbsCopy,
+  termsCopy,
+} from "../lib/content/page-copy";
 
 const client = getCliClient({ apiVersion: "2026-08-01" });
 
@@ -179,6 +192,59 @@ async function seedSuburbs() {
   console.log(`  ${suburbs.length} suburbs imported.`);
 }
 
+/** Sanity object-array items need _key/_type; map field name → object type. */
+const ARRAY_ITEM_TYPES: Record<string, string> = {
+  faqs: "faqItem",
+  steps: "stepItem",
+  sections: "legalSection",
+};
+
+function withSanityKeys(value: unknown, field?: string): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item, i) =>
+      item && typeof item === "object"
+        ? {
+            _key: `${field}-${i}`,
+            ...(field && ARRAY_ITEM_TYPES[field] ? { _type: ARRAY_ITEM_TYPES[field] } : {}),
+            ...(withSanityKeys(item) as Record<string, unknown>),
+          }
+        : item
+    );
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, withSanityKeys(v, k)])
+    );
+  }
+  return value;
+}
+
+const PAGE_COPY: Record<string, object> = {
+  pageHome: homeCopy,
+  pageAbout: aboutCopy,
+  pageSell: sellCopy,
+  pageAppraisal: appraisalCopy,
+  pageContact: contactCopy,
+  pageListings: listingsCopy,
+  pageSold: soldCopy,
+  pageSuburbs: suburbsCopy,
+  pageResources: resourcesCopy,
+  pagePrivacy: privacyCopy,
+  pageTerms: termsCopy,
+};
+
+async function seedPageCopy() {
+  for (const [id, defaults] of Object.entries(PAGE_COPY)) {
+    console.log(`Importing ${id} …`);
+    await client.createIfNotExists({
+      _id: id,
+      _type: id,
+      ...(withSanityKeys(defaults) as Record<string, unknown>),
+    });
+  }
+  console.log(`  ${Object.keys(PAGE_COPY).length} page-copy documents imported.`);
+}
+
 async function seedSiteSettings() {
   console.log("Importing site settings …");
   await client.createIfNotExists({
@@ -211,8 +277,21 @@ async function seedSiteSettings() {
       title: p.title,
       detail: p.detail,
     })),
+    ctaTitle: siteConfig.cta.title,
+    ctaDescription: siteConfig.cta.description,
+    ctaNote: siteConfig.cta.note,
     // Socials/profile URLs are left unset until the client supplies real ones.
   });
+  // The document may pre-date newer fields (e.g. the CTA banner) — backfill
+  // without touching anything the client has already edited.
+  await client
+    .patch("siteSettings")
+    .setIfMissing({
+      ctaTitle: siteConfig.cta.title,
+      ctaDescription: siteConfig.cta.description,
+      ctaNote: siteConfig.cta.note,
+    })
+    .commit();
   console.log("  site settings imported.");
 }
 
@@ -222,6 +301,7 @@ async function main() {
   await seedGuides();
   await seedSuburbs();
   await seedSiteSettings();
+  await seedPageCopy();
 
   const { projectId, dataset } = client.config();
   console.log(`Done — content imported into ${projectId}/${dataset}.`);

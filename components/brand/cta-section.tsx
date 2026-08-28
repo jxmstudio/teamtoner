@@ -8,28 +8,28 @@ import { getSiteConfig } from "@/lib/data";
  * page; pass `title`/`description` only where a page needs a local variant.
  */
 export async function CtaSection({
-  title = "Curious what your property could sell for?",
+  title,
   description,
-  note = "No pressure. No obligation. Just straightforward advice.",
+  note,
 }: {
   title?: string;
   description?: string;
   note?: string | null;
 }) {
-  const { stats } = await getSiteConfig();
-  const resolvedDescription =
-    description ??
-    `Get an honest, evidence-based appraisal from ${stats.regionName}'s ${stats.regionRank} Arizto team.*`;
+  const { cta } = await getSiteConfig();
+  const resolvedTitle = title ?? cta.title;
+  const resolvedDescription = description ?? cta.description;
+  const resolvedNote = note === null ? null : (note ?? cta.note);
   return (
     <section className="bg-petrol text-white">
       <Container className="flex flex-col items-center gap-6 py-14 text-center lg:flex-row lg:justify-between lg:text-left">
         <div>
-          <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
+          <h2 className="text-2xl font-bold sm:text-3xl">{resolvedTitle}</h2>
           <p className="mt-2 max-w-2xl text-white/80">
             <FeeText>{resolvedDescription}</FeeText>
           </p>
-          {note ? (
-            <p className="mt-3 text-sm text-white/60">{note}</p>
+          {resolvedNote ? (
+            <p className="mt-3 text-sm text-white/60">{resolvedNote}</p>
           ) : null}
         </div>
         <div className="flex shrink-0 flex-wrap justify-center gap-3">

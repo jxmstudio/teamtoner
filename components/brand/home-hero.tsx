@@ -1,15 +1,12 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/brand/primitives";
-import {
-  CommissionRate,
-  FeeText,
-  RankingAsterisk,
-} from "@/components/brand/commission";
-import { getSiteConfig } from "@/lib/data";
+import { FeeText, RankingAsterisk } from "@/components/brand/commission";
+import { getHomeCopy, getSiteConfig } from "@/lib/data";
 
 export async function HomeHero() {
   const { stats } = await getSiteConfig();
+  const copy = await getHomeCopy();
   return (
     <section className="relative overflow-hidden bg-night text-white">
       <div
@@ -23,18 +20,17 @@ export async function HomeHero() {
             <RankingAsterisk />
           </p>
           <h1 className="mt-6 text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            A smarter way to{" "}
-            <span className="font-script font-normal text-teal">sell your home</span>{" "}
-            in Palmerston North.
+            {copy.heroTitleStart}{" "}
+            <span className="font-script font-normal text-teal">
+              {copy.heroTitleHighlight}
+            </span>{" "}
+            {copy.heroTitleEnd}
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-lg text-white/80">
-            Premium marketing. Proven results. Two experienced agents working for
-            you — with a fairer <CommissionRate /> commission and no upfront
-            costs.
+            <FeeText>{copy.heroParagraph}</FeeText>
           </p>
           <p className="mt-3 max-w-xl text-pretty text-white/60">
-            Allan &amp; Karen Toner proudly serving Palmerston North, Feilding,
-            Ashhurst and the wider Manawatū.
+            {copy.heroSecondary}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink

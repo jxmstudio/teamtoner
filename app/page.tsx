@@ -16,7 +16,7 @@ import {
   getAreas,
   getFeaturedListings,
   getFeaturedTestimonials,
-  getSiteConfig,
+  getHomeCopy,
   getSiteVideos,
 } from "@/lib/data";
 
@@ -36,7 +36,7 @@ export default async function HomePage() {
   const videos = await getSiteVideos();
   const reviews = await getFeaturedTestimonials(3);
   const areas = await getAreas();
-  const { stats } = await getSiteConfig();
+  const copy = await getHomeCopy();
   return (
     <>
       <HomeHero />
@@ -58,11 +58,9 @@ export default async function HomePage() {
           <div>
             <SectionHeading
               align="left"
-              eyebrow="Proven results"
-              title="Proud to be recognised"
-              description={
-                <FeeText>{`Ranked ${stats.nationalRank} among Arizto agents nationwide and ${stats.regionRank} in ${stats.regionName}.* When you list with Team Toner, you get two experienced agents personally working on your sale.`}</FeeText>
-              }
+              eyebrow={copy.recognitionEyebrow}
+              title={copy.recognitionTitle}
+              description={<FeeText>{copy.recognitionDescription}</FeeText>}
             />
           </div>
         </Container>
@@ -84,9 +82,9 @@ export default async function HomePage() {
           <div>
             <SectionHeading
               align="left"
-              eyebrow="Meet Allan & Karen"
-              title="Two agents. One team. Personally involved from start to finish."
-              description="We're Allan & Karen Toner, a husband-and-wife real estate team helping homeowners throughout Palmerston North, Feilding, Ashhurst and the wider Manawatū. When you list with Team Toner, you deal directly with us throughout your sale."
+              eyebrow={copy.meetEyebrow}
+              title={copy.meetTitle}
+              description={copy.meetDescription}
             />
             <Link
               href="/about"
@@ -105,8 +103,8 @@ export default async function HomePage() {
             <div className="flex items-end justify-between gap-4">
               <SectionHeading
                 align="left"
-                eyebrow="Current listings"
-                title="Featured properties"
+                eyebrow={copy.featuredEyebrow}
+                title={copy.featuredTitle}
               />
               <ButtonLink
                 href="/listings"
@@ -148,9 +146,9 @@ export default async function HomePage() {
         <Section className="bg-secondary/60">
           <Container>
             <SectionHeading
-              eyebrow="What our clients say"
-              title="Trusted across the Manawatū"
-              description="Real feedback from families who've sold with Team Toner."
+              eyebrow={copy.testimonialsEyebrow}
+              title={copy.testimonialsTitle}
+              description={copy.testimonialsDescription}
             />
             <TestimonialCarousel className="mt-10" testimonials={reviews} />
           </Container>
@@ -161,9 +159,9 @@ export default async function HomePage() {
       <Section>
         <Container>
           <SectionHeading
-            eyebrow="Local experts"
-            title="Suburbs we know inside out"
-            description="Deep local knowledge across Palmerston North and the wider Manawatū."
+            eyebrow={copy.suburbsEyebrow}
+            title={copy.suburbsTitle}
+            description={copy.suburbsDescription}
           />
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {areas.map((s) => (

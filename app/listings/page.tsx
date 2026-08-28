@@ -7,7 +7,7 @@ import { Container, Section } from "@/components/brand/primitives";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { cn } from "@/lib/utils";
 import { seoTitles } from "@/lib/site";
-import { formatListingAddress, getListings, getAreas, getSuburbName } from "@/lib/data";
+import { formatListingAddress, getListings, getListingsCopy, getAreas, getSuburbName } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.listings },
@@ -26,6 +26,7 @@ export default async function ListingsPage(props: PageProps<"/listings">) {
   const all = await getListings();
   const listings = selected ? all.filter((l) => l.suburb === selected) : all;
   const suburbs = await getAreas();
+  const copy = await getListingsCopy();
   const listingItems = await Promise.all(
     listings.map(async (l) => ({
       name: formatListingAddress(l.address, await getSuburbName(l.suburb)),
@@ -42,9 +43,9 @@ export default async function ListingsPage(props: PageProps<"/listings">) {
       />
 
       <PageHeader
-        eyebrow="Current listings"
-        title="Homes for sale"
-        description="Browse our current listings across the Manawatū. New properties are added regularly."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       />
 
       <Section>

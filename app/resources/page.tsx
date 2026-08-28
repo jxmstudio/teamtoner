@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { getGuides } from "@/lib/data";
+import { getGuides, getResourcesCopy } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.resources },
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 export default async function ResourcesPage() {
   const guides = await getGuides();
+  const copy = await getResourcesCopy();
   return (
     <>
       <ItemListJsonLd
@@ -31,9 +32,9 @@ export default async function ResourcesPage() {
       />
 
       <PageHeader
-        eyebrow="Free downloads"
-        title="Free property selling guides"
-        description="Straightforward, practical advice from Team Toner to help you prepare, sell and move with confidence."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       />
       <Section>
         <Container>

@@ -11,14 +11,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
-  CommissionRate,
   FeeText,
   RankingAsterisk,
   TermsFootnote,
 } from "@/components/brand/commission";
 import { FaqJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
-import { getSiteConfig } from "@/lib/data";
+import { getAppraisalCopy, getSiteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.appraisal },
@@ -27,43 +26,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/appraisal" },
 };
 
-const benefits = [
-  "A free, no-obligation property appraisal",
-  "An evidence-based assessment, backed by recent local sales",
-  "Allan & Karen personally — two experienced agents, not one",
-  "An honest discussion about price, buyer demand and current competition",
-  "Advice on the best strategy and timing if you're considering selling",
-  "Clear answers to your questions — with absolutely no pressure to list",
-];
-
 const tel = (n: string) => `tel:${n.replace(/\s/g, "")}`;
 
-/**
- * Appraisal FAQs. The appraisal-versus-valuation answer is deliberately written
- * as a plain definition — that's the shape Google lifts into a featured snippet
- * and the AI answer engines quote.
- */
-const faqs = [
-  {
-    q: "Is a Team Toner property appraisal really free?",
-    a: "Yes. The appraisal is completely free and carries no obligation to list with us. There are also no upfront costs if you do decide to sell — with No Sale — No Fee, you only pay when your property sells. T's and C's apply.",
-  },
-  {
-    q: "What is the difference between a property appraisal and a registered valuation?",
-    a: "A property appraisal is a licensed salesperson's evidence-based estimate of what your property should sell for in the current market, based on recent comparable sales. It is free and used to guide your pricing and marketing decisions. A registered valuation is a formal, paid assessment carried out by a registered valuer, and is what a lender will usually ask for.",
-  },
-  {
-    q: "What happens at a Team Toner appraisal?",
-    a: "Allan and Karen both visit your property, discuss your plans and timeframe, then look at recent comparable sales, current competition and buyer demand. You get a realistic price range and the evidence behind it — not a number designed to win your listing.",
-  },
-  {
-    q: "Do I have to list my property after getting an appraisal?",
-    a: "No. There is no obligation and no pressure. Plenty of people get an appraisal a year or more before they sell, simply to understand where they stand.",
-  },
-];
-
 export default async function AppraisalPage() {
-  const { agents, contact, guarantee } = await getSiteConfig();
+  const { agents, contact } = await getSiteConfig();
+  const copy = await getAppraisalCopy();
+  const { benefits, faqs } = copy;
 
   return (
     <>
@@ -71,19 +39,12 @@ export default async function AppraisalPage() {
 
       <PageHeader
         compact
-        eyebrow="Free appraisal"
-        title="What Could Your Property Sell For in Today's Market?"
-        description="Get a clear, evidence-based appraisal from Allan & Karen Toner — Team Toner, Palmerston North & Manawatū's No.1 Arizto team."
+        eyebrow={copy.headerEyebrow}
+        title={copy.headerTitle}
+        description={copy.headerDescription}
       >
-        <p className="mt-3 max-w-2xl text-muted-foreground">
-          We&rsquo;ll personally assess your property, look at recent comparable
-          sales, current competition and buyer demand, and give you
-          straightforward advice on where your property sits in today&rsquo;s
-          market.
-        </p>
-        <p className="mt-3 font-semibold text-foreground">
-          No pressure. No obligation. Just experienced, honest advice.
-        </p>
+        <p className="mt-3 max-w-2xl text-muted-foreground">{copy.intro}</p>
+        <p className="mt-3 font-semibold text-foreground">{copy.introNote}</p>
       </PageHeader>
 
       <Section className="py-10 sm:py-12 lg:py-16">
@@ -114,7 +75,7 @@ export default async function AppraisalPage() {
 
             <div className="order-2 lg:order-1">
               <h2 className="text-2xl font-bold text-foreground">
-                What you&rsquo;ll get
+                {copy.benefitsTitle}
               </h2>
               <ul className="mt-6 space-y-4">
                 {benefits.map((benefit) => (
@@ -129,12 +90,10 @@ export default async function AppraisalPage() {
 
               <div className="mt-8 rounded-xl border border-border bg-secondary/40 p-5">
                 <h3 className="font-semibold text-foreground">
-                  Thinking of selling?
+                  {copy.sellingNoteTitle}
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  We can also explain our premium marketing approach, No Upfront
-                  Costs, and {guarantee.name} &mdash; along with our
-                  competitive <CommissionRate /> commission.
+                  <FeeText>{copy.sellingNote}</FeeText>
                 </p>
               </div>
 
@@ -170,7 +129,7 @@ export default async function AppraisalPage() {
       <Section className="bg-secondary/50">
         <Container className="max-w-3xl">
           <h2 className="text-2xl font-bold text-foreground">
-            Appraisal questions, answered
+            {copy.faqTitle}
           </h2>
           <Accordion className="mt-8">
             {faqs.map((faq) => (

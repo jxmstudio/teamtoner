@@ -4,21 +4,33 @@ import { defineConfig } from "sanity";
 import { structureTool, type StructureResolver } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { dataset, projectId } from "./sanity/env";
-import { schemaTypes } from "./sanity/schemaTypes";
+import { schemaTypes, singletonTypes } from "./sanity/schemaTypes";
+import { pageCopyTypes } from "./sanity/schemaTypes/pageCopy";
 
 /**
- * Desk layout: Site settings is a singleton (one fixed document) pinned to the
- * top; the content types follow as plain lists.
+ * Desk layout: Site settings and the per-page copy documents are singletons
+ * (one fixed document each, _id === type name) pinned above the content lists.
  */
+const singleton = (S: Parameters<StructureResolver>[0], type: string, title: string) =>
+  S.listItem()
+    .title(title)
+    .id(type)
+    .child(S.document().schemaType(type).documentId(type));
+
 const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
+      singleton(S, "siteSettings", "Site settings"),
       S.listItem()
-        .title("Site settings")
-        .id("siteSettings")
+        .title("Page copy")
+        .id("pageCopy")
         .child(
-          S.document().schemaType("siteSettings").documentId("siteSettings")
+          S.list()
+            .title("Page copy")
+            .items(
+              pageCopyTypes.map((t) => singleton(S, t.name, t.title ?? t.name))
+            )
         ),
       S.divider(),
       S.documentTypeListItem("listing").title("Listings"),
@@ -42,14 +54,14 @@ export default defineConfig({
   plugins: [structureTool({ structure }), visionTool()],
   schema: {
     types: schemaTypes,
-    // The singleton is edited through its pinned desk entry, never created.
+    // Singletons are edited through their pinned desk entries, never created.
     templates: (templates) =>
-      templates.filter((t) => t.schemaType !== "siteSettings"),
+      templates.filter((t) => !singletonTypes.has(t.schemaType)),
   },
   document: {
-    // No duplicate/delete/unpublish on the settings singleton.
+    // No duplicate/delete/unpublish on singletons.
     actions: (actions, context) =>
-      context.schemaType === "siteSettings"
+      singletonTypes.has(context.schemaType)
         ? actions.filter(
             (a) => a.action && ["publish", "discardChanges", "restore"].includes(a.action)
           )

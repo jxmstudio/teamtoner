@@ -17,6 +17,7 @@ export const siteSettings = defineType({
     { name: "stats", title: "Rankings & fee" },
     { name: "selling", title: "Why Team Toner" },
     { name: "social", title: "Social & profiles" },
+    { name: "cta", title: "Appraisal banner" },
   ],
   fields: [
     defineField({
@@ -177,6 +178,28 @@ export const siteSettings = defineType({
       group: "selling",
     }),
 
+    defineField({
+      name: "ctaTitle",
+      title: "Banner title",
+      type: "string",
+      description: "The site-wide appraisal banner, e.g. “Curious what your property could sell for?”",
+      group: "cta",
+    }),
+    defineField({
+      name: "ctaDescription",
+      title: "Banner description",
+      type: "text",
+      rows: 2,
+      description: "A “*” after a ranking claim becomes the linked rankings asterisk.",
+      group: "cta",
+    }),
+    defineField({
+      name: "ctaNote",
+      title: "Banner note",
+      type: "string",
+      description: "Small line under the description.",
+      group: "cta",
+    }),
     defineField({
       name: "facebook",
       title: "Facebook URL",

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/brand/page-header";
+import { LegalText } from "@/components/brand/legal-text";
 import { Container, Section } from "@/components/brand/primitives";
-import { siteConfig } from "@/lib/site";
-import { getSiteConfig } from "@/lib/data";
+import { getSiteConfig, getTermsCopy } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
@@ -14,105 +14,34 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function TermsPage() {
-  const config = await getSiteConfig();
+  const copy = await getTermsCopy();
   return (
     <>
       <PageHeader title="Terms of Use" eyebrow="Legal" />
       <Section>
         <Container className="max-w-3xl space-y-6 text-foreground/90">
-          <p className="text-sm text-muted-foreground">
-            Template terms — to be reviewed/replaced with {siteConfig.name}&rsquo;s
-            approved wording.
-          </p>
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">Use of this site</h2>
-            <p className="mt-2">
-              This website is provided by {config.legalName} for general
-              information about our real estate services. By using it you agree to
-              these terms.
-            </p>
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">
-              Property information
-            </h2>
-            <p className="mt-2">
-              Listing details are provided in good faith and believed to be
-              accurate, but are not guaranteed. Prospective purchasers should make
-              their own enquiries and rely on their own investigations.
-            </p>
-          </div>
-          {/*
-            Every asterisk beside the commission rate on the site links to this
-            section (see components/brand/commission.tsx). Keep the `id` stable.
-            TODO(client): Allan to have this wording confirmed before launch.
-          */}
-          <div id="commission" className="scroll-mt-24">
-            <h2 className="text-xl font-semibold text-foreground">
-              Commission and fees &mdash; T&rsquo;s &amp; C&rsquo;s
-            </h2>
-            <p className="mt-2">
-              The {config.stats.commission} commission quoted on this site is
-              our standard residential selling fee and is calculated on the final
-              sale price. It is indicative only and does not form an offer or an
-              agency agreement. The fee that applies to your property is the one
-              recorded in the signed agency agreement between you and{" "}
-              {config.legalName}.
-            </p>
-            <p className="mt-2">
-              Marketing inclusions, the fee, and any minimum fee may vary
-              depending on the property, the method of sale and the marketing
-              package selected. Fees are exclusive of GST unless stated
-              otherwise. Third-party costs, where they apply, are additional and
-              will be disclosed to you in writing before you commit to them.
-            </p>
-            <p className="mt-2">
-              <strong className="font-semibold text-foreground">
-                {config.guarantee.name}:
-              </strong>{" "}
-              {config.guarantee.summary} The guarantee applies to the selling
-              commission only and is subject to the terms of your signed agency
-              agreement, including any agreed marketing costs and the conditions
-              under which the agreement may end.
-            </p>
-          </div>
-          {/*
-            Every asterisk beside a ranking claim (No.1 Arizto team, #7
-            nationwide) links to this section. Keep the `id` stable.
-            TODO(client): Allan & Karen to confirm the exact ranking source
-            and "as at" date before publication (launch brief §4).
-          */}
-          <div id="rankings" className="scroll-mt-24">
-            <h2 className="text-xl font-semibold text-foreground">
-              Ranking claims
-            </h2>
-            <p className="mt-2">
-              References on this site to Team Toner being the No.1 Arizto team
-              in {config.stats.regionName} and ranked{" "}
-              {config.stats.nationalRank} among Arizto agents nationwide are
-              based on Arizto agent sales results as at August 2026. Rankings
-              are reviewed periodically and may change.
-            </p>
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">
-              Licensing
-            </h2>
-            <p className="mt-2">
-              {config.brand.reaa}. All real estate agency work is carried out
-              in accordance with the Real Estate Agents Act 2008.
-            </p>
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">Contact</h2>
-            <p className="mt-2">
-              Questions about these terms? Email{" "}
-              <a className="text-primary underline" href={`mailto:${config.contact.email}`}>
-                {config.contact.email}
-              </a>
-              .
-            </p>
-          </div>
+          {copy.note ? (
+            <p className="text-sm text-muted-foreground">{copy.note}</p>
+          ) : null}
+          {/* The #commission and #rankings anchors are the landing points for
+              every fee/ranking asterisk on the site — the section anchors come
+              from the CMS document but are read-only there. */}
+          {copy.sections.map((section) => (
+            <div
+              key={section.heading}
+              id={section.anchor || undefined}
+              className={section.anchor ? "scroll-mt-24" : undefined}
+            >
+              <h2 className="text-xl font-semibold text-foreground">
+                {section.heading}
+              </h2>
+              {section.paragraphs.map((paragraph, i) => (
+                <p key={i} className="mt-2">
+                  <LegalText>{paragraph}</LegalText>
+                </p>
+              ))}
+            </div>
+          ))}
         </Container>
       </Section>
     </>

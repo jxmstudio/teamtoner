@@ -87,6 +87,7 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"][0] {
   },
   "contact": { "email": contactEmail, "office": officePhone, "region": region },
   "stats": { nationalRank, regionRank, regionName, commission },
+  "cta": { "title": ctaTitle, "description": ctaDescription, "note": ctaNote },
   feePillars,
   "sellingPoints": sellingPoints[]{ title, detail },
   "sellingPointsSell": sellingPointsSell[]{ title, detail },

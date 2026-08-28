@@ -4,6 +4,19 @@ import { testimonials as fixtureTestimonials } from "@/lib/content/testimonials"
 import { guides as fixtureGuides } from "@/lib/content/guides";
 import { suburbs as fixtureSuburbs } from "@/lib/content/suburbs";
 import type { Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
+import {
+  aboutCopy,
+  appraisalCopy,
+  contactCopy,
+  homeCopy,
+  listingsCopy,
+  privacyCopy,
+  resourcesCopy,
+  sellCopy,
+  soldCopy,
+  suburbsCopy,
+  termsCopy,
+} from "@/lib/content/page-copy";
 import { siteConfig, type SiteConfig } from "@/lib/site";
 import { sanityClient } from "@/lib/sanity/client";
 import {
@@ -72,6 +85,48 @@ function withOverrides<T>(base: T, overrides: unknown): T {
   if (typeof overrides === "string" && overrides.trim() === "") return base;
   return overrides as T;
 }
+
+/** Recursively drop Sanity metadata (_id, _type, _key, …) before merging. */
+function stripMeta(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(stripMeta);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key]) => !key.startsWith("_"))
+        .map(([key, v]) => [key, stripMeta(v)])
+    );
+  }
+  return value;
+}
+
+/**
+ * Page copy: each page's "Page copy" studio document (fixed _id === type
+ * name) merged over its typed defaults in lib/content/page-copy.ts.
+ */
+function pageCopy<T>(id: string, defaults: T) {
+  return cache(async (): Promise<T> => {
+    if (!sanityClient) return defaults;
+    try {
+      const doc = await sanityClient.fetch<unknown>(`*[_id == $id][0]`, { id });
+      return withOverrides(defaults, stripMeta(doc));
+    } catch (error) {
+      console.error(`[sanity] ${id} fetch failed — serving defaults`, error);
+      return defaults;
+    }
+  });
+}
+
+export const getHomeCopy = pageCopy("pageHome", homeCopy);
+export const getAboutCopy = pageCopy("pageAbout", aboutCopy);
+export const getSellCopy = pageCopy("pageSell", sellCopy);
+export const getAppraisalCopy = pageCopy("pageAppraisal", appraisalCopy);
+export const getContactCopy = pageCopy("pageContact", contactCopy);
+export const getListingsCopy = pageCopy("pageListings", listingsCopy);
+export const getSoldCopy = pageCopy("pageSold", soldCopy);
+export const getSuburbsCopy = pageCopy("pageSuburbs", suburbsCopy);
+export const getResourcesCopy = pageCopy("pageResources", resourcesCopy);
+export const getPrivacyCopy = pageCopy("pagePrivacy", privacyCopy);
+export const getTermsCopy = pageCopy("pageTerms", termsCopy);
 
 /**
  * Site-wide settings: the `siteConfig` defaults with the studio's
