@@ -100,8 +100,11 @@ export function TestimonialCarousel({
           </CarouselContent>
         </div>
 
-        <CarouselPrevious className="hidden sm:flex" />
-        <CarouselNext className="hidden sm:flex" />
+        {/* The px-14 gutter above reserves room for the arrows *inside* the
+            carousel box — the component's default -left/right-12 hangs them
+            outside it, which overflowed the viewport on tablet widths. */}
+        <CarouselPrevious className="left-0 hidden sm:flex" />
+        <CarouselNext className="right-0 hidden sm:flex" />
       </Carousel>
 
       <div className="mt-6 flex items-center justify-center gap-4">

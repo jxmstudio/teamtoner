@@ -36,8 +36,9 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       {/* Header height tracks the logo — enlarged at the client's request for
-          readability, so the bar grows with it rather than cropping. */}
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          readability, so the bar grows with it rather than cropping. On phones
+          the bar drops to 56px so the sticky chrome doesn't eat the viewport. */}
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2" aria-label={siteConfig.name}>
           {/* team-toner-signature-mark.png is the original signature cropped
               to its ink with the white background removed — the source PNG is
@@ -49,7 +50,7 @@ export function SiteHeader({
             width={1256}
             height={417}
             priority
-            className="h-10 w-auto sm:h-12"
+            className="h-8 w-auto sm:h-12"
           />
         </Link>
 
@@ -71,10 +72,13 @@ export function SiteHeader({
         <div className="hidden items-center gap-2 lg:flex">
           <a
             href={allanTel}
-            className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
+            aria-label={`Call ${phone}`}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
           >
             <Phone className="size-4" />
-            {phone}
+            {/* At exactly lg (iPad landscape) the full number wrapped to three
+                lines — the row only has room for it from xl up. */}
+            <span className="hidden xl:inline">{phone}</span>
           </a>
           <ButtonLink href="/appraisal" className={cn("h-10 px-4", teal)}>
             Get a Free Appraisal
@@ -83,6 +87,13 @@ export function SiteHeader({
 
         {/* Mobile */}
         <div className="flex items-center gap-2 lg:hidden">
+          <a
+            href={allanTel}
+            aria-label={`Call ${phone}`}
+            className="inline-flex size-9 items-center justify-center rounded-lg border border-border text-foreground/70 transition-colors hover:text-primary"
+          >
+            <Phone className="size-4" />
+          </a>
           <ButtonLink href="/appraisal" size="sm" className={teal}>
             Appraisal
           </ButtonLink>

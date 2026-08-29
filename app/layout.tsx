@@ -4,7 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
-import { HideOnGate } from "@/components/hide-on-gate";
+import { HideOnStudio } from "@/components/hide-on-studio";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/lib/site";
 import { getSiteConfig } from "@/lib/data";
@@ -81,13 +81,13 @@ export default async function RootLayout({
         {/* Site-wide so every page resolves to the same business entity — the
             listing and breadcrumb nodes reference this @id. */}
         <OrganizationJsonLd />
-        <HideOnGate>
+        <HideOnStudio>
           <SiteHeader phone={config.agents.allan.phone} />
-        </HideOnGate>
+        </HideOnStudio>
         <main className="flex-1">{children}</main>
-        <HideOnGate>
+        <HideOnStudio>
           <SiteFooter />
-        </HideOnGate>
+        </HideOnStudio>
         <Toaster richColors position="top-center" />
       </body>
     </html>
