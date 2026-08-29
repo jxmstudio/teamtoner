@@ -7,18 +7,20 @@ import { Container, Section, SectionHeading } from "@/components/brand/primitive
 import { Card, CardContent } from "@/components/ui/card";
 import { ItemListJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
+import type { Suburb } from "@/lib/content/types";
 import { getAreas, getSuburbChildren, getSuburbs, getSuburbsCopy } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: { absolute: seoTitles.suburbs },
   description:
-    "Local knowledge across Palmerston North and the Manawatū — Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson, Feilding and Ashhurst.",
+    "Local knowledge across Palmerston North and the Manawatū — Hokowhitu, Takaro, Highbury, Kelvin Grove, Terrace End, Awapuni, Milson, Feilding, Ashhurst, Sanson and more.",
   alternates: { canonical: "/suburbs" },
 };
 
 export default async function SuburbsPage() {
   const areas = await getAreas();
   const pnSuburbs = await getSuburbChildren("palmerston-north");
+  const manawatuTowns = await getSuburbChildren("manawatu");
   const allSuburbs = await getSuburbs();
   const copy = await getSuburbsCopy();
 
@@ -68,35 +70,60 @@ export default async function SuburbsPage() {
         </Container>
       </Section>
 
-      {/* Individual Palmerston North suburbs — each its own indexable page. */}
-      {pnSuburbs.length > 0 && (
-        <Section className="bg-secondary/50">
-          <Container>
-            <SectionHeading
-              eyebrow={copy.pnEyebrow}
-              title={copy.pnTitle}
-              description={copy.pnDescription}
-            />
-            <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-              {pnSuburbs.map((s) => (
-                <li key={s.slug}>
-                  <Link
-                    href={`/suburbs/${s.slug}`}
-                    className="group flex h-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-teal hover:bg-background"
-                  >
-                    <span className="font-semibold text-foreground group-hover:text-primary">
-                      {s.name}
-                    </span>
-                    <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Container>
-        </Section>
-      )}
+      {/* Individual suburbs and towns — each its own indexable page. */}
+      <SuburbCluster
+        suburbs={pnSuburbs}
+        eyebrow={copy.pnEyebrow}
+        title={copy.pnTitle}
+        description={copy.pnDescription}
+        className="bg-secondary/50"
+      />
+      <SuburbCluster
+        suburbs={manawatuTowns}
+        eyebrow={copy.manawatuEyebrow}
+        title={copy.manawatuTitle}
+        description={copy.manawatuDescription}
+      />
 
       <CtaSection />
     </>
+  );
+}
+
+function SuburbCluster({
+  suburbs,
+  eyebrow,
+  title,
+  description,
+  className,
+}: {
+  suburbs: Suburb[];
+  eyebrow: string;
+  title: string;
+  description: string;
+  className?: string;
+}) {
+  if (suburbs.length === 0) return null;
+  return (
+    <Section className={className}>
+      <Container>
+        <SectionHeading eyebrow={eyebrow} title={title} description={description} />
+        <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {suburbs.map((s) => (
+            <li key={s.slug}>
+              <Link
+                href={`/suburbs/${s.slug}`}
+                className="group flex h-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-teal hover:bg-background"
+              >
+                <span className="font-semibold text-foreground group-hover:text-primary">
+                  {s.name}
+                </span>
+                <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </Section>
   );
 }

@@ -34,6 +34,11 @@ export interface SiteVideo {
   title: string;
   url: string;
   caption?: string;
+  /**
+   * ISO date the video went up on YouTube. Google requires an upload date for
+   * video rich results, so `VideoObject` markup is only emitted when it's set.
+   */
+  published?: string;
 }
 
 export interface Testimonial {

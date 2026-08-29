@@ -217,12 +217,29 @@ export async function getSuburbName(slug: string): Promise<string> {
   return (await loadSuburbs()).find((s) => s.slug === slug)?.name ?? slug;
 }
 
+/**
+ * Slugs that count as "in" a location: the location itself plus any suburbs
+ * sitting under it.
+ *
+ * Listings are tagged to the specific suburb they're in (Takaro, Highbury,
+ * Sanson…), which is what makes each suburb page carry real local evidence.
+ * Without this an area page like /suburbs/palmerston-north would show only the
+ * handful of listings still tagged at area level. Individual suburbs have no
+ * children, so this collapses to an exact match for them.
+ */
+async function locationSlugs(slug: string): Promise<string[]> {
+  const children = await getSuburbChildren(slug);
+  return [slug, ...children.map((c) => c.slug)];
+}
+
 export async function getListingsBySuburb(slug: string): Promise<Listing[]> {
-  return (await getListings()).filter((l) => l.suburb === slug);
+  const slugs = await locationSlugs(slug);
+  return (await getListings()).filter((l) => slugs.includes(l.suburb));
 }
 
 export async function getSoldBySuburb(slug: string): Promise<Listing[]> {
-  return (await getSoldListings()).filter((l) => l.suburb === slug);
+  const slugs = await locationSlugs(slug);
+  return (await getSoldListings()).filter((l) => slugs.includes(l.suburb));
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {

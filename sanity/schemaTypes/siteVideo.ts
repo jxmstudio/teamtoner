@@ -40,6 +40,13 @@ export const siteVideo = defineType({
       description: "Optional line under the title.",
     }),
     defineField({
+      name: "published",
+      title: "Date published to YouTube",
+      type: "date",
+      description:
+        "Google needs an upload date before it will show a video result. Without it the video still plays — it just isn't eligible for video-rich results.",
+    }),
+    defineField({
       name: "featured",
       title: "Show on the home page",
       type: "boolean",

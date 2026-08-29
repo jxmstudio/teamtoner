@@ -50,6 +50,14 @@ site settings) so the studio isn't empty:
 `npx sanity login` (Google, web@jxmstudio.com), then `npm run seed:sanity`.
 Idempotent — never duplicates or overwrites studio edits.
 
+To bring an already-seeded dataset in line with the suburb-level structure —
+creating any missing suburb page and re-tagging listings from area slugs
+("palmerston-north", "manawatu") to the suburb their address names — run
+`npm run migrate:suburbs`. Also idempotent; existing suburb documents are never
+overwritten, so studio edits to blurbs and commentary survive. To preview
+without writing, set `DRY_RUN=1` (PowerShell: `$env:DRY_RUN=1;`) before the
+command — `sanity exec` drops command-line flags, so it can't be one.
+
 Pages that render CMS content revalidate every 60 s, so studio edits go live
 within a minute — no redeploy needed.
 
@@ -97,19 +105,9 @@ Copy `.env.example` → `.env.local` for local dev, and set the same in Vercel.
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project id — unset = site runs from fixtures. |
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (default `production`). |
 | `SANITY_API_WRITE_TOKEN` | Local-only, for `npm run seed:sanity`. Never set in Vercel. |
-| `SITE_PASSWORD` | Pre-launch gate password. Defaults to `toner123`. |
-| `SITE_PASSWORD_ENABLED` | Set to `false` at launch to make the site public. |
 
-## Pre-launch password gate
-
-The site now runs on the client's own domain, so every route is behind a
-password until launch. Visitors are redirected to `/password`; entering the
-password sets a 30-day cookie and returns them to the page they asked for.
-
-- Password: `toner123` (override with `SITE_PASSWORD`).
-- Logic lives in `proxy.ts` (Next 16's renamed middleware) and `app/password/`.
-- **To go live:** set `SITE_PASSWORD_ENABLED=false` in Vercel and redeploy.
-- Changing `SITE_PASSWORD` invalidates everyone's existing cookie.
+The pre-launch password gate (`proxy.ts` + `/password`, `SITE_PASSWORD*` vars)
+was removed at launch — the site is public and robots.txt allows crawling.
 
 ## Deploy to Vercel
 

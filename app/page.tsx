@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { HomeHero } from "@/components/brand/home-hero";
+import { AgentCards } from "@/components/brand/agent-cards";
 import { ValueProps } from "@/components/brand/value-props";
 import { CtaSection } from "@/components/brand/cta-section";
 import { ListingCard } from "@/components/brand/listing-card";
@@ -12,12 +13,14 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { seoTitles } from "@/lib/site";
 import { VideoEmbed } from "@/components/brand/video-embed";
+import { VideoObjectJsonLd } from "@/components/seo/json-ld";
 import {
   getAreas,
   getFeaturedListings,
   getFeaturedTestimonials,
   getHomeCopy,
   getSiteVideos,
+  getSuburbs,
 } from "@/lib/data";
 
 // Listings and videos are CMS-managed — refresh the static page periodically.
@@ -36,67 +39,16 @@ export default async function HomePage() {
   const videos = await getSiteVideos();
   const reviews = await getFeaturedTestimonials(3);
   const areas = await getAreas();
+  const localities = (await getSuburbs()).filter((s) => s.parent);
   const copy = await getHomeCopy();
   return (
     <>
       <HomeHero />
       <ValueProps />
 
-      {/* Recognition */}
-      <Section className="bg-secondary/60">
-        <Container className="grid items-center gap-10 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
-            <Image
-              src="/brand/top-10-nationwide.jpg"
-              alt="Team Toner recognised in the top 10 Arizto agents nationwide"
-              width={1536}
-              height={1024}
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div>
-            <SectionHeading
-              align="left"
-              eyebrow={copy.recognitionEyebrow}
-              title={copy.recognitionTitle}
-              description={<FeeText>{copy.recognitionDescription}</FeeText>}
-            />
-          </div>
-        </Container>
-      </Section>
-
-      {/* Meet Allan & Karen (launch brief §5) — official supplied photo only. */}
-      <Section>
-        <Container className="grid items-center gap-10 lg:grid-cols-[2fr_3fr]">
-          <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl shadow-lg ring-1 ring-border lg:mx-0">
-            <Image
-              src="/team/allan-karen.jpg"
-              alt="Allan and Karen Toner — Team Toner, Arizto real estate agents in Palmerston North"
-              width={1200}
-              height={1200}
-              sizes="(min-width: 1024px) 33vw, 100vw"
-              className="aspect-[4/5] w-full object-cover object-top"
-            />
-          </div>
-          <div>
-            <SectionHeading
-              align="left"
-              eyebrow={copy.meetEyebrow}
-              title={copy.meetTitle}
-              description={copy.meetDescription}
-            />
-            <Link
-              href="/about"
-              className="mt-6 inline-flex items-center gap-2 font-semibold text-primary transition-all hover:gap-3"
-            >
-              Meet Team Toner <ArrowRight className="size-4" />
-            </Link>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Featured listings */}
+      {/* Featured listings — ahead of the story sections. Property is what most
+          home-page visitors arrived for, and it's the strongest internal link
+          target on the page. */}
       {featured.length > 0 && (
         <Section>
           <Container>
@@ -123,10 +75,57 @@ export default async function HomePage() {
         </Section>
       )}
 
+      {/* Recognition */}
+      <Section className="bg-secondary/60">
+        <Container className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
+            <Image
+              src="/brand/top-10-nationwide.jpg"
+              alt="Team Toner recognised in the top 10 Arizto agents nationwide"
+              width={1536}
+              height={1024}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div>
+            <SectionHeading
+              align="left"
+              eyebrow={copy.recognitionEyebrow}
+              title={copy.recognitionTitle}
+              description={<FeeText>{copy.recognitionDescription}</FeeText>}
+            />
+          </div>
+        </Container>
+      </Section>
+
+      {/* Meet Allan & Karen (launch brief §5) — their individual portraits, so
+          the two-agent proposition is shown rather than just stated. */}
+      <Section>
+        <Container className="grid items-center gap-10 lg:grid-cols-[3fr_2fr]">
+          <div>
+            <SectionHeading
+              align="left"
+              eyebrow={copy.meetEyebrow}
+              title={copy.meetTitle}
+              description={copy.meetDescription}
+            />
+            <Link
+              href="/about"
+              className="mt-6 inline-flex items-center gap-2 font-semibold text-primary transition-all hover:gap-3"
+            >
+              Meet Team Toner <ArrowRight className="size-4" />
+            </Link>
+          </div>
+          <AgentCards />
+        </Container>
+      </Section>
+
       {/* Videos — managed in /studio; the section is hidden while there are none. */}
       {videos.length > 0 && (
         <Section className="bg-secondary/60">
           <Container>
+            <VideoObjectJsonLd video={videos[0]} />
             <SectionHeading
               eyebrow="Watch"
               title={videos[0].title}
@@ -176,6 +175,24 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+
+          {/* Every suburb and town page, linked from the home page. The four
+              area cards alone left the individual location pages two clicks
+              deep with no link from the site's strongest page. */}
+          {localities.length > 0 && (
+            <ul className="mt-6 flex flex-wrap justify-center gap-2.5">
+              {localities.map((s) => (
+                <li key={s.slug}>
+                  <Link
+                    href={`/suburbs/${s.slug}`}
+                    className="inline-flex rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-foreground/80 transition-colors hover:border-teal hover:text-primary"
+                  >
+                    {s.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </Container>
       </Section>
 

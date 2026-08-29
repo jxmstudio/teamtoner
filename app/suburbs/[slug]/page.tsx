@@ -54,6 +54,9 @@ function suburbFaqs(suburbName: string, siteConfig: SiteConfig) {
   ];
 }
 
+/** How many area-wide cards to show on a suburb page that has none of its own. */
+const AREA_FALLBACK_LIMIT = 6;
+
 // Suburb pages list CMS-managed listings — refresh them periodically.
 export const revalidate = 60;
 
@@ -101,11 +104,18 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
   const listings = await getListingsBySuburb(slug);
   const sold = await getSoldBySuburb(slug);
 
-  // Individual suburbs inherit their area's listings until the live feed
-  // carries suburb-level data.
+  // A suburb with nothing of its own shows a sample from its area rather than
+  // an empty section. Capped, because an area now aggregates every suburb under
+  // it — an uncapped fallback would bury a quiet suburb's page under dozens of
+  // cards from streets nowhere near it.
   const areaListings =
-    listings.length === 0 && parent ? await getListingsBySuburb(parent.slug) : [];
-  const areaSold = sold.length === 0 && parent ? await getSoldBySuburb(parent.slug) : [];
+    listings.length === 0 && parent
+      ? (await getListingsBySuburb(parent.slug)).slice(0, AREA_FALLBACK_LIMIT)
+      : [];
+  const areaSold =
+    sold.length === 0 && parent
+      ? (await getSoldBySuburb(parent.slug)).slice(0, AREA_FALLBACK_LIMIT)
+      : [];
 
   const [testimonial] = await getFeaturedTestimonials(1);
 

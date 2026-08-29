@@ -1,6 +1,7 @@
 import { entitySameAs, siteConfig } from "@/lib/site";
 import { formatListingAddress, getSiteConfig, getSuburbs } from "@/lib/data";
-import type { Guide, Listing } from "@/lib/content/types";
+import { videoId } from "@/components/brand/video-embed";
+import type { Guide, Listing, SiteVideo } from "@/lib/content/types";
 
 function JsonLd({ data }: { data: unknown }) {
   return (
@@ -256,6 +257,35 @@ export function HowToJsonLd({
           name: step.name,
           text: step.text,
         })),
+      })}
+    />
+  );
+}
+
+/**
+ * Video markup for the home-page embed, which is what makes it eligible for
+ * video-rich results and gives the answer engines something citable.
+ *
+ * Google requires an upload date, so a video without one renders no markup at
+ * all rather than an incomplete node it would only reject. Thumbnail and embed
+ * URL are derived from the YouTube id — no extra fields for the client to fill.
+ */
+export function VideoObjectJsonLd({ video }: { video: SiteVideo }) {
+  const id = videoId(video.url);
+  if (!id || !video.published) return null;
+  return (
+    <JsonLd
+      data={defined({
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: video.title,
+        description: video.caption ?? video.title,
+        thumbnailUrl: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+        uploadDate: video.published,
+        embedUrl: `https://www.youtube-nocookie.com/embed/${id}`,
+        contentUrl: video.url,
+        publisher: { "@id": ORG_ID },
+        inLanguage: "en-NZ",
       })}
     />
   );

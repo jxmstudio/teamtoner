@@ -193,6 +193,9 @@ export const pageSuburbs = page("pageSuburbs", "Suburbs page", [
   str("pnEyebrow", "Palmerston North section — eyebrow"),
   str("pnTitle", "Palmerston North section — title"),
   txt("pnDescription", "Palmerston North section — description"),
+  str("manawatuEyebrow", "Manawatū section — eyebrow"),
+  str("manawatuTitle", "Manawatū section — title"),
+  txt("manawatuDescription", "Manawatū section — description"),
 ]);
 
 export const pageResources = page("pageResources", "Resources page", header("Resources"));

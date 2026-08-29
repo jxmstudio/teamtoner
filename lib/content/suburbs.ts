@@ -140,4 +140,105 @@ export const suburbs: Suburb[] = [
       "Views, sun and indoor–outdoor flow are the features buyers ask about first — worth capturing properly in the marketing.",
     ],
   },
+  {
+    slug: "highbury",
+    name: "Highbury",
+    parent: "palmerston-north",
+    blurb:
+      "A busy western suburb and one of Palmerston North's most active markets — entry-level homes, renovation projects and steady first-home and investor demand.",
+    commentary: [
+      "Highbury is where a lot of Palmerston North buyers get their start. The housing stock is largely post-war and ex-state, much of it now renovated, and the price bracket keeps first-home buyers and investors competing for the same homes.",
+      "Because condition varies so much street to street, comparable-sales evidence matters more here than almost anywhere else in the city — two homes of the same size can be worth quite different money depending on what's been done to them.",
+    ],
+  },
+  {
+    slug: "takaro",
+    name: "Takaro",
+    parent: "palmerston-north",
+    blurb:
+      "Central, well-connected and consistently in demand — Takaro sits within easy reach of the Square, the Esplanade and the city's western schools.",
+    commentary: [
+      "Takaro's appeal is position: flat, central and walkable or a short drive to almost everything in Palmerston North, with Takaro Park and the western sports grounds on the doorstep.",
+      "The housing is a mix of solid post-war family homes, tidy units and a growing number of renovated properties, which keeps buyer interest broad — first-home buyers, families trading up and investors all shop here.",
+    ],
+  },
+  {
+    slug: "westbrook",
+    name: "Westbrook",
+    parent: "palmerston-north",
+    blurb:
+      "A tidy pocket off Tremaine Avenue with newer, low-maintenance homes — popular with buyers who want modern living close to the city's northern amenities.",
+    commentary: [
+      "Westbrook's newer housing stock is its drawcard: warmer, better-insulated homes on manageable sections, which suits downsizers and busy families alike.",
+      "Buyers here tend to be comparing build quality and running costs rather than renovation potential, so accurate detail on age, cladding and heating earns its place in the marketing.",
+    ],
+  },
+
+  /* --- Wider Manawatū towns & villages --- */
+  {
+    slug: "bunnythorpe",
+    name: "Bunnythorpe",
+    parent: "manawatu",
+    blurb:
+      "A small village just north of Palmerston North, surrounded by farmland and lifestyle blocks — village amenities with the city ten minutes away.",
+    commentary: [
+      "Bunnythorpe suits buyers who want a genuine village and some land without a long commute — Palmerston North is a short drive, and Feilding is closer still.",
+      "Properties here range from village sections to working lifestyle blocks, so water supply, shedding and consents are usually part of the conversation well before price is.",
+    ],
+  },
+  {
+    slug: "halcombe",
+    name: "Halcombe",
+    parent: "manawatu",
+    blurb:
+      "A quiet rural village north-west of Feilding — a settled community, affordable sections and easy access to the wider Manawatū.",
+    commentary: [
+      "Halcombe is a small, established village where buyers are usually after space, quiet and value rather than proximity to a city. Feilding is the nearest service town.",
+      "Sales here turn on reaching the right buyer rather than the biggest audience, which is where a marketing plan with real regional reach makes the difference.",
+    ],
+  },
+  {
+    slug: "sanson",
+    name: "Sanson",
+    parent: "manawatu",
+    blurb:
+      "A crossroads town where State Highways 1 and 3 meet — handy to Feilding, Palmerston North, Ōhakea and Bulls, with lifestyle blocks in every direction.",
+    commentary: [
+      "Sanson's position is its strength: buyers get rural living with straightforward access in several directions, which broadens the pool well beyond people who work locally.",
+      "Lifestyle and rural holdings dominate around the town, so land use, water and shedding carry real weight in both pricing and marketing.",
+    ],
+  },
+  {
+    slug: "linton",
+    name: "Linton",
+    parent: "manawatu",
+    blurb:
+      "A rural settlement south of Palmerston North, best known for Linton Military Camp — steady demand from Defence and rural families.",
+    commentary: [
+      "Linton has a buyer pool most rural settlements don't: Defence personnel posted to the camp, alongside families wanting land within a short run of Palmerston North.",
+      "Postings move on their own timetable, so timing and reach matter here — the right buyer is often someone relocating into the region rather than already living in it.",
+    ],
+  },
+  {
+    slug: "tokomaru",
+    name: "Tokomaru",
+    parent: "manawatu",
+    blurb:
+      "A small village on the southern edge of the Manawatū, framed by the Tararua foothills — space, quiet and a straightforward run into Palmerston North.",
+    commentary: [
+      "Tokomaru appeals to buyers trading section size and quiet for a slightly longer commute, with Palmerston North to the north and Levin to the south.",
+      "Village sections and lifestyle blocks sit side by side, so the marketing needs to be clear about exactly what a property offers — the two attract quite different buyers.",
+    ],
+  },
+  {
+    slug: "foxton-beach",
+    name: "Foxton Beach",
+    parent: "manawatu",
+    blurb:
+      "A relaxed coastal settlement at the mouth of the Manawatū River — holiday homes, permanent residents and buyers after the beach without the price tag.",
+    commentary: [
+      "Foxton Beach draws two distinct buyer groups: people buying a permanent home near the coast, and people buying a bach they'll use in summer. They value quite different things, and the marketing should speak to both.",
+      "Coastal properties invite specific questions — orientation, shelter, section maintenance and how the home has been looked after — and answering them up front keeps a sale moving.",
+    ],
+  },
 ];

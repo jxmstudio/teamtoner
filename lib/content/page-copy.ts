@@ -141,7 +141,7 @@ export const sellCopy = {
     },
     {
       q: "What areas do you cover?",
-      a: "We sell throughout Palmerston North · Feilding · Ashhurst · Manawatū, including the Palmerston North suburbs of Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson and Summerhill / Fitzherbert.",
+      a: "We sell throughout Palmerston North · Feilding · Ashhurst · Manawatū. That includes the Palmerston North suburbs of Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson, Highbury, Takaro, Westbrook and Summerhill / Fitzherbert, and Manawatū towns including Bunnythorpe, Halcombe, Sanson, Linton, Tokomaru and Foxton Beach.",
     },
   ] as Faq[],
 };
@@ -214,13 +214,17 @@ export const suburbsCopy = {
   headerEyebrow: "Local experts",
   headerTitle: "Local real estate knowledge across Palmerston North & Manawatū",
   headerDescription:
-    "From Hokowhitu and Kelvin Grove to Feilding, Ashhurst and the wider Manawatū, we understand the local property markets we sell in — the homes, the buyers and what makes each area different.",
+    "From Hokowhitu, Takaro and Highbury to Feilding, Ashhurst, Sanson and the wider Manawatū, we understand the local property markets we sell in — the homes, the buyers and what makes each area different.",
   intro:
     "Explore our local areas, current properties and recent Team Toner sales.",
   pnEyebrow: "Palmerston North",
   pnTitle: "Explore Palmerston North suburbs",
   pnDescription:
     "Local information, current listings, recent Team Toner sales and market commentary for the suburbs we sell in most.",
+  manawatuEyebrow: "Wider Manawatū",
+  manawatuTitle: "Towns and villages across the Manawatū",
+  manawatuDescription:
+    "Rural and small-town markets we sell in regularly — each with its own local commentary, listings and recent Team Toner sales.",
 };
 
 export const resourcesCopy = {

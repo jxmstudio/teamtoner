@@ -31,7 +31,8 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
 export const SITE_VIDEOS_QUERY = groq`*[_type == "siteVideo" && featured == true && defined(url)] | order(coalesce(order, 0) asc) {
   title,
   url,
-  caption
+  caption,
+  published
 }`;
 
 export const TESTIMONIALS_QUERY = groq`*[_type == "testimonial"] | order(coalesce(order, 0) asc, _createdAt asc) {
