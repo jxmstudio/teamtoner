@@ -6,7 +6,8 @@ import { HomeHero } from "@/components/brand/home-hero";
 import { AgentCards } from "@/components/brand/agent-cards";
 import { ValueProps } from "@/components/brand/value-props";
 import { CtaSection } from "@/components/brand/cta-section";
-import { ListingCard } from "@/components/brand/listing-card";
+import { FeaturedListingCard } from "@/components/brand/featured-listing-card";
+import { cn } from "@/lib/utils";
 import { TestimonialCarousel } from "@/components/brand/testimonial-carousel";
 import { FeeText } from "@/components/brand/commission";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -48,7 +49,9 @@ export default async function HomePage() {
 
       {/* Featured listings — ahead of the story sections. Property is what most
           home-page visitors arrived for, and it's the strongest internal link
-          target on the page. */}
+          target on the page. Full-bleed photo cards in an editorial grid: the
+          lead listing gets a double-width cell, so its photo runs roughly four
+          times the size the old uniform grid allowed. */}
       {featured.length > 0 && (
         <Section>
           <Container>
@@ -66,11 +69,26 @@ export default async function HomePage() {
                 View All Properties
               </ButtonLink>
             </div>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featured.map((listing) => (
-                <ListingCard key={listing.slug} listing={listing} />
+            <div className="mt-10 grid auto-rows-fr gap-5 lg:grid-cols-3 lg:grid-rows-2">
+              {featured.map((listing, i) => (
+                <div
+                  key={listing.slug}
+                  className={cn(
+                    "grid",
+                    i === 0 && "lg:col-span-2 lg:row-span-2 lg:min-h-[34rem]"
+                  )}
+                >
+                  <FeaturedListingCard listing={listing} hero={i === 0} />
+                </div>
               ))}
             </div>
+            <ButtonLink
+              href="/listings"
+              variant="outline"
+              className="mt-6 h-11 w-full sm:hidden"
+            >
+              View All Properties
+            </ButtonLink>
           </Container>
         </Section>
       )}

@@ -13,9 +13,11 @@ export async function HomeHero() {
         aria-hidden
         className="pointer-events-none absolute -right-24 -top-24 size-[36rem] rounded-full bg-teal/20 blur-3xl"
       />
-      {/* Mobile gets a tighter rhythm than desktop: smaller type steps,
-          shorter paddings, and a wide-crop photo — a full 4:5 portrait pushed
-          everything below one screen-height of image on a phone. */}
+      {/* Mobile gets a tighter rhythm than desktop: smaller type steps and
+          shorter paddings, and no photo at all — any crop of the square duo
+          portrait either ate a screen-height or clipped heads. The portraits
+          belong to the "Meet Allan & Karen" cards below; the hero photo
+          returns from lg, where the two-column layout gives it a 4:5 frame. */}
       <Container className="relative grid items-center gap-8 py-10 sm:py-16 lg:grid-cols-2 lg:gap-10 lg:py-24">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1 text-xs font-medium text-teal sm:px-4 sm:py-1.5 sm:text-sm">
@@ -32,7 +34,7 @@ export async function HomeHero() {
           <p className="mt-4 max-w-xl text-pretty text-base text-white/80 sm:mt-5 sm:text-lg">
             <FeeText>{copy.heroParagraph}</FeeText>
           </p>
-          <p className="mt-3 hidden max-w-xl text-pretty text-white/60 sm:block">
+          <p className="mt-3 max-w-xl text-pretty text-sm text-white/60 sm:text-base">
             {copy.heroSecondary}
           </p>
           <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
@@ -57,20 +59,20 @@ export async function HomeHero() {
           </dl>
         </div>
 
-        <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+        <div className="relative hidden w-full lg:block">
           <div
             aria-hidden
             className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-teal/25 to-petrol/30 blur-xl"
           />
-          <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10 sm:rounded-3xl">
+          <div className="relative overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/10">
             <Image
               src="/team/allan-karen.jpg"
               alt="Allan and Karen Toner — Team Toner, Arizto real estate agents in Palmerston North"
               width={1200}
               height={1200}
               priority
-              sizes="(min-width: 1024px) 40vw, (min-width: 640px) 448px, 100vw"
-              className="aspect-[16/10] w-full object-cover object-top lg:aspect-[4/5]"
+              sizes="(min-width: 1024px) 40vw, 1px"
+              className="aspect-[4/5] w-full object-cover object-top"
             />
           </div>
         </div>
