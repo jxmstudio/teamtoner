@@ -128,7 +128,7 @@ function page(name: string, title: string, fields: FieldDefinition[]) {
 export const pageHome = page("pageHome", "Home page", [
   str("heroTitleStart", "Hero heading — start", "e.g. “A smarter way to”."),
   str("heroTitleHighlight", "Hero heading — highlighted words", "Rendered in the teal script font, e.g. “sell your home”."),
-  str("heroTitleEnd", "Hero heading — end", "e.g. “in Palmerston North.”"),
+  str("heroTitleEnd", "Hero heading — end", "e.g. “in Palmerston North & Manawatū.”"),
   txt("heroParagraph", "Hero paragraph", "Write “2% + GST” literally — the site links its asterisk automatically."),
   txt("heroSecondary", "Hero secondary line"),
   str("recognitionEyebrow", "Recognition — eyebrow"),

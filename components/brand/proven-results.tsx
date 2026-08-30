@@ -25,7 +25,7 @@ export async function ProvenResults({
         <SectionHeading
           eyebrow="Proven results"
           title="Results that back up the promise"
-          description="We're not the cheapest option because we cut corners — we're a top-performing team that has chosen a fairer fee structure."
+          description="Our smarter, technology-driven model allows us to deliver premium service and proven results, while keeping our fee fair — so you keep more of your hard-earned money in your pocket."
         />
 
         <dl className="mt-12 grid gap-8 text-center sm:grid-cols-2">

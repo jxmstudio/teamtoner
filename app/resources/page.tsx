@@ -18,7 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ResourcesPage() {
-  const guides = await getGuides();
+  // Guides with neither a PDF nor a content page stay hidden (client brief,
+  // Aug 2026) — no "coming soon" placeholders. They reappear automatically
+  // once a PDF path is set in the CMS or fixtures.
+  const guides = (await getGuides()).filter((g) => g.pdf || g.body?.length);
   const copy = await getResourcesCopy();
   return (
     <>

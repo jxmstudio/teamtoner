@@ -41,7 +41,7 @@ function suburbFaqs(suburbName: string, siteConfig: SiteConfig) {
     },
     {
       q: `What does it cost to sell a house in ${suburbName}?`,
-      a: `Team Toner charge a ${stats.commission} commission on the sale price, with no upfront costs. Under ${guarantee.name} you only pay when your property sells. T's and C's apply.`,
+      a: `Team Toner charge a ${stats.commission} commission on the sale price, with No Upfront Costs. Under ${guarantee.name} you only pay when your property sells. T's and C's apply.`,
     },
     {
       q: `How do I get a free property appraisal in ${suburbName}?`,
@@ -49,7 +49,7 @@ function suburbFaqs(suburbName: string, siteConfig: SiteConfig) {
     },
     {
       q: `What marketing is included when selling in ${suburbName}?`,
-      a: `Professional property photography, free aerial photography, premium placement across the major online property portals, signage, and Team Toner social and video marketing — with no upfront cost to you.`,
+      a: `Professional property photography, free aerial photography, premium placement across the major online property portals, signage, and Team Toner social and video marketing — with No Upfront Costs.`,
     },
   ];
 }

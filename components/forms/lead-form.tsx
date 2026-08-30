@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -123,9 +124,18 @@ export function LeadForm({
       </Button>
 
       <p className={cn("text-muted-foreground", isAppraisal ? "text-sm" : "text-xs")}>
-        {isAppraisal
-          ? "Your details stay private. We won't add you to a mailing list or pressure you to sell."
-          : "By submitting, you agree to be contacted about your enquiry. We never share your details."}
+        {isAppraisal ? (
+          "Your details stay private. We won't add you to a mailing list or pressure you to sell."
+        ) : (
+          <>
+            By submitting, you agree to be contacted about your enquiry. Your
+            information will be handled in accordance with our{" "}
+            <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+              Privacy Statement
+            </Link>
+            .
+          </>
+        )}
       </p>
     </form>
   );

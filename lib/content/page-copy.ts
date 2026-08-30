@@ -30,9 +30,9 @@ export interface LegalSection {
 export const homeCopy = {
   heroTitleStart: "A smarter way to",
   heroTitleHighlight: "sell your home",
-  heroTitleEnd: "in Palmerston North.",
+  heroTitleEnd: "in Palmerston North & Manawatū.",
   heroParagraph:
-    "Premium marketing. Proven results. Two experienced agents working for you — with a fairer 2% + GST commission and no upfront costs.",
+    "Premium marketing. Proven results. Two experienced agents working for you — with a fairer 2% + GST commission and No Upfront Costs.",
   heroSecondary:
     "Allan & Karen Toner proudly serving Palmerston North, Feilding, Ashhurst and the wider Manawatū.",
   recognitionEyebrow: "Proven results",
@@ -109,7 +109,7 @@ export const sellCopy = {
   faqs: [
     {
       q: "How much is your commission?",
-      a: "Our commission is 2% + GST of the sale price. There are no upfront costs, and under No Sale — No Fee you only pay when your property sells.",
+      a: "Our commission is just 2% + GST of the sale price. There are No Upfront Costs, backed by our Team Toner No Sale — No Fee Guarantee. You only pay our commission when your property sells.",
     },
     {
       q: "Are there any upfront costs?",
@@ -170,7 +170,7 @@ export const appraisalCopy = {
   faqs: [
     {
       q: "Is a Team Toner property appraisal really free?",
-      a: "Yes. The appraisal is completely free and carries no obligation to list with us. There are also no upfront costs if you do decide to sell — with No Sale — No Fee, you only pay when your property sells. T's and C's apply.",
+      a: "Yes. The appraisal is completely free and carries no obligation to list with us. There are also No Upfront Costs if you do decide to sell — with No Sale — No Fee, you only pay when your property sells. T's and C's apply.",
     },
     {
       q: "What is the difference between a property appraisal and a registered valuation?",
@@ -235,37 +235,75 @@ export const resourcesCopy = {
 };
 
 export const privacyCopy = {
-  note: "Template policy — to be reviewed/replaced with Team Toner’s approved wording.",
+  // Client-approved wording (FINAL amendments, 30 Aug 2026) — the template
+  // note is retired and must stay empty.
+  note: "",
   sections: [
     {
       heading: "Who we are",
       paragraphs: [
-        "Team Toner — Allan & Karen Toner (Arizto Ltd — Licensed REAA 2008) operates https://teamtoner.co.nz. We are committed to protecting your privacy in accordance with the Privacy Act 2020.",
+        "Team Toner — Allan & Karen Toner are licensed real estate salespeople operating under Arizto Ltd — Licensed REAA 2008.",
+        "We respect your privacy and are committed to handling personal information responsibly and in accordance with the New Zealand Privacy Act 2020.",
       ],
     },
     {
       heading: "Information we collect",
       paragraphs: [
-        "When you submit an enquiry or appraisal request, we collect the information you provide — such as your name, email, phone number and property details — so we can respond to you.",
+        "When you contact us through this website, request a free property appraisal, make an enquiry or otherwise communicate with Team Toner, we may collect your name, email address, phone number, property address, property details and any other information you choose to provide.",
+        "Our website may also collect technical information such as your browser, device, IP address, pages visited and website usage information through cookies or analytics tools.",
       ],
     },
     {
       heading: "How we use your information",
       paragraphs: [
-        "We use your information solely to respond to your enquiry and provide our real estate services. We do not sell your information, and we only share it where necessary to deliver those services or where required by law.",
+        "We may use your personal information to respond to enquiries, provide property appraisals and real estate services, communicate with you about services you have requested, improve our website and services, and meet our legal and regulatory obligations.",
+        "Providing your personal information is generally voluntary. However, if you don't provide information needed for a particular request, we may not be able to provide that service or fully respond to your enquiry.",
+      ],
+    },
+    {
+      heading: "Marketing",
+      paragraphs: [
+        "Requesting an appraisal or making an enquiry through our website does not automatically subscribe you to marketing communications. Where you have agreed to receive marketing communications from us, you can unsubscribe at any time.",
+      ],
+    },
+    {
+      heading: "Sharing your information",
+      paragraphs: [
+        "We do not sell your personal information. We may share information where reasonably necessary to provide our real estate services, including with Arizto Ltd and service providers who support those services, or where disclosure is required or permitted by law.",
+      ],
+    },
+    {
+      heading: "Storage and security",
+      paragraphs: [
+        "We take reasonable steps to protect personal information from loss, unauthorised access, misuse or disclosure. Personal information is retained only for as long as reasonably required for the purposes for which it was collected or as required by law.",
+      ],
+    },
+    {
+      heading: "Cookies and website analytics",
+      paragraphs: [
+        "Our website may use cookies and analytics technologies to understand how visitors use the site and to help us improve its performance and user experience.",
       ],
     },
     {
       heading: "Your rights",
       paragraphs: [
-        "You may request access to, or correction of, the personal information we hold about you by contacting us at thetoners@arizto.co.nz.",
+        "Under the Privacy Act 2020, you have the right to request access to personal information we hold about you and to ask us to correct it if it is inaccurate.",
+        "To make a request or ask a question about your privacy, please contact Team Toner at thetoners@arizto.co.nz.",
+      ],
+    },
+    {
+      heading: "Updates",
+      paragraphs: [
+        "We may update this Privacy Statement from time to time to reflect changes to our website, services or legal obligations.",
       ],
     },
   ] as LegalSection[],
 };
 
 export const termsCopy = {
-  note: "Template terms — to be reviewed/replaced with Team Toner’s approved wording.",
+  // Client-approved wording (FINAL amendments, 30 Aug 2026) — the template
+  // note is retired and must stay empty.
+  note: "",
   sections: [
     {
       heading: "Use of this site",
@@ -276,7 +314,13 @@ export const termsCopy = {
     {
       heading: "Property information",
       paragraphs: [
-        "Listing details are provided in good faith and believed to be accurate, but are not guaranteed. Prospective purchasers should make their own enquiries and rely on their own investigations.",
+        "Property and listing information is provided in good faith and is believed to be accurate at the time of publication, but is not guaranteed. Prospective purchasers should make their own enquiries, undertake their own due diligence and obtain independent professional advice where appropriate.",
+      ],
+    },
+    {
+      heading: "No Upfront Costs",
+      paragraphs: [
+        "Our standard selling model has No Upfront Costs. Any exceptions or additional services requiring payment will be discussed and agreed with you in advance.",
       ],
     },
     {

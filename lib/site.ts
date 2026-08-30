@@ -15,7 +15,7 @@ export const siteConfig = {
   tagline: "Premium service. Proven results. A smarter fee.",
   strapline: "Premium service. Proven results. A smarter fee.",
   description:
-    "Allan & Karen Toner — a husband-and-wife real estate team ranked #7 Arizto agents nationwide and No.1 in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with no upfront costs.",
+    "Allan & Karen Toner — a husband-and-wife real estate team ranked #7 Arizto agents nationwide and No.1 in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with No Upfront Costs.",
   /**
    * Footer blurb (launch brief §13) — deliberately shorter than `description`,
    * which continues to serve <meta> and JSON-LD. The `*` after "nationwide."
@@ -132,7 +132,7 @@ export const siteConfig = {
     },
     {
       title: "A smarter fee",
-      detail: "2% + GST commission. No upfront costs. No Sale — No Fee.",
+      detail: "2% + GST Commission. No Upfront Costs. No Sale — No Fee.",
     },
   ],
   sellingPointsSell: [
@@ -151,7 +151,7 @@ export const siteConfig = {
     },
     {
       title: "A smarter fee",
-      detail: "2% + GST. No upfront costs. No Sale — No Fee.",
+      detail: "2% + GST Commission. No Upfront Costs. No Sale — No Fee.",
     },
   ],
   suburbs: [
