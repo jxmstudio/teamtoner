@@ -25,7 +25,8 @@ export const RANKINGS_TERMS_HREF = "/terms#rankings";
  * Matches either the commission rate, tolerating spacing variations (a linked
  * asterisk gets appended after it), or a literal `*` an author placed in copy
  * (replaced with a linked ranking asterisk). Authors write ranking claims exactly as the client brief does —
- * "No.1 Arizto team*", "#7 nationwide.*" — and FeeText makes the `*` a link.
+ * "Arizto's No.1 agents — Palmerston North & Manawatū.*" — and FeeText makes
+ * the `*` a link.
  */
 const NOTE_PATTERN = /2\s*%\s*\+\s*GST|\*/g;
 
@@ -43,7 +44,7 @@ export function FeeAsterisk() {
   );
 }
 
-/** Asterisk for the No.1 / #7 ranking claims — links to the source note. */
+/** Asterisk for the No.1 ranking claim — links to the source note. */
 export function RankingAsterisk() {
   return (
     <Link
@@ -101,7 +102,8 @@ export function FeeText({ children }: { children: string }) {
  * reachable from every page. `underline hover:opacity-80` rather than a brand
  * colour so it reads correctly on both the light pages and the dark footer.
  */
-export function TermsFootnote({ className }: { className?: string }) {
+export async function TermsFootnote({ className }: { className?: string }) {
+  const { stats } = await getSiteConfig();
   return (
     <div
       className={
@@ -114,9 +116,9 @@ export function TermsFootnote({ className }: { className?: string }) {
         <Link href={COMMISSION_TERMS_HREF} className="underline hover:opacity-80">
           see our commission terms
         </Link>
-        . Rankings based on Arizto agent sales results &mdash;{" "}
+        . {stats.rankingFootnote}{" "}
         <Link href={RANKINGS_TERMS_HREF} className="underline hover:opacity-80">
-          source and date
+          Ranking terms
         </Link>
         .
       </p>

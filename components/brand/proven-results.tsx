@@ -1,13 +1,12 @@
 import { Star } from "lucide-react";
-import { FeeText } from "@/components/brand/commission";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
-import { getSiteConfig } from "@/lib/data";
+import { RankingClaim } from "@/components/brand/ranking-claim";
 import { getFeaturedTestimonials } from "@/lib/data";
 
 /**
- * Proven Results block — the #7 / No.1 ranking figures plus one strong five-star
- * seller testimonial. Used on the Sell page (before the FAQs) and reusable
- * anywhere the proof needs restating.
+ * Proven Results block — the ranking claim plus one strong five-star seller
+ * testimonial. Used on the Sell page (before the FAQs) and reusable anywhere
+ * the proof needs restating.
  */
 export async function ProvenResults({
   className,
@@ -16,7 +15,6 @@ export async function ProvenResults({
   className?: string;
   showTestimonial?: boolean;
 }) {
-  const { stats } = await getSiteConfig();
   const [testimonial] = await getFeaturedTestimonials(1);
 
   return (
@@ -28,13 +26,7 @@ export async function ProvenResults({
           description="Our smarter, technology-driven model allows us to deliver premium service and proven results, while keeping our fee fair — so you keep more of your hard-earned money in your pocket."
         />
 
-        <dl className="mt-12 grid gap-8 text-center sm:grid-cols-2">
-          <Stat value={stats.nationalRank} label="Arizto Agents Nationwide*" />
-          <Stat
-            value={stats.regionRank}
-            label={`Arizto Team — ${stats.regionName}*`}
-          />
-        </dl>
+        <RankingClaim className="mt-12 text-center" />
 
         {showTestimonial && testimonial ? (
           <figure className="mx-auto mt-12 max-w-3xl rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
@@ -60,17 +52,5 @@ export async function ProvenResults({
         ) : null}
       </Container>
     </Section>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <dt className="sr-only">{label.replace("*", "")}</dt>
-      <dd className="text-5xl font-bold text-primary">{value}</dd>
-      <p className="mt-2 text-muted-foreground">
-        <FeeText>{label}</FeeText>
-      </p>
-    </div>
   );
 }

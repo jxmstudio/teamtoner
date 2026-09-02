@@ -262,9 +262,8 @@ async function seedSiteSettings() {
     contactEmail: siteConfig.contact.email,
     officePhone: siteConfig.contact.office,
     region: siteConfig.contact.region,
-    nationalRank: siteConfig.stats.nationalRank,
-    regionRank: siteConfig.stats.regionRank,
-    regionName: siteConfig.stats.regionName,
+    rankingLine: siteConfig.stats.rankingLine,
+    rankingFootnote: siteConfig.stats.rankingFootnote,
     commission: siteConfig.stats.commission,
     feePillars: [...siteConfig.feePillars],
     sellingPoints: siteConfig.sellingPoints.map((p, i) => ({
@@ -290,6 +289,8 @@ async function seedSiteSettings() {
       ctaTitle: siteConfig.cta.title,
       ctaDescription: siteConfig.cta.description,
       ctaNote: siteConfig.cta.note,
+      rankingLine: siteConfig.stats.rankingLine,
+      rankingFootnote: siteConfig.stats.rankingFootnote,
     })
     .commit();
   console.log("  site settings imported.");

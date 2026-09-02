@@ -38,7 +38,7 @@ export const homeCopy = {
   recognitionEyebrow: "Proven results",
   recognitionTitle: "Proud to be recognised",
   recognitionDescription:
-    "Ranked #7 among Arizto agents nationwide and No.1 in Palmerston North & Manawatū.* When you list with Team Toner, you get two experienced agents personally working on your sale.",
+    "Arizto's No.1 agents in Palmerston North & Manawatū.* When you list with Team Toner, you get two experienced agents personally working on your sale.",
   meetEyebrow: "Meet Allan & Karen",
   meetTitle: "Two agents. One team. Personally involved from start to finish.",
   meetDescription:
@@ -150,7 +150,7 @@ export const appraisalCopy = {
   headerEyebrow: "Free appraisal",
   headerTitle: "What Could Your Property Sell For in Today's Market?",
   headerDescription:
-    "Get a clear, evidence-based appraisal from Allan & Karen Toner — Team Toner, Palmerston North & Manawatū's No.1 Arizto team.",
+    "Get a clear, evidence-based appraisal from Allan & Karen Toner — Team Toner, Arizto's No.1 agents in Palmerston North & Manawatū.",
   intro:
     "We’ll personally assess your property, look at recent comparable sales, current competition and buyer demand, and give you straightforward advice on where your property sits in today’s market.",
   introNote: "No pressure. No obligation. Just experienced, honest advice.",
@@ -339,7 +339,7 @@ export const termsCopy = {
       anchor: "rankings",
       heading: "Ranking claims",
       paragraphs: [
-        "References on this site to Team Toner being the No.1 Arizto team in Palmerston North & Manawatū and ranked #7 among Arizto agents nationwide are based on Arizto agent sales results as at August 2026. Rankings are reviewed periodically and may change.",
+        "Based on Arizto sales results as at August 2026. This applies to every reference on this site to Team Toner being Arizto's No.1 agents in Palmerston North & Manawatū. Rankings are reviewed periodically and may change.",
       ],
     },
     {

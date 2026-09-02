@@ -109,24 +109,19 @@ export const siteSettings = defineType({
     }),
 
     defineField({
-      name: "nationalRank",
-      title: "National ranking",
+      name: "rankingLine",
+      title: "Ranking line",
       type: "string",
-      description: "e.g. “#7”. Update when the Arizto rankings change.",
+      description:
+        "The ranking claim, shown exactly as written — e.g. “ARIZTO’S No.1 AGENTS – PALMERSTON NORTH & MANAWATŪ”. It appears in the home hero badge and on the Sell, Sold, About and Appraisal pages, always with a linked “*”.",
       group: "stats",
     }),
     defineField({
-      name: "regionRank",
-      title: "Regional ranking",
+      name: "rankingFootnote",
+      title: "Ranking footnote",
       type: "string",
-      description: "e.g. “No.1”.",
-      group: "stats",
-    }),
-    defineField({
-      name: "regionName",
-      title: "Region name",
-      type: "string",
-      description: "e.g. “Palmerston North & Manawatū”.",
+      description:
+        "The small print printed under the ranking line — e.g. “Based on Arizto sales results as at August 2026.” Update the month here and in Terms → Ranking claims whenever the results are refreshed.",
       group: "stats",
     }),
     defineField({

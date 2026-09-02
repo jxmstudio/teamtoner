@@ -15,6 +15,7 @@ import {
   RankingAsterisk,
   TermsFootnote,
 } from "@/components/brand/commission";
+import { RankingFootnote } from "@/components/brand/ranking-claim";
 import { FaqJsonLd } from "@/components/seo/json-ld";
 import { seoTitles } from "@/lib/site";
 import { getAppraisalCopy, getSiteConfig } from "@/lib/data";
@@ -22,14 +23,14 @@ import { getAppraisalCopy, getSiteConfig } from "@/lib/data";
 export const metadata: Metadata = {
   title: { absolute: seoTitles.appraisal },
   description:
-    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner — Palmerston North's No.1 Arizto team. No obligation.",
+    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner — Arizto's No.1 agents in Palmerston North & Manawatū. No obligation.",
   alternates: { canonical: "/appraisal" },
 };
 
 const tel = (n: string) => `tel:${n.replace(/\s/g, "")}`;
 
 export default async function AppraisalPage() {
-  const { agents, contact } = await getSiteConfig();
+  const { agents, contact, stats } = await getSiteConfig();
   const copy = await getAppraisalCopy();
   const { benefits, faqs } = copy;
 
@@ -56,14 +57,11 @@ export default async function AppraisalPage() {
                 <p className="text-sm font-semibold uppercase tracking-[0.14em] text-teal">
                   Local experience. Proven results.
                 </p>
-                <p className="mt-2 font-semibold text-foreground">
-                  No.1 Arizto Team — Palmerston North &amp; Manawatū
+                <p className="mt-2 text-balance font-semibold text-foreground">
+                  {stats.rankingLine}
                   <RankingAsterisk />
                 </p>
-                <p className="font-semibold text-foreground">
-                  #7 Arizto Agents Nationwide
-                  <RankingAsterisk />
-                </p>
+                <RankingFootnote className="mt-2" />
               </div>
 
               <Card className="mt-6">

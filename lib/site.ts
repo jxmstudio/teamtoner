@@ -15,15 +15,15 @@ export const siteConfig = {
   tagline: "Premium service. Proven results. A smarter fee.",
   strapline: "Premium service. Proven results. A smarter fee.",
   description:
-    "Allan & Karen Toner — a husband-and-wife real estate team ranked #7 Arizto agents nationwide and No.1 in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with No Upfront Costs.",
+    "Allan & Karen Toner — a husband-and-wife real estate team and Arizto's No.1 agents in Palmerston North & Manawatū. Two agents working for you, premium marketing, and a 2% + GST commission with No Upfront Costs.",
   /**
    * Footer blurb (launch brief §13) — deliberately shorter than `description`,
-   * which continues to serve <meta> and JSON-LD. The `*` after "nationwide."
-   * is rendered as a link to the rankings note by <FeeText>.
+   * which continues to serve <meta> and JSON-LD. The `*` after the ranking
+   * claim is rendered as a link to the rankings note by <FeeText>.
    */
   footerTagline: "Allan & Karen Toner | Team Toner",
   footerDescription:
-    "Palmerston North & Manawatū's No.1 Arizto team and ranked #7 nationwide.* Two experienced agents, premium marketing and a smarter 2% + GST commission.",
+    "Arizto's No.1 agents — Palmerston North & Manawatū.* Two experienced agents, premium marketing and a smarter 2% + GST commission.",
   // Env-driven so preview/staging deployments generate their own canonicals,
   // sitemap and OG URLs instead of pointing at production.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://teamtoner.co.nz",
@@ -83,14 +83,19 @@ export const siteConfig = {
    * Only *relative* performance figures live here. Absolute counts (e.g. a
    * running homes-sold total or the "of 350+ agents" pool size) date the site
    * and need manual upkeep, so they were removed at the client's request —
-   * don't reintroduce one. Launch brief §14 standardises the wording as
-   * "No.1 Arizto team" and "#7 nationwide", each carrying a `*` that links to
-   * the rankings note on /terms#rankings.
+   * don't reintroduce one.
+   *
+   * The client amendment of 31 Aug 2026 retired the "#7 nationwide" claim:
+   * there is now a *single* ranking claim, `rankingLine`, rendered verbatim
+   * wherever the line appears (hero badge, Proven Results, Sold, About,
+   * Appraisal) and always followed by `rankingFootnote` plus a `*` linking to
+   * /terms#rankings. Prose that restates the claim uses sentence case
+   * ("Arizto's No.1 agents — Palmerston North & Manawatū.*"). Don't
+   * reintroduce a nationwide ranking figure without new terms copy to back it.
    */
   stats: {
-    nationalRank: "#7",
-    regionRank: "No.1",
-    regionName: "Palmerston North & Manawatū",
+    rankingLine: "ARIZTO'S No.1 AGENTS – PALMERSTON NORTH & MANAWATŪ",
+    rankingFootnote: "Based on Arizto sales results as at August 2026.",
     commission: "2% + GST",
   },
   /**
@@ -106,7 +111,7 @@ export const siteConfig = {
   cta: {
     title: "Curious what your property could sell for?",
     description:
-      "Get an honest, evidence-based appraisal from Palmerston North & Manawatū's No.1 Arizto team.*",
+      "Get an honest, evidence-based appraisal from Arizto's No.1 agents in Palmerston North & Manawatū.*",
     note: "No pressure. No obligation. Just straightforward advice.",
   },
   /** The three fee pillars, shown as a strip under the Sell/About intros. */
@@ -123,7 +128,7 @@ export const siteConfig = {
     },
     {
       title: "Proven results",
-      detail: "Palmerston North & Manawatū's No.1 Arizto team.*",
+      detail: "Arizto's No.1 agents — Palmerston North & Manawatū.*",
     },
     {
       title: "Premium marketing",
@@ -143,7 +148,7 @@ export const siteConfig = {
     },
     {
       title: "Proven results",
-      detail: "Palmerston North & Manawatū's No.1 Arizto team.*",
+      detail: "Arizto's No.1 agents — Palmerston North & Manawatū.*",
     },
     {
       title: "Premium marketing",

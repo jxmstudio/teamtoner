@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/brand/primitives";
 import { FeeText, RankingAsterisk } from "@/components/brand/commission";
+import { RankingFootnote } from "@/components/brand/ranking-claim";
 import { getHomeCopy, getSiteConfig } from "@/lib/data";
 
 export async function HomeHero() {
@@ -20,8 +21,12 @@ export async function HomeHero() {
           returns from lg, where the two-column layout gives it a 4:5 frame. */}
       <Container className="relative grid items-center gap-8 py-10 sm:py-16 lg:grid-cols-2 lg:gap-10 lg:py-24">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1 text-xs font-medium text-teal sm:px-4 sm:py-1.5 sm:text-sm">
-            {stats.nationalRank} Arizto Agents Nationwide
+          {/* The ranking line runs ~50 characters in caps — too long for a pill
+              at phone widths, where it would wrap into a lopsided stadium. So
+              the pill chrome (border, fill, padding) only starts at sm; below
+              that the line reads as a plain teal eyebrow and wraps cleanly. */}
+          <p className="inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold tracking-[0.12em] text-teal sm:gap-2 sm:rounded-full sm:border sm:border-white/15 sm:bg-white/5 sm:px-4 sm:py-1.5 sm:text-sm sm:font-medium sm:tracking-wide">
+            {stats.rankingLine}
             <RankingAsterisk />
           </p>
           <h1 className="mt-5 text-balance text-3xl font-bold leading-tight tracking-tight sm:mt-6 sm:text-5xl lg:text-6xl">
@@ -53,10 +58,10 @@ export async function HomeHero() {
             </ButtonLink>
           </div>
 
-          <dl className="mt-8 grid max-w-lg grid-cols-2 gap-6 border-t border-white/10 pt-5 sm:mt-10 sm:pt-6">
-            <Stat value={stats.nationalRank} label="Arizto Agents Nationwide*" />
-            <Stat value={stats.regionRank} label={`Arizto Team — ${stats.regionName}*`} />
-          </dl>
+          {/* Was a two-stat row (#7 / No.1). With the nationwide figure retired
+              the badge above already carries the whole claim, so this slot
+              holds the source note rather than restating "No.1" twice. */}
+          <RankingFootnote className="mt-8 max-w-lg border-t border-white/10 pt-5 text-white/50 sm:mt-10 sm:pt-6" />
         </div>
 
         <div className="relative hidden w-full lg:block">
@@ -78,17 +83,5 @@ export async function HomeHero() {
         </div>
       </Container>
     </section>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <dt className="sr-only">{label.replace("*", "")}</dt>
-      <dd className="text-3xl font-bold text-white">{value}</dd>
-      <p className="mt-1 text-xs text-white/60">
-        <FeeText>{label}</FeeText>
-      </p>
-    </div>
   );
 }

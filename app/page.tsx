@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   title: { absolute: seoTitles.home },
   // Kept under 160 characters so Google shows it whole rather than truncating.
   description:
-    "Palmerston North real estate agents Allan & Karen Toner — ranked #7 Arizto agents nationwide and No.1 in the Manawatū. Get a free appraisal.",
+    "Palmerston North real estate agents Allan & Karen Toner — Arizto's No.1 agents in Palmerston North & Manawatū. Get a free appraisal.",
   alternates: { canonical: "/" },
 };
 
@@ -94,6 +94,12 @@ export default async function HomePage() {
       )}
 
       {/* Recognition */}
+      {/* TODO(client): the recognition graphic still reads "TOP 10 NATIONWIDE
+          / #7 NATIONWIDE ARIZTO AGENTS / OUT OF 350+ AGENTS" — a claim the
+          31 Aug 2026 amendment retired from the copy and from the ranking
+          terms. Needs replacement artwork from Allan & Karen leading with
+          "Arizto's No.1 agents — Palmerston North & Manawatū"; the alt text
+          describes what is currently in the image and should change with it. */}
       <Section className="bg-secondary/60">
         <Container className="grid items-center gap-10 lg:grid-cols-2">
           <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
