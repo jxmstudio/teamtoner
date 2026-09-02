@@ -20,6 +20,7 @@ import {
 import { siteConfig, type SiteConfig } from "@/lib/site";
 import { sanityClient } from "@/lib/sanity/client";
 import {
+  FEATURED_LISTINGS_QUERY,
   GUIDES_QUERY,
   LISTINGS_QUERY,
   SITE_SETTINGS_QUERY,
@@ -170,10 +171,44 @@ export async function getListings(): Promise<Listing[]> {
   return (await loadListings()).filter((l) => l.status !== "sold");
 }
 
+type FeaturedPicks = { hero: string | null; others: string[] } | null;
+
+/** The studio's "Featured properties" picks (listing slugs), null if unset. */
+const loadFeaturedPicks = cache(async (): Promise<FeaturedPicks> => {
+  if (!sanityClient) return null;
+  try {
+    return await sanityClient.fetch<FeaturedPicks>(FEATURED_LISTINGS_QUERY);
+  } catch (error) {
+    console.error("[sanity] featured picks fetch failed", error);
+    return null;
+  }
+});
+
+/**
+ * Home-page featured grid: the studio's hand-picked hero first, then its
+ * other picks in order. Picks that are missing or now Sold are skipped and
+ * the grid is topped up from the current listings in display order, so it
+ * never shows a sold home or an empty cell. With no picks at all (fixtures,
+ * or the document untouched) the fixture `featured` flags decide, and
+ * failing that the first listings in display order.
+ */
 export async function getFeaturedListings(limit = 3): Promise<Listing[]> {
   const active = await getListings();
-  const featured = active.filter((l) => l.featured);
-  return (featured.length ? featured : active).slice(0, limit);
+  const picks = await loadFeaturedPicks();
+  const bySlug = new Map(active.map((l) => [l.slug, l]));
+
+  const chosen: Listing[] = [];
+  for (const slug of [picks?.hero, ...(picks?.others ?? [])]) {
+    const listing = slug ? bySlug.get(slug) : undefined;
+    if (listing && !chosen.includes(listing)) chosen.push(listing);
+  }
+
+  const fallback = chosen.length ? active : active.filter((l) => l.featured);
+  for (const listing of fallback.length ? fallback : active) {
+    if (chosen.length >= limit) break;
+    if (!chosen.includes(listing)) chosen.push(listing);
+  }
+  return chosen.slice(0, limit);
 }
 
 export async function getListingBySlug(slug: string): Promise<Listing | undefined> {

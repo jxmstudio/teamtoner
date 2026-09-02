@@ -99,12 +99,13 @@ export const listing = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "featured",
-      title: "Feature on the home page",
-      type: "boolean",
-      description: "Featured listings fill the “Featured properties” section (first three).",
-      initialValue: false,
+      name: "sortOrder",
+      title: "Display order",
+      type: "number",
+      description:
+        "Controls where this listing appears on the Listings page, suburb pages and the home page. Lower numbers show first (1 is the top spot). Leave blank to sort by newest after any numbered listings.",
       group: "details",
+      validation: (rule) => rule.integer().min(1),
     }),
     defineField({
       name: "description",
@@ -149,7 +150,7 @@ export const listing = defineType({
       title: "Property documents",
       type: "array",
       description:
-        "Shown as a “Property documents” panel on the listing page — e.g. Certificate of Title, rates, LIM, disclosure form. Each entry needs a title plus either an uploaded file or a link.",
+        "Shown as a “Property documents” panel on the listing page — e.g. Certificate of Title, rates, LIM, disclosure form. Each entry needs a title plus either an uploaded file or a link. Removed automatically when the listing is published as Sold.",
       group: "documents",
       of: [
         {
@@ -213,12 +214,31 @@ export const listing = defineType({
       hidden: ({ document }) => document?.status !== "sold",
     }),
   ],
+  orderings: [
+    {
+      title: "Display order",
+      name: "displayOrder",
+      by: [
+        { field: "sortOrder", direction: "asc" },
+        { field: "_createdAt", direction: "desc" },
+      ],
+    },
+    { title: "Newest first", name: "newest", by: [{ field: "_createdAt", direction: "desc" }] },
+    { title: "Address A–Z", name: "address", by: [{ field: "address", direction: "asc" }] },
+  ],
   preview: {
-    select: { title: "address", subtitle: "priceDisplay", media: "images.0", status: "status" },
-    prepare({ title, subtitle, media, status }) {
+    select: {
+      title: "address",
+      subtitle: "priceDisplay",
+      media: "images.0",
+      status: "status",
+      sortOrder: "sortOrder",
+    },
+    prepare({ title, subtitle, media, status, sortOrder }) {
       const label =
         status === "sold" ? "SOLD" : status === "under-offer" ? "UNDER OFFER" : "FOR SALE";
-      return { title, subtitle: `${label} — ${subtitle ?? ""}`, media };
+      const order = typeof sortOrder === "number" ? `#${sortOrder} · ` : "";
+      return { title, subtitle: `${order}${label} — ${subtitle ?? ""}`, media };
     },
   },
 });

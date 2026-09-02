@@ -58,6 +58,26 @@ overwritten, so studio edits to blurbs and commentary survive. To preview
 without writing, set `DRY_RUN=1` (PowerShell: `$env:DRY_RUN=1;`) before the
 command — `sanity exec` drops command-line flags, so it can't be one.
 
+To move a dataset seeded before the hand-picked featured grid (2 Sep 2026)
+onto it — creating the "Featured properties" document from the old
+"Feature on the home page" flags and then clearing those flags — run
+`npm run migrate:featured` (idempotent; `DRY_RUN=1` previews).
+
+**Listing order, featured grid and sold documents** (client requests from the
+2 Sep 2026 handover):
+
+- Every listing has a **Display order** number. Numbered listings come first
+  (1 on top) on the Listings page, suburb pages and the home page; unnumbered
+  ones follow, newest first. The studio's Listings list shows the same order.
+- **Featured properties** (pinned under Site settings) picks the home page's
+  large hero card and the two smaller cards, drag-to-reorder. Sold picks are
+  skipped and empty cells are filled from the current listings in display
+  order, so the grid never shows a sold home or a gap.
+- Publishing a listing as **Sold** removes its property documents (the button
+  reads "Publish & remove documents"; `sanity/actions/clear-documents-on-sold.ts`).
+  The public query also hides documents on sold listings as a backstop. The
+  uploaded files stay in the Sanity media library.
+
 Pages that render CMS content revalidate every 60 s, so studio edits go live
 within a minute — no redeploy needed.
 

@@ -5,7 +5,12 @@ import groq from "groq";
  * lib/content/types.ts, so everything downstream of lib/data.ts is agnostic
  * about where content came from.
  */
-export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)] | order(coalesce(soldDate, _createdAt) desc) {
+/**
+ * Listings in site display order: hand-numbered ones first (lowest number on
+ * top), then everything else newest first. The Sold page re-sorts by sold
+ * date in lib/data.ts.
+ */
+export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)] | order(coalesce(sortOrder, 1000000) asc, coalesce(soldDate, _createdAt) desc) {
   "slug": slug.current,
   title,
   status,
@@ -19,13 +24,29 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
   "features": coalesce(features, []),
   "images": coalesce(images[].asset->url, []),
   "video": videoUrl,
-  "documents": coalesce(documents[defined(file.asset) || defined(url)]{
-    title,
-    "url": coalesce(file.asset->url, url)
-  }, []),
+  "documents": select(
+    status == "sold" => [],
+    coalesce(documents[defined(file.asset) || defined(url)]{
+      title,
+      "url": coalesce(file.asset->url, url)
+    }, [])
+  ),
+  sortOrder,
+  // Retired flag, still read so a deploy ahead of "npm run migrate:featured"
+  // keeps the same three homes on the home page. Null once migrated.
   featured,
   soldPrice,
   soldDate
+}`;
+
+/**
+ * The hand-picked home-page featured grid, as listing slugs: the hero plus up
+ * to two others in display order. Resolved against the listings by
+ * getFeaturedListings in lib/data.ts.
+ */
+export const FEATURED_LISTINGS_QUERY = groq`*[_type == "featuredListings"][0] {
+  "hero": hero->slug.current,
+  "others": coalesce(others[]->slug.current, [])
 }`;
 
 export const SITE_VIDEOS_QUERY = groq`*[_type == "siteVideo" && featured == true && defined(url)] | order(coalesce(order, 0) asc) {

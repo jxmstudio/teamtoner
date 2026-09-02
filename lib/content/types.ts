@@ -24,7 +24,13 @@ export interface Listing {
   video?: string;
   /** Property documents (title, rates, LIM, disclosures…) shown on the listing page. */
   documents?: ListingDocument[];
+  /**
+   * Fixture-only fallback for the home-page featured grid, used while the CMS
+   * is unconnected or its "Featured properties" document is empty.
+   */
   featured?: boolean;
+  /** Manual position (1 = first). Unnumbered listings follow, newest first. */
+  sortOrder?: number;
   soldPrice?: string;
   soldDate?: string; // ISO date
 }

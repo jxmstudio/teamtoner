@@ -6,6 +6,7 @@ import { visionTool } from "@sanity/vision";
 import { dataset, projectId } from "./sanity/env";
 import { schemaTypes, singletonTypes } from "./sanity/schemaTypes";
 import { pageCopyTypes } from "./sanity/schemaTypes/pageCopy";
+import { clearDocumentsOnSold } from "./sanity/actions/clear-documents-on-sold";
 
 /**
  * Desk layout: Site settings and the per-page copy documents are singletons
@@ -22,6 +23,7 @@ const structure: StructureResolver = (S) =>
     .title("Content")
     .items([
       singleton(S, "siteSettings", "Site settings"),
+      singleton(S, "featuredListings", "Featured properties"),
       S.listItem()
         .title("Page copy")
         .id("pageCopy")
@@ -33,7 +35,20 @@ const structure: StructureResolver = (S) =>
             )
         ),
       S.divider(),
-      S.documentTypeListItem("listing").title("Listings"),
+      // Listed in the order the site shows them: numbered listings first, then
+      // newest — the same ordering LISTINGS_QUERY applies.
+      S.listItem()
+        .title("Listings")
+        .id("listing")
+        .schemaType("listing")
+        .child(
+          S.documentTypeList("listing")
+            .title("Listings")
+            .defaultOrdering([
+              { field: "sortOrder", direction: "asc" },
+              { field: "_createdAt", direction: "desc" },
+            ])
+        ),
       S.documentTypeListItem("siteVideo").title("Videos"),
       S.documentTypeListItem("testimonial").title("Testimonials"),
       S.documentTypeListItem("guide").title("Guides"),
@@ -59,12 +74,18 @@ export default defineConfig({
       templates.filter((t) => !singletonTypes.has(t.schemaType)),
   },
   document: {
-    // No duplicate/delete/unpublish on singletons.
-    actions: (actions, context) =>
-      singletonTypes.has(context.schemaType)
-        ? actions.filter(
-            (a) => a.action && ["publish", "discardChanges", "restore"].includes(a.action)
-          )
-        : actions,
+    actions: (actions, context) => {
+      // No duplicate/delete/unpublish on singletons.
+      if (singletonTypes.has(context.schemaType)) {
+        return actions.filter(
+          (a) => a.action && ["publish", "discardChanges", "restore"].includes(a.action)
+        );
+      }
+      // Publishing a listing as Sold clears its property documents.
+      if (context.schemaType === "listing") {
+        return actions.map((a) => (a.action === "publish" ? clearDocumentsOnSold(a) : a));
+      }
+      return actions;
+    },
   },
 });

@@ -96,7 +96,7 @@ async function seedListings() {
       baths: l.baths,
       parking: l.parking,
       priceDisplay: l.priceDisplay,
-      featured: l.featured ?? false,
+      ...(l.sortOrder ? { sortOrder: l.sortOrder } : {}),
       description: l.description,
       features: l.features,
       images,
@@ -245,6 +245,24 @@ async function seedPageCopy() {
   console.log(`  ${Object.keys(PAGE_COPY).length} page-copy documents imported.`);
 }
 
+/**
+ * The home-page featured grid, from the fixture `featured` flags: first
+ * flagged listing is the hero, the next two fill the smaller cells.
+ */
+async function seedFeaturedListings() {
+  console.log("Importing featured properties …");
+  const [hero, ...others] = listings
+    .filter((l) => l.featured && l.status !== "sold")
+    .slice(0, 3)
+    .map((l) => ({ _type: "reference" as const, _ref: `listing-${l.slug}` }));
+  await client.createIfNotExists({
+    _id: "featuredListings",
+    _type: "featuredListings",
+    ...(hero ? { hero } : {}),
+    others: others.map((ref, i) => ({ ...ref, _key: `featured-${i}` })),
+  });
+}
+
 async function seedSiteSettings() {
   console.log("Importing site settings …");
   await client.createIfNotExists({
@@ -302,6 +320,7 @@ async function main() {
   await seedGuides();
   await seedSuburbs();
   await seedSiteSettings();
+  await seedFeaturedListings();
   await seedPageCopy();
 
   const { projectId, dataset } = client.config();
