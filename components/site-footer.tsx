@@ -164,13 +164,27 @@ export async function SiteFooter() {
             {/* Site-wide landing point for every commission asterisk. */}
             <TermsFootnote className="mt-1 text-white/50" />
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <Link href="/privacy" className="hover:text-teal">
               Privacy
             </Link>
             <Link href="/terms" className="hover:text-teal">
               Terms
             </Link>
+            {/* Agency credit — intentionally a followed link (no `nofollow`)
+                so it passes SEO value back to the studio. */}
+            <span>
+              Website by{" "}
+              <a
+                href="https://jxmstudio.com/"
+                title="jxmstudio — web design & development"
+                className="text-white/70 hover:text-teal"
+                target="_blank"
+                rel="noopener"
+              >
+                jxmstudio
+              </a>
+            </span>
           </div>
         </div>
       </div>
