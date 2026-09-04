@@ -131,8 +131,17 @@ Copy `.env.example` → `.env.local` for local dev, and set the same in Vercel.
 
 | Var | Purpose |
 | --- | --- |
-| `RESEND_API_KEY` | Enables lead-form emails via [resend.com](https://resend.com). If unset, leads are logged to the server console only. |
-| `LEAD_FROM_EMAIL` | Verified sender, e.g. `Team Toner <hello@teamtoner.co.nz>`. Leads are sent to `thetoners@arizto.co.nz`. |
+| `JXM_FORMS_API_KEY` | Overrides the JXM Forms key baked into `lib/leads.ts` (rotate without a code change). |
+| `RESEND_API_KEY` | Fallback only: direct lead emails via [resend.com](https://resend.com) when JXM Forms is unreachable. If unset, fallback leads are logged to the server console. |
+| `LEAD_FROM_EMAIL` | Verified sender for the fallback, e.g. `Team Toner <hello@teamtoner.co.nz>`. Fallback leads go to the Site settings contact email (`thetoners@arizto.co.nz`). |
+
+**Lead delivery.** Every form (contact, appraisal, listing enquiry) posts to
+JXM Forms (`https://jxm-forms.vercel.app/api/submit/teamtoner`, see
+`lib/leads.ts`), which stores the lead, spam-checks it and emails it on. The
+notification address is **not** in this repo — it's the `teamtoner` client's
+notify emails in the JXM Forms dashboard (Settings), set to
+`thetoners@arizto.co.nz` on 4 Sep 2026. Submissions the classifier marks as
+spam (e.g. gibberish test messages) are stored but not emailed.
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata (defaults to production). |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project id — unset = site runs from fixtures. |
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (default `production`). |
