@@ -31,6 +31,12 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
       "url": coalesce(file.asset->url, url)
     }, [])
   ),
+  // Only upcoming open homes reach the site; finished ones drop off within
+  // the page's revalidate window (60s) with no editing needed.
+  "openHomes": select(
+    status == "sold" => [],
+    coalesce(openHomes[defined(start) && defined(end) && dateTime(end) > now()]{ start, end }, [])
+  ),
   sortOrder,
   // Retired flag, still read so a deploy ahead of "npm run migrate:featured"
   // keeps the same three homes on the home page. Null once migrated.

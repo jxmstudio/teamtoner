@@ -78,6 +78,18 @@ onto it — creating the "Featured properties" document from the old
   The public query also hides documents on sold listings as a backstop. The
   uploaded files stay in the Sanity media library.
 
+**Photos and open homes** (client requests, 4 Sep 2026):
+
+- The **Photos** field shows large drag-to-reorder tiles (Sanity's grid
+  layout). Many photos can be uploaded at once: multi-select in the file dialog
+  behind the array's Upload button, or drag the files onto the field.
+- **Open homes** (Details tab) take a start and end date-time each. The public
+  query keeps only entries whose end is in the future (`dateTime(end) > now()`
+  in `lib/sanity/queries.ts`), so a finished open home leaves the listing page
+  within the 60 s revalidate window with no editing; past entries stay in the
+  studio marked "Finished" until deleted. Times display in NZ time via
+  `lib/open-homes.ts` (`npm test`).
+
 Pages that render CMS content revalidate every 60 s, so studio edits go live
 within a minute — no redeploy needed.
 

@@ -124,11 +124,73 @@ export const listing = defineType({
       group: "details",
     }),
     defineField({
+      name: "openHomes",
+      title: "Open homes",
+      type: "array",
+      description:
+        "Shown as an “Open homes” panel on the listing page. Each one disappears from the website by itself once its end time has passed — you can delete old ones here whenever you like, but you don’t have to.",
+      group: "details",
+      hidden: ({ document }) => document?.status === "sold",
+      of: [
+        {
+          type: "object",
+          name: "openHome",
+          title: "Open home",
+          fields: [
+            defineField({
+              name: "start",
+              title: "Starts",
+              type: "datetime",
+              options: { timeStep: 15 },
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "end",
+              title: "Ends",
+              type: "datetime",
+              options: { timeStep: 15 },
+              validation: (rule) =>
+                rule.required().custom((value, context) => {
+                  const start = (context.parent as { start?: string } | undefined)?.start;
+                  if (!value || !start) return true;
+                  return new Date(value) > new Date(start) ? true : "Must be after the start time";
+                }),
+            }),
+          ],
+          preview: {
+            select: { start: "start", end: "end" },
+            prepare({ start, end }) {
+              const fmt = (iso?: string) =>
+                iso
+                  ? new Date(iso).toLocaleString("en-NZ", {
+                      timeZone: "Pacific/Auckland",
+                      weekday: "short",
+                      day: "numeric",
+                      month: "short",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })
+                  : "…";
+              const past = end ? new Date(end) < new Date() : false;
+              return {
+                title: `${fmt(start)} – ${fmt(end)}`,
+                subtitle: past ? "Finished — no longer shown on the website" : undefined,
+              };
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
       name: "images",
       title: "Photos",
       type: "array",
       of: [{ type: "image", options: { hotspot: true } }],
-      description: "First photo is the hero / card image.",
+      // Grid layout shows each photo as a large tile that can be dragged to
+      // reorder — the default list rows are too small to tell photos apart.
+      options: { layout: "grid" },
+      description:
+        "To add many photos at once, select them all in the file dialog via the Upload button, or drag them from your computer onto this box. Drag tiles to reorder — the first photo is the hero / card image.",
       group: "media",
     }),
     defineField({

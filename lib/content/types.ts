@@ -6,6 +6,12 @@ export interface ListingDocument {
   url: string;
 }
 
+/** A scheduled open home; both ends are ISO date-times (UTC). */
+export interface OpenHome {
+  start: string;
+  end: string;
+}
+
 export interface Listing {
   slug: string;
   title: string;
@@ -24,6 +30,8 @@ export interface Listing {
   video?: string;
   /** Property documents (title, rates, LIM, disclosures…) shown on the listing page. */
   documents?: ListingDocument[];
+  /** Upcoming open homes only — the CMS query drops any that have already ended. */
+  openHomes?: OpenHome[];
   /**
    * Fixture-only fallback for the home-page featured grid, used while the CMS
    * is unconnected or its "Featured properties" document is empty.

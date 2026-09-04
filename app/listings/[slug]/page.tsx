@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Bed, Bath, Car, Check, FileText, MapPin } from "lucide-react";
+import { Bed, Bath, Car, CalendarDays, Check, FileText, MapPin } from "lucide-react";
 import { fitTitle } from "@/lib/site";
+import { formatOpenHome } from "@/lib/open-homes";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { ListingGallery } from "@/components/brand/listing-gallery";
@@ -233,6 +234,24 @@ export default async function ListingPage(
                     </div>
                   </CardContent>
                 </Card>
+
+                {(listing.openHomes?.length ?? 0) > 0 && (
+                  <Card className="mt-6">
+                    <CardContent className="pt-6">
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Open homes
+                      </h2>
+                      <ul className="mt-4 space-y-2">
+                        {listing.openHomes!.map((oh) => (
+                          <li key={oh.start} className="flex items-start gap-2.5 text-foreground/90">
+                            <CalendarDays className="mt-0.5 size-4 shrink-0 text-teal" />
+                            <span>{formatOpenHome(oh)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {(listing.documents?.length ?? 0) > 0 && (
                   <Card className="mt-6">
