@@ -26,7 +26,10 @@ export const siteConfig = {
     "Arizto's No.1 agents — Palmerston North & Manawatū.* Two experienced agents, premium marketing and a smarter 2% + GST commission.",
   // Env-driven so preview/staging deployments generate their own canonicals,
   // sitemap and OG URLs instead of pointing at production.
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://teamtoner.co.nz",
+  // The apex domain 308-redirects to www on Vercel, so canonicals, the
+  // sitemap and OG URLs must use www too — otherwise every URL Google is
+  // handed is a redirect.
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.teamtoner.co.nz",
   brand: {
     parent: "Arizto",
     // TODO(client): confirm REAA licence details to display
@@ -179,6 +182,21 @@ export const siteConfig = {
     youtube: "",
   },
   /**
+   * Header/footer menu wording, editable under Site settings → Menu labels.
+   * Only the labels are client-editable; the routes in `mainNav` are fixed
+   * (they're indexed URLs).
+   */
+  navLabels: {
+    home: "Home",
+    listings: "Listings",
+    sold: "Sold",
+    sell: "Sell",
+    suburbs: "Suburbs",
+    about: "About",
+    resources: "Resources",
+    contact: "Contact",
+  },
+  /**
    * Independent profiles that describe the *same* entity. These become schema
    * `sameAs` links, which is how Google and the AI answer engines connect
    * teamtoner.co.nz to the reviews and listings held on other platforms.
@@ -225,12 +243,25 @@ export function fitTitle(candidates: string[]): string {
   );
 }
 
-/** Social links that are actually configured, for rendering the footer icons. */
+export type SocialNetwork =
+  | keyof typeof siteConfig.social
+  | "googleBusiness"
+  | "rateMyAgent";
+
+/**
+ * Profiles that are actually configured, for rendering the footer icons:
+ * the social networks plus the Google Business and RateMyAgent profiles,
+ * which the client also expects to see as icons.
+ */
 export function configuredSocials(config: SiteConfig = siteConfig) {
-  return Object.entries(config.social).filter(([, url]) => Boolean(url)) as [
-    keyof typeof siteConfig.social,
-    string,
-  ][];
+  const { googleBusiness, rateMyAgent } = config.externalProfiles;
+  return (
+    [
+      ...Object.entries(config.social),
+      ["googleBusiness", googleBusiness],
+      ["rateMyAgent", rateMyAgent],
+    ] as [SocialNetwork, string][]
+  ).filter(([, url]) => Boolean(url));
 }
 
 /**
@@ -249,13 +280,22 @@ export const seoTitles = {
   appraisal: "Free Property Appraisal | Team Toner Palmerston North",
 } as const;
 
-export const mainNav = [
-  { title: "Home", href: "/" },
-  { title: "Listings", href: "/listings" },
-  { title: "Sold", href: "/sold" },
-  { title: "Sell", href: "/sell" },
-  { title: "Suburbs", href: "/suburbs" },
-  { title: "About", href: "/about" },
-  { title: "Resources", href: "/resources" },
-  { title: "Contact", href: "/contact" },
-] as const;
+export type NavItem = { title: string; href: string };
+
+/**
+ * Header/footer menu with the CMS-editable labels applied. Pass the result
+ * of `getSiteConfig()`; the bare default is only right for build-time code.
+ */
+export function mainNav(config: SiteConfig = siteConfig): NavItem[] {
+  const labels = config.navLabels;
+  return [
+    { title: labels.home, href: "/" },
+    { title: labels.listings, href: "/listings" },
+    { title: labels.sold, href: "/sold" },
+    { title: labels.sell, href: "/sell" },
+    { title: labels.suburbs, href: "/suburbs" },
+    { title: labels.about, href: "/about" },
+    { title: labels.resources, href: "/resources" },
+    { title: labels.contact, href: "/contact" },
+  ];
+}

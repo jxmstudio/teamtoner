@@ -18,6 +18,7 @@ export const siteSettings = defineType({
     { name: "selling", title: "Why Team Toner" },
     { name: "social", title: "Social & profiles" },
     { name: "cta", title: "Appraisal banner" },
+    { name: "menu", title: "Menu labels" },
   ],
   fields: [
     defineField({
@@ -199,7 +200,7 @@ export const siteSettings = defineType({
       name: "facebook",
       title: "Facebook URL",
       type: "url",
-      description: "Full profile URL. Leave empty to hide the icon.",
+      description: "Full profile URL. Each profile filled in here shows as an icon in the website footer; leave one empty to hide its icon.",
       group: "social",
     }),
     defineField({
@@ -218,15 +219,41 @@ export const siteSettings = defineType({
       name: "googleBusiness",
       title: "Google Business Profile URL",
       type: "url",
-      description: "Helps Google connect the site to your reviews.",
+      description: "Shown as a Google icon in the footer, and helps Google connect the site to your reviews.",
       group: "social",
     }),
     defineField({
       name: "rateMyAgent",
       title: "RateMyAgent profile URL",
       type: "url",
+      description: "Shown as a RateMyAgent icon in the footer.",
       group: "social",
     }),
+
+    ...(
+      [
+        ["navHome", "Home", "Home"],
+        ["navListings", "Listings", "Listings"],
+        ["navSold", "Sold", "Sold"],
+        ["navSell", "Sell", "Sell"],
+        ["navSuburbs", "Suburbs", "Suburbs"],
+        ["navAbout", "About", "About"],
+        ["navResources", "Resources", "Resources — e.g. “Guides” or “Useful Guides”"],
+        ["navContact", "Contact", "Contact"],
+      ] as const
+    ).map(([name, title, placeholder]) =>
+      defineField({
+        name,
+        title: `“${title}” menu item`,
+        type: "string",
+        placeholder,
+        description:
+          name === "navResources"
+            ? "The wording shown in the header menu and footer. Leave empty for “Resources”. The page address stays /resources either way."
+            : `Leave empty for “${title}”.`,
+        group: "menu",
+      })
+    ),
   ],
   preview: {
     prepare: () => ({ title: "Site settings" }),

@@ -89,6 +89,8 @@ export interface Guide {
   process?: boolean;
   /** Optional at-a-glance comparison table — a strong table-snippet candidate. */
   comparison?: GuideComparison;
+  /** Manual position on /resources (1 = first). Unnumbered guides follow, oldest first. */
+  sortOrder?: number;
 }
 
 export interface GuideComparison {

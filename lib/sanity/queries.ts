@@ -32,10 +32,13 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
     }, [])
   ),
   // Only upcoming open homes reach the site; finished ones drop off within
-  // the page's revalidate window (60s) with no editing needed.
+  // the page's revalidate window (60s) with no editing needed. Both sides
+  // must be wrapped in dateTime() — GROQ's now() is a plain string, and a
+  // datetime-vs-string comparison is null, which silently dropped every
+  // open home.
   "openHomes": select(
     status == "sold" => [],
-    coalesce(openHomes[defined(start) && defined(end) && dateTime(end) > now()]{ start, end }, [])
+    coalesce(openHomes[defined(start) && defined(end) && dateTime(end) > dateTime(now())]{ start, end }, [])
   ),
   sortOrder,
   // Retired flag, still read so a deploy ahead of "npm run migrate:featured"
@@ -71,8 +74,13 @@ export const TESTIMONIALS_QUERY = groq`*[_type == "testimonial"] | order(coalesc
   featured
 }`;
 
-export const GUIDES_QUERY = groq`*[_type == "guide" && defined(slug.current)] | order(_createdAt asc) {
+/**
+ * Guides in site display order: hand-numbered ones first (lowest number on
+ * top), then the rest oldest first — the same scheme as listings.
+ */
+export const GUIDES_QUERY = groq`*[_type == "guide" && defined(slug.current)] | order(coalesce(sortOrder, 1000000) asc, _createdAt asc) {
   "slug": slug.current,
+  sortOrder,
   title,
   description,
   category,
@@ -124,5 +132,15 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"][0] {
   "sellingPoints": sellingPoints[]{ title, detail },
   "sellingPointsSell": sellingPointsSell[]{ title, detail },
   "social": { facebook, instagram, youtube },
-  "externalProfiles": { googleBusiness, rateMyAgent }
+  "externalProfiles": { googleBusiness, rateMyAgent },
+  "navLabels": {
+    "home": navHome,
+    "listings": navListings,
+    "sold": navSold,
+    "sell": navSell,
+    "suburbs": navSuburbs,
+    "about": navAbout,
+    "resources": navResources,
+    "contact": navContact
+  }
 }`;

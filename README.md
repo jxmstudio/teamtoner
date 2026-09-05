@@ -84,11 +84,26 @@ onto it — creating the "Featured properties" document from the old
   layout). Many photos can be uploaded at once: multi-select in the file dialog
   behind the array's Upload button, or drag the files onto the field.
 - **Open homes** (Details tab) take a start and end date-time each. The public
-  query keeps only entries whose end is in the future (`dateTime(end) > now()`
-  in `lib/sanity/queries.ts`), so a finished open home leaves the listing page
+  query keeps only entries whose end is in the future (`dateTime(end) >
+  dateTime(now())` in `lib/sanity/queries.ts` — both sides wrapped, GROQ's
+  `now()` is a string), so a finished open home leaves the listing page
   within the 60 s revalidate window with no editing; past entries stay in the
   studio marked "Finished" until deleted. Times display in NZ time via
   `lib/open-homes.ts` (`npm test`).
+
+**Guide order, footer icons and menu labels** (client requests, 5 Sep 2026):
+
+- Every guide has a **Display order** number, like listings: numbered guides
+  come first (1 on top) on /resources, unnumbered ones follow oldest first.
+  The studio's Guides list shows the same order. `scripts/patch-guide-order.ts`
+  applied the client's five-guide order (and cleared a stray `featured` flag
+  that the studio reported as "Unknown field found").
+- Every profile filled in under **Site settings → Social & profiles** shows as
+  a footer icon — Facebook, Instagram, YouTube, Google Business Profile and
+  RateMyAgent (`components/site-footer.tsx`).
+- The header/footer menu wording is editable under **Site settings → Menu
+  labels** (e.g. "Resources" → "Guides"). Only the labels change; the routes
+  (`/resources` etc.) are fixed because they're indexed URLs.
 
 Pages that render CMS content revalidate every 60 s, so studio edits go live
 within a minute — no redeploy needed.
@@ -106,7 +121,8 @@ the pre-CMS fallback and the source for `npm run seed:sanity`.
 | **Guides (incl. PDF upload + article pages)** | **`/studio` → Guides** (fallback: `lib/content/guides.ts`) |
 | **Suburb pages (blurbs, market commentary)** | **`/studio` → Suburbs** (fallback: `lib/content/suburbs.ts`) |
 | **Page headings, prose, FAQs, legal wording** | **`/studio` → Page copy** (defaults: `lib/content/page-copy.ts`) |
-| Nav labels, per-suburb template sentences, layout | code (`lib/site.ts`, `app/…`) |
+| **Menu labels (header/footer)** | **`/studio` → Site settings → Menu labels** (defaults: `lib/site.ts` `navLabels`) |
+| Per-suburb template sentences, layout | code (`lib/site.ts`, `app/…`) |
 
 Note: the suburb dropdown on a Listing offers the suburbs defined in
 `lib/content/suburbs.ts`; a brand-new suburb page added in the studio gets its
@@ -142,7 +158,7 @@ notification address is **not** in this repo — it's the `teamtoner` client's
 notify emails in the JXM Forms dashboard (Settings), set to
 `thetoners@arizto.co.nz` on 4 Sep 2026. Submissions the classifier marks as
 spam (e.g. gibberish test messages) are stored but not emailed.
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata (defaults to production). |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://www.teamtoner.co.nz` — the apex redirects to www on Vercel, so leave it unset in production (or set it to the www URL); a non-www value makes every canonical and sitemap entry a redirect. |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project id — unset = site runs from fixtures. |
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (default `production`). |
 | `SANITY_API_WRITE_TOKEN` | Local-only, for `npm run seed:sanity`. Never set in Vercel. |

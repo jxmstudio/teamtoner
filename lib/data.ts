@@ -287,8 +287,15 @@ export async function getFeaturedTestimonials(limit = 3): Promise<Testimonial[]>
   return (featured.length ? featured : all).slice(0, limit);
 }
 
+/** Numbered guides first (lowest on top), the rest in source order — the fixture-side twin of GUIDES_QUERY's ordering. */
+function byDisplayOrder(guides: Guide[]): Guide[] {
+  return [...guides].sort(
+    (a, b) => (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER)
+  );
+}
+
 export async function getGuides(): Promise<Guide[]> {
-  return loadGuides();
+  return byDisplayOrder(await loadGuides());
 }
 
 export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
@@ -297,5 +304,5 @@ export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
 
 /** Guides that publish an indexable content page at /resources/<slug>. */
 export async function getGuidesWithPages(): Promise<Guide[]> {
-  return (await loadGuides()).filter((g) => g.body?.length);
+  return (await getGuides()).filter((g) => g.body?.length);
 }

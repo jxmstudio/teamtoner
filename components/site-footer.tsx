@@ -31,16 +31,41 @@ function Youtube(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+/** The Google "G", for the Google Business Profile (reviews) link. */
+function Google(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
+      <path d="M21.6 12.23c0-.68-.06-1.33-.17-1.96H12v3.7h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.9-1.75 2.98-4.32 2.98-7.26Z" />
+      <path d="M12 22c2.7 0 4.97-.9 6.62-2.42l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.75-5.6-4.1H3.07v2.58A10 10 0 0 0 12 22Z" />
+      <path d="M6.4 13.92A6 6 0 0 1 6.09 12c0-.67.11-1.31.31-1.92V7.5H3.07A10 10 0 0 0 2 12c0 1.61.39 3.14 1.07 4.5l3.33-2.58Z" />
+      <path d="M12 5.98c1.47 0 2.79.5 3.82 1.5l2.87-2.87C16.96 3 14.7 2 12 2a10 10 0 0 0-8.93 5.5l3.33 2.58c.8-2.35 3-4.1 5.6-4.1Z" />
+    </svg>
+  );
+}
+
+/** RateMyAgent has no public brand glyph; a rating star reads as "reviews". */
+function RateMyAgent(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
+      <path d="M12 2.5l2.94 6.1 6.7.9-4.9 4.66 1.23 6.66L12 17.6l-5.97 3.22 1.23-6.66-4.9-4.66 6.7-.9L12 2.5Z" />
+    </svg>
+  );
+}
+
 const SOCIAL_ICONS = {
   facebook: Facebook,
   instagram: Instagram,
   youtube: Youtube,
+  googleBusiness: Google,
+  rateMyAgent: RateMyAgent,
 } as const;
 
 const SOCIAL_LABELS = {
   facebook: "Facebook",
   instagram: "Instagram",
   youtube: "YouTube",
+  googleBusiness: "Google reviews",
+  rateMyAgent: "RateMyAgent reviews",
 } as const;
 
 export async function SiteFooter() {
@@ -76,7 +101,7 @@ export async function SiteFooter() {
           <ul className="mt-4 space-y-2 text-sm">
             {/* Footer-only "Free Appraisal" entry (brief §13); the header
                 already carries its own appraisal CTA button. */}
-            {[...mainNav, { title: "Free Appraisal", href: "/appraisal" }].map(
+            {[...mainNav(siteConfig), { title: "Free Appraisal", href: "/appraisal" }].map(
               (item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="hover:text-teal">

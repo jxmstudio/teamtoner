@@ -48,6 +48,15 @@ export const guide = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "sortOrder",
+      title: "Display order",
+      type: "number",
+      description:
+        "Controls where this guide appears on the Guides page. Lower numbers show first (1 is the top spot). Leave blank to follow the numbered guides, oldest first.",
+      group: "guide",
+      validation: (rule) => rule.integer().min(1),
+    }),
+    defineField({
       name: "pdfFile",
       title: "PDF",
       type: "file",
@@ -152,7 +161,22 @@ export const guide = defineType({
       ],
     }),
   ],
+  orderings: [
+    {
+      title: "Display order",
+      name: "displayOrder",
+      by: [
+        { field: "sortOrder", direction: "asc" },
+        { field: "_createdAt", direction: "asc" },
+      ],
+    },
+    { title: "Title A–Z", name: "title", by: [{ field: "title", direction: "asc" }] },
+  ],
   preview: {
-    select: { title: "title", subtitle: "category" },
+    select: { title: "title", subtitle: "category", sortOrder: "sortOrder" },
+    prepare({ title, subtitle, sortOrder }) {
+      const order = typeof sortOrder === "number" ? `#${sortOrder} · ` : "";
+      return { title, subtitle: `${order}${subtitle ?? ""}` };
+    },
   },
 });

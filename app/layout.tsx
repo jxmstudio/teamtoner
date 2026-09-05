@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { HideOnStudio } from "@/components/hide-on-studio";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
-import { siteConfig } from "@/lib/site";
+import { mainNav, siteConfig } from "@/lib/site";
 import { getSiteConfig } from "@/lib/data";
 
 const inter = Inter({
@@ -82,7 +82,7 @@ export default async function RootLayout({
             listing and breadcrumb nodes reference this @id. */}
         <OrganizationJsonLd />
         <HideOnStudio>
-          <SiteHeader phone={config.agents.allan.phone} />
+          <SiteHeader phone={config.agents.allan.phone} nav={mainNav(config)} />
         </HideOnStudio>
         <main className="flex-1">{children}</main>
         <HideOnStudio>

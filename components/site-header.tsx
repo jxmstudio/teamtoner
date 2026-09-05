@@ -16,15 +16,20 @@ import {
   SheetTrigger,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { mainNav, siteConfig } from "@/lib/site";
+import { mainNav, siteConfig, type NavItem } from "@/lib/site";
 
 const teal = "bg-teal text-teal-foreground hover:bg-teal/90";
 
-/** `phone` comes from the layout so the CMS-edited number reaches this client component. */
+/**
+ * `phone` and `nav` come from the layout so the CMS-edited number and menu
+ * labels reach this client component.
+ */
 export function SiteHeader({
   phone = siteConfig.agents.allan.phone,
+  nav = mainNav(),
 }: {
   phone?: string;
+  nav?: NavItem[];
 }) {
   const allanTel = `tel:${phone.replace(/\s/g, "")}`;
   const pathname = usePathname();
@@ -55,7 +60,7 @@ export function SiteHeader({
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
-          {mainNav.map((item) => (
+          {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -112,7 +117,7 @@ export function SiteHeader({
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-2 flex flex-col px-4" aria-label="Mobile">
-                {mainNav.map((item) => (
+                {nav.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}

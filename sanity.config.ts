@@ -51,7 +51,19 @@ const structure: StructureResolver = (S) =>
         ),
       S.documentTypeListItem("siteVideo").title("Videos"),
       S.documentTypeListItem("testimonial").title("Testimonials"),
-      S.documentTypeListItem("guide").title("Guides"),
+      // Same display order as /resources: numbered guides first, then oldest.
+      S.listItem()
+        .title("Guides")
+        .id("guide")
+        .schemaType("guide")
+        .child(
+          S.documentTypeList("guide")
+            .title("Guides")
+            .defaultOrdering([
+              { field: "sortOrder", direction: "asc" },
+              { field: "_createdAt", direction: "asc" },
+            ])
+        ),
       S.documentTypeListItem("suburb").title("Suburbs"),
     ]);
 

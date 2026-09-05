@@ -21,6 +21,7 @@ export const guides: Guide[] = [
   {
     slug: "seller-success-guide",
     title: "Seller Success Guide",
+    sortOrder: 1,
     description:
       "Everything you need to know about selling with Team Toner — from appraisal to sold sign.",
     category: "Selling",
@@ -71,6 +72,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "methods-of-sale",
+    sortOrder: 3,
     title: "Choosing Your Method of Sale",
     description:
       "Auction, deadline sale, price by negotiation — understand the options and pick what's right for you.",
