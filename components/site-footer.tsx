@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Mail } from "lucide-react";
 import { FeeText, TermsFootnote } from "@/components/brand/commission";
 import { configuredSocials, mainNav } from "@/lib/site";
-import { getSiteConfig } from "@/lib/data";
+import { getSiteConfig, hasArticles } from "@/lib/data";
 
 function Facebook(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -69,7 +69,7 @@ const SOCIAL_LABELS = {
 } as const;
 
 export async function SiteFooter() {
-  const siteConfig = await getSiteConfig();
+  const [siteConfig, insights] = await Promise.all([getSiteConfig(), hasArticles()]);
   const socials = configuredSocials(siteConfig);
   return (
     <footer className="bg-night text-white/80">
@@ -101,7 +101,7 @@ export async function SiteFooter() {
           <ul className="mt-4 space-y-2 text-sm">
             {/* Footer-only "Free Appraisal" entry (brief §13); the header
                 already carries its own appraisal CTA button. */}
-            {[...mainNav(siteConfig), { title: "Free Appraisal", href: "/appraisal" }].map(
+            {[...mainNav(siteConfig, { insights }), { title: "Free Appraisal", href: "/appraisal" }].map(
               (item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="hover:text-teal">

@@ -123,3 +123,29 @@ export interface Suburb {
    */
   commentary?: string[];
 }
+
+/** URL segment of an insights category; the labels live in lib/insights.ts. */
+export type ArticleCategorySlug =
+  | "market-updates"
+  | "selling-advice"
+  | "buying-advice"
+  | "palmerston-north-manawatu";
+
+/**
+ * A Property Insights article at /insights/<slug>. Shares the guide's
+ * section-based body so the studio editor is the one the client already knows.
+ */
+export interface Article {
+  slug: string;
+  title: string;
+  /** One or two sentences for the card and meta description. */
+  excerpt: string;
+  category: ArticleCategorySlug;
+  /** ISO date first published — drives the byline, ordering and Article schema. */
+  published: string;
+  /** ISO date last substantively revised. Falls back to `published`. */
+  updated?: string;
+  /** Cover image CDN URL. Empty string = branded placeholder on the card. */
+  cover: string;
+  body: GuideSection[];
+}

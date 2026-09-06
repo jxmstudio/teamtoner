@@ -100,6 +100,26 @@ export const GUIDES_QUERY = groq`*[_type == "guide" && defined(slug.current)] | 
   }
 }`;
 
+/**
+ * Property Insights articles, newest first. Articles dated in the future stay
+ * unpublished until that day; ordering and category filtering are repeated in
+ * lib/insights.ts for the fixture path.
+ */
+export const ARTICLES_QUERY = groq`*[_type == "article" && defined(slug.current) && defined(published) && published <= now()] | order(published desc) {
+  "slug": slug.current,
+  title,
+  excerpt,
+  category,
+  published,
+  updated,
+  "cover": coalesce(cover.asset->url, ""),
+  "body": coalesce(body[]{
+    heading,
+    "paragraphs": coalesce(paragraphs, []),
+    bullets
+  }, [])
+}`;
+
 export const SUBURBS_QUERY = groq`*[_type == "suburb" && defined(slug.current)] | order(_createdAt asc) {
   "slug": slug.current,
   name,
@@ -141,6 +161,7 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"][0] {
     "suburbs": navSuburbs,
     "about": navAbout,
     "resources": navResources,
+    "insights": navInsights,
     "contact": navContact
   }
 }`;

@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { HideOnStudio } from "@/components/hide-on-studio";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { mainNav, siteConfig } from "@/lib/site";
-import { getSiteConfig } from "@/lib/data";
+import { getSiteConfig, hasArticles } from "@/lib/data";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -71,7 +71,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const config = await getSiteConfig();
+  const [config, insights] = await Promise.all([getSiteConfig(), hasArticles()]);
   return (
     <html
       lang="en-NZ"
@@ -82,7 +82,7 @@ export default async function RootLayout({
             listing and breadcrumb nodes reference this @id. */}
         <OrganizationJsonLd />
         <HideOnStudio>
-          <SiteHeader phone={config.agents.allan.phone} nav={mainNav(config)} />
+          <SiteHeader phone={config.agents.allan.phone} nav={mainNav(config, { insights })} />
         </HideOnStudio>
         <main className="flex-1">{children}</main>
         <HideOnStudio>

@@ -5,7 +5,9 @@ import {
   getListingBySlug,
   getSuburbs,
   getGuidesWithPages,
+  getArticles,
 } from "@/lib/data";
+import { ARTICLE_CATEGORIES } from "@/lib/insights";
 
 /**
  * Date the site's content was last substantively revised.
@@ -67,5 +69,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...listingRoutes, ...suburbRoutes, ...guideRoutes];
+  // Insights only enters the sitemap once there's an article; each category
+  // page lists as fresh as its newest article.
+  const articles = await getArticles();
+  const insightsRoutes = articles.length
+    ? [
+        {
+          url: `${base}/insights`,
+          lastModified: articles[0].updated ?? articles[0].published,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        },
+        ...ARTICLE_CATEGORIES.flatMap((c) => {
+          const newest = articles.find((a) => a.category === c.slug);
+          return newest
+            ? [
+                {
+                  url: `${base}/insights/category/${c.slug}`,
+                  lastModified: newest.updated ?? newest.published,
+                  changeFrequency: "weekly" as const,
+                  priority: 0.5,
+                },
+              ]
+            : [];
+        }),
+        ...articles.map((a) => ({
+          url: `${base}/insights/${a.slug}`,
+          lastModified: a.updated ?? a.published,
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        })),
+      ]
+    : [];
+
+  return [...staticRoutes, ...listingRoutes, ...suburbRoutes, ...guideRoutes, ...insightsRoutes];
 }

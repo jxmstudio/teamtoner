@@ -64,6 +64,16 @@ const structure: StructureResolver = (S) =>
               { field: "_createdAt", direction: "asc" },
             ])
         ),
+      // Newest first, as on /insights.
+      S.listItem()
+        .title("Property Insights")
+        .id("article")
+        .schemaType("article")
+        .child(
+          S.documentTypeList("article")
+            .title("Property Insights")
+            .defaultOrdering([{ field: "published", direction: "desc" }])
+        ),
       S.documentTypeListItem("suburb").title("Suburbs"),
     ]);
 

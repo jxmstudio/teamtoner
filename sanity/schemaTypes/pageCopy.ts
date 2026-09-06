@@ -200,6 +200,8 @@ export const pageSuburbs = page("pageSuburbs", "Suburbs page", [
 
 export const pageResources = page("pageResources", "Resources page", header("Resources"));
 
+export const pageInsights = page("pageInsights", "Property Insights page", header("Property Insights"));
+
 export const pagePrivacy = page("pagePrivacy", "Privacy page", [
   txt("note", "Top note", "The small disclaimer line above the policy. Clear it in code once the wording is approved."),
   legalSections,
@@ -220,6 +222,7 @@ export const pageCopyTypes = [
   pageSold,
   pageSuburbs,
   pageResources,
+  pageInsights,
   pagePrivacy,
   pageTerms,
 ];

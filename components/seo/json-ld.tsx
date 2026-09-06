@@ -1,7 +1,7 @@
 import { entitySameAs, siteConfig } from "@/lib/site";
 import { formatListingAddress, getSiteConfig, getSuburbs } from "@/lib/data";
 import { videoId } from "@/components/brand/video-embed";
-import type { Guide, Listing, SiteVideo } from "@/lib/content/types";
+import type { Article, Guide, Listing, SiteVideo } from "@/lib/content/types";
 
 function JsonLd({ data }: { data: unknown }) {
   return (
@@ -205,6 +205,28 @@ export function ItemListJsonLd({
           name: item.name,
           url: `${siteConfig.url}${item.path}`,
         })),
+      })}
+    />
+  );
+}
+
+/** Property Insights articles at /insights/<slug>. */
+export function InsightArticleJsonLd({ article, category }: { article: Article; category: string }) {
+  return (
+    <JsonLd
+      data={defined({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: article.title,
+        description: article.excerpt,
+        url: `${siteConfig.url}/insights/${article.slug}`,
+        image: article.cover || undefined,
+        datePublished: article.published,
+        dateModified: article.updated ?? article.published,
+        inLanguage: "en-NZ",
+        author: { "@id": ORG_ID },
+        publisher: { "@id": ORG_ID },
+        articleSection: category,
       })}
     />
   );

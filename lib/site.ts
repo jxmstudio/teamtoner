@@ -194,6 +194,7 @@ export const siteConfig = {
     suburbs: "Suburbs",
     about: "About",
     resources: "Resources",
+    insights: "Insights",
     contact: "Contact",
   },
   /**
@@ -274,6 +275,7 @@ export const seoTitles = {
   sell: "Sell Your Home | Team Toner Palmerston North Real Estate",
   suburbs: "Palmerston North & Manawatū Real Estate | Team Toner",
   resources: "Free Property Selling Guides | Team Toner",
+  insights: "Property Insights | Team Toner Palmerston North",
   contact: "Contact Team Toner | Palmerston North Real Estate Agents",
   listings: "Homes for Sale | Team Toner Palmerston North & Manawatū",
   sold: "Recently Sold | Team Toner Palmerston North & Manawatū",
@@ -285,8 +287,14 @@ export type NavItem = { title: string; href: string };
 /**
  * Header/footer menu with the CMS-editable labels applied. Pass the result
  * of `getSiteConfig()`; the bare default is only right for build-time code.
+ *
+ * Insights only joins the menu once the site has an article to show
+ * (`insights: true`), so an empty section is never a dead menu entry.
  */
-export function mainNav(config: SiteConfig = siteConfig): NavItem[] {
+export function mainNav(
+  config: SiteConfig = siteConfig,
+  { insights = false }: { insights?: boolean } = {}
+): NavItem[] {
   const labels = config.navLabels;
   return [
     { title: labels.home, href: "/" },
@@ -296,6 +304,7 @@ export function mainNav(config: SiteConfig = siteConfig): NavItem[] {
     { title: labels.suburbs, href: "/suburbs" },
     { title: labels.about, href: "/about" },
     { title: labels.resources, href: "/resources" },
+    ...(insights ? [{ title: labels.insights, href: "/insights" }] : []),
     { title: labels.contact, href: "/contact" },
   ];
 }

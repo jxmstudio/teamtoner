@@ -2,13 +2,16 @@ import { cache } from "react";
 import { listings as fixtureListings } from "@/lib/content/listings";
 import { testimonials as fixtureTestimonials } from "@/lib/content/testimonials";
 import { guides as fixtureGuides } from "@/lib/content/guides";
+import { articles as fixtureArticles } from "@/lib/content/articles";
 import { suburbs as fixtureSuburbs } from "@/lib/content/suburbs";
-import type { Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
+import type { Article, Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
+import { byNewest, inCategory } from "@/lib/insights";
 import {
   aboutCopy,
   appraisalCopy,
   contactCopy,
   homeCopy,
+  insightsCopy,
   listingsCopy,
   privacyCopy,
   resourcesCopy,
@@ -20,6 +23,7 @@ import {
 import { siteConfig, type SiteConfig } from "@/lib/site";
 import { sanityClient } from "@/lib/sanity/client";
 import {
+  ARTICLES_QUERY,
   FEATURED_LISTINGS_QUERY,
   GUIDES_QUERY,
   LISTINGS_QUERY,
@@ -61,6 +65,7 @@ const loadTestimonials = cmsCollection<Testimonial>(
 );
 const loadGuides = cmsCollection<Guide>(GUIDES_QUERY, fixtureGuides, "guides");
 const loadSuburbs = cmsCollection<Suburb>(SUBURBS_QUERY, fixtureSuburbs, "suburbs");
+const loadArticles = cmsCollection<Article>(ARTICLES_QUERY, fixtureArticles, "articles");
 
 /**
  * Recursively lay the CMS settings document over the typed defaults in
@@ -126,6 +131,7 @@ export const getListingsCopy = pageCopy("pageListings", listingsCopy);
 export const getSoldCopy = pageCopy("pageSold", soldCopy);
 export const getSuburbsCopy = pageCopy("pageSuburbs", suburbsCopy);
 export const getResourcesCopy = pageCopy("pageResources", resourcesCopy);
+export const getInsightsCopy = pageCopy("pageInsights", insightsCopy);
 export const getPrivacyCopy = pageCopy("pagePrivacy", privacyCopy);
 export const getTermsCopy = pageCopy("pageTerms", termsCopy);
 
@@ -305,4 +311,22 @@ export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
 /** Guides that publish an indexable content page at /resources/<slug>. */
 export async function getGuidesWithPages(): Promise<Guide[]> {
   return (await getGuides()).filter((g) => g.body?.length);
+}
+
+/** Property Insights articles, newest first. */
+export async function getArticles(): Promise<Article[]> {
+  return byNewest(await loadArticles());
+}
+
+export async function getArticlesByCategory(category: string): Promise<Article[]> {
+  return inCategory(await getArticles(), category);
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
+  return (await loadArticles()).find((a) => a.slug === slug);
+}
+
+/** Whether the Insights section has anything to show (drives its menu entry). */
+export async function hasArticles(): Promise<boolean> {
+  return (await loadArticles()).length > 0;
 }

@@ -4,6 +4,7 @@ import { siteVideo } from "./siteVideo";
 import { siteSettings } from "./siteSettings";
 import { testimonial } from "./testimonial";
 import { guide } from "./guide";
+import { article } from "./article";
 import { suburb } from "./suburb";
 import { pageCopyTypes } from "./pageCopy";
 
@@ -20,6 +21,7 @@ export const schemaTypes = [
   siteVideo,
   testimonial,
   guide,
+  article,
   suburb,
   siteSettings,
   ...pageCopyTypes,

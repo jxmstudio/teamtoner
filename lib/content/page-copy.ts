@@ -234,6 +234,13 @@ export const resourcesCopy = {
     "Straightforward, practical advice from Team Toner to help you prepare, sell and move with confidence.",
 };
 
+export const insightsCopy = {
+  headerEyebrow: "Property Insights",
+  headerTitle: "Property insights for Palmerston North & Manawatū",
+  headerDescription:
+    "Market updates, selling and buying advice, and local knowledge from Allan & Karen Toner.",
+};
+
 export const privacyCopy = {
   // Client-approved wording (FINAL amendments, 30 Aug 2026) — the template
   // note is retired and must stay empty.

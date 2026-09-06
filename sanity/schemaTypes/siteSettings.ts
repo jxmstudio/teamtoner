@@ -239,6 +239,7 @@ export const siteSettings = defineType({
         ["navSuburbs", "Suburbs", "Suburbs"],
         ["navAbout", "About", "About"],
         ["navResources", "Resources", "Resources — e.g. “Guides” or “Useful Guides”"],
+        ["navInsights", "Insights", "Insights — e.g. “Property Insights” or “News”"],
         ["navContact", "Contact", "Contact"],
       ] as const
     ).map(([name, title, placeholder]) =>
@@ -250,7 +251,9 @@ export const siteSettings = defineType({
         description:
           name === "navResources"
             ? "The wording shown in the header menu and footer. Leave empty for “Resources”. The page address stays /resources either way."
-            : `Leave empty for “${title}”.`,
+            : name === "navInsights"
+              ? "Leave empty for “Insights”. The menu item only appears once at least one Insight is published; the page address stays /insights either way."
+              : `Leave empty for “${title}”.`,
         group: "menu",
       })
     ),

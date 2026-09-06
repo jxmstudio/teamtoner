@@ -20,12 +20,12 @@ npm run start      # serve the production build
 
 Everything the client needs to touch is editable in an embedded Sanity Studio
 at **`/studio`** (schemas in `sanity/schemaTypes/`, read layer in
-`lib/data.ts`): **listings, YouTube videos, testimonials, guides, suburbs and
-the "Site settings" singleton** (taglines, contact details & phone numbers,
+`lib/data.ts`): **listings, YouTube videos, testimonials, guides, Property
+Insights articles, suburbs and the "Site settings" singleton** (taglines, contact details & phone numbers,
 rankings, commission rate, fee pillars, "Why Team Toner" cards, social links,
 the site-wide appraisal banner) — plus a **"Page copy"** document for every
 page (Home, About, Sell, Appraisal, Contact, Listings, Sold, Suburbs,
-Resources, Privacy, Terms) covering headings, intro prose, story paragraphs,
+Resources, Property Insights, Privacy, Terms) covering headings, intro prose, story paragraphs,
 process steps, FAQs and the legal wording.
 Site settings deep-merge over the typed defaults in `lib/site.ts` — any field
 left empty in the studio falls back to the value shipped in code.
@@ -119,6 +119,7 @@ the pre-CMS fallback and the source for `npm run seed:sanity`.
 | **Taglines, contact, phones, stats, fee, socials** | **`/studio` → Site settings** (defaults: `lib/site.ts`) |
 | **Testimonials (Google / RateMyAgent)** | **`/studio` → Testimonials** (fallback: `lib/content/testimonials.ts`) |
 | **Guides (incl. PDF upload + article pages)** | **`/studio` → Guides** (fallback: `lib/content/guides.ts`) |
+| **Property Insights articles** | **`/studio` → Property Insights** (no fixtures — `lib/content/articles.ts` is empty) |
 | **Suburb pages (blurbs, market commentary)** | **`/studio` → Suburbs** (fallback: `lib/content/suburbs.ts`) |
 | **Page headings, prose, FAQs, legal wording** | **`/studio` → Page copy** (defaults: `lib/content/page-copy.ts`) |
 | **Menu labels (header/footer)** | **`/studio` → Site settings → Menu labels** (defaults: `lib/site.ts` `navLabels`) |
@@ -137,6 +138,18 @@ tour. Videos on the home page live under Video in the studio.
 **Add a guide PDF:** in `/studio`, open the guide and upload the PDF to its
 "PDF" field (an empty field shows a "coming soon" badge). Adding "Article
 sections" publishes the guide as a web page at /resources/<slug>.
+
+**Add a Property Insights article** (client request, 6 Sep 2026): in
+`/studio` → Property Insights → new document. Pick one of the four fixed
+categories (Market Updates, Selling Advice, Buying Advice, Palmerston North &
+Manawatū), write a summary and the sections, set the Published date and
+optionally a cover image. It appears at /insights/<slug>, on /insights (newest
+first) and on its category page /insights/category/<category>. The "Insights"
+menu item (label editable under Site settings → Menu labels) and the sitemap
+entries only appear once at least one article is published, so the section
+can't show empty. A future Published date holds an article back until that
+day. Categories are fixed in `lib/insights.ts` so their URLs stay stable for
+Google; adding one means updating that list (the studio dropdown reads it).
 
 Brand colours and fonts are defined once in `app/globals.css` (`:root`) — change
 the hex values there to re-skin the whole site.
