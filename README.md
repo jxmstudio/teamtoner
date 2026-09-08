@@ -139,6 +139,14 @@ tour. Videos on the home page live under Video in the studio.
 "PDF" field (an empty field shows a "coming soon" badge). Adding "Article
 sections" publishes the guide as a web page at /resources/<slug>.
 
+**Property document titles** (client request, 7 Sep 2026): the Title on each
+listing document is a dropdown of the eight names Allan uses most (list in
+`lib/property-documents.ts`) plus "Other", which reveals a free-text title.
+The site query resolves whichever applies. To promote a wording to the
+dropdown, add it to that list and run
+`npx sanity exec scripts/migrate-document-titles.ts --with-user-token` — it
+snaps matching "Other" entries onto the preset and is safe to re-run.
+
 **Add a Property Insights article** (client request, 6 Sep 2026): in
 `/studio` → Property Insights → new document. Pick one of the four fixed
 categories (Market Updates, Selling Advice, Buying Advice, Palmerston North &

@@ -27,7 +27,8 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
   "documents": select(
     status == "sold" => [],
     coalesce(documents[defined(file.asset) || defined(url)]{
-      title,
+      // "Other" in the title dropdown means the typed customTitle is the label.
+      "title": select(title == "Other" => coalesce(customTitle, "Document"), title),
       "url": coalesce(file.asset->url, url)
     }, [])
   ),

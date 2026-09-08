@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { OTHER_DOCUMENT_TITLE, PROPERTY_DOCUMENT_TITLES } from "../../lib/property-documents";
 import { suburbs } from "../../lib/content/suburbs";
 
 /**
@@ -224,8 +225,29 @@ export const listing = defineType({
               name: "title",
               title: "Title",
               type: "string",
-              description: "e.g. “Certificate of Title”, “PNCC Rates”, “Disclosure Form”.",
+              description: "Pick the document type, or choose “Other” to type your own title.",
+              options: {
+                list: [
+                  ...PROPERTY_DOCUMENT_TITLES.map((t) => ({ title: t, value: t })),
+                  { title: "Other (type a title below)", value: OTHER_DOCUMENT_TITLE },
+                ],
+              },
               validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: "customTitle",
+              title: "Custom title",
+              type: "string",
+              description: "e.g. “Floor Plan”, “Buyers Guide”, “Rental Appraisal”.",
+              hidden: ({ parent }) => (parent as { title?: string } | undefined)?.title !== OTHER_DOCUMENT_TITLE,
+              validation: (rule) =>
+                rule.custom((value, context) => {
+                  const parent = context.parent as { title?: string } | undefined;
+                  if (parent?.title === OTHER_DOCUMENT_TITLE && !value?.trim()) {
+                    return "Type a title for this document";
+                  }
+                  return true;
+                }),
             }),
             defineField({
               name: "file",
@@ -251,9 +273,12 @@ export const listing = defineType({
             }),
           ],
           preview: {
-            select: { title: "title", url: "url" },
-            prepare({ title, url }) {
-              return { title, subtitle: url ?? "Uploaded file" };
+            select: { title: "title", customTitle: "customTitle", url: "url" },
+            prepare({ title, customTitle, url }) {
+              return {
+                title: title === OTHER_DOCUMENT_TITLE ? customTitle || "Other (untitled)" : title,
+                subtitle: url ?? "Uploaded file",
+              };
             },
           },
         },
