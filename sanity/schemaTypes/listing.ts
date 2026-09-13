@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { OTHER_DOCUMENT_TITLE, PROPERTY_DOCUMENT_TITLES } from "../../lib/property-documents";
-import { suburbs } from "../../lib/content/suburbs";
+import { SuburbInput } from "../components/suburb-input";
 
 /**
  * A property listing. Mirrors the `Listing` type in lib/content/types.ts —
@@ -64,9 +64,8 @@ export const listing = defineType({
       name: "suburb",
       title: "Suburb / area",
       type: "string",
-      options: {
-        list: suburbs.map((s) => ({ title: s.name, value: s.slug })),
-      },
+      components: { input: SuburbInput },
+      description: "Choose the property's suburb. To add one, create it under Suburbs, generate its web address and publish it; it will then appear here.",
       group: "details",
       validation: (rule) => rule.required(),
     }),

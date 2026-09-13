@@ -125,10 +125,12 @@ the pre-CMS fallback and the source for `npm run seed:sanity`.
 | **Menu labels (header/footer)** | **`/studio` → Site settings → Menu labels** (defaults: `lib/site.ts` `navLabels`) |
 | Per-suburb template sentences, layout | code (`lib/site.ts`, `app/…`) |
 
-Note: the suburb dropdown on a Listing offers the suburbs defined in
-`lib/content/suburbs.ts`; a brand-new suburb page added in the studio gets its
-own page automatically, but linking listings to it needs that list updated in
-code.
+The suburb dropdown on a Listing loads published **Suburbs** from the CMS in
+alphabetical order. To add a suburb, create it under Suburbs, generate its web
+address (slug), fill in the required fields and publish. It then appears in the
+listing dropdown without a code change or redeploy. Existing listings keep their
+selected suburb until an editor changes it. The fixture list is used only when
+the CMS has no published suburbs, matching the website's fallback.
 
 **Add a listing:** in `/studio`, click Listing → new document, fill in the
 fields, drag photos in. Set status "Sold" with sold price + date to move it to
