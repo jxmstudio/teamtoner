@@ -9,6 +9,20 @@
  * high-performing husband-and-wife team — two agents personally working for the
  * seller. The fee strengthens that proposition; it is not the headline.
  */
+/** Keep production SEO URLs on the destination of Vercel's domain redirect. */
+export function resolveSiteUrl(value?: string): string {
+  const url = new URL(value?.trim() || "https://www.teamtoner.co.nz");
+  if (url.protocol !== "https:" && url.protocol !== "http:") {
+    throw new Error("NEXT_PUBLIC_SITE_URL must be an HTTP(S) URL");
+  }
+  if (url.hostname === "teamtoner.co.nz" || url.hostname === "www.teamtoner.co.nz") {
+    return "https://www.teamtoner.co.nz";
+  }
+  // Preview and local hosts remain configurable. The app lives at the origin
+  // root; paths, query strings and trailing slashes must not leak into URLs.
+  return url.origin;
+}
+
 export const siteConfig = {
   name: "Team Toner",
   legalName: "Team Toner — Allan & Karen Toner",
@@ -29,7 +43,7 @@ export const siteConfig = {
   // The apex domain 308-redirects to www on Vercel, so canonicals, the
   // sitemap and OG URLs must use www too — otherwise every URL Google is
   // handed is a redirect.
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.teamtoner.co.nz",
+  url: resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL),
   brand: {
     parent: "Arizto",
     // TODO(client): confirm REAA licence details to display

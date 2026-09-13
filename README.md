@@ -179,7 +179,7 @@ notification address is **not** in this repo — it's the `teamtoner` client's
 notify emails in the JXM Forms dashboard (Settings), set to
 `thetoners@arizto.co.nz` on 4 Sep 2026. Submissions the classifier marks as
 spam (e.g. gibberish test messages) are stored but not emailed.
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://www.teamtoner.co.nz` — the apex redirects to www on Vercel, so leave it unset in production (or set it to the www URL); a non-www value makes every canonical and sitemap entry a redirect. |
+| `NEXT_PUBLIC_SITE_URL` | Origin for metadata, sitemap and robots. Defaults to `https://www.teamtoner.co.nz`. Production domain variants are normalised to HTTPS www to match Vercel's redirect, even with an old non-www setting. Preview/local origins remain configurable; paths, queries and trailing slashes are removed. |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project id — unset = site runs from fixtures. |
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (default `production`). |
 | `SANITY_API_WRITE_TOKEN` | Local-only, for `npm run seed:sanity`. Never set in Vercel. |
