@@ -6,6 +6,7 @@ import { testimonial } from "./testimonial";
 import { guide } from "./guide";
 import { article } from "./article";
 import { suburb } from "./suburb";
+import { localServicePage } from "./localServicePage";
 import { pageCopyTypes } from "./pageCopy";
 
 /** Types edited through a pinned singleton desk entry (never created/deleted). */
@@ -23,6 +24,7 @@ export const schemaTypes = [
   guide,
   article,
   suburb,
+  localServicePage,
   siteSettings,
   ...pageCopyTypes,
 ];

@@ -10,10 +10,9 @@
  * terms/rankings asterisks at render time.
  */
 
-export interface Faq {
-  q: string;
-  a: string;
-}
+import type { Faq } from "./types";
+
+export type { Faq };
 
 export interface Step {
   title: string;

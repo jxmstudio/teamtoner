@@ -8,6 +8,7 @@ import {
   getArticles,
 } from "@/lib/data";
 import { ARTICLE_CATEGORIES } from "@/lib/insights";
+import { LOCAL_SERVICES, LOCAL_SERVICE_AREAS, localServicePath } from "@/lib/local-services";
 
 /**
  * Date the site's content was last substantively revised.
@@ -18,7 +19,7 @@ import { ARTICLE_CATEGORIES } from "@/lib/insights";
  * it discounts it entirely. Bump this when content actually changes; pages that
  * carry their own real dates (guides, sold listings) use those instead.
  */
-const CONTENT_REVISED = "2026-08-29";
+const CONTENT_REVISED = "2026-09-17";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url;
@@ -53,6 +54,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: listing?.status === "sold" ? 0.6 : 0.8,
       };
     })
+  );
+
+  // /appraisal/<area> and /sell/<area> — the seller-intent pages the SEO
+  // programme is built around, so they sit just under the home page.
+  const localServiceRoutes = LOCAL_SERVICES.flatMap((service) =>
+    LOCAL_SERVICE_AREAS.map((area) => ({
+      url: `${base}${localServicePath(service, area)}`,
+      lastModified: CONTENT_REVISED,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }))
   );
 
   const suburbRoutes = (await getSuburbs()).map((s) => ({
@@ -102,5 +114,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ]
     : [];
 
-  return [...staticRoutes, ...listingRoutes, ...suburbRoutes, ...guideRoutes, ...insightsRoutes];
+  return [
+    ...staticRoutes,
+    ...localServiceRoutes,
+    ...listingRoutes,
+    ...suburbRoutes,
+    ...guideRoutes,
+    ...insightsRoutes,
+  ];
 }

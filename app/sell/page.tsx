@@ -4,6 +4,7 @@ import { ValueProps } from "@/components/brand/value-props";
 import { FeePillars } from "@/components/brand/fee-pillars";
 import { MarketingGallery } from "@/components/brand/marketing-gallery";
 import { ProvenResults } from "@/components/brand/proven-results";
+import { ServiceAreaLinks } from "@/components/brand/service-area-links";
 import { CtaSection } from "@/components/brand/cta-section";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
@@ -70,6 +71,8 @@ export default async function SellPage() {
       <MarketingGallery />
 
       <ProvenResults className="bg-secondary/50" />
+
+      <ServiceAreaLinks service="sell" />
 
       <Section>
         <Container className="max-w-3xl">

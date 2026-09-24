@@ -35,7 +35,7 @@ const txtList = (name: string, title: string, description?: string) =>
     ...(description ? { description } : {}),
   });
 
-const faqList = (name = "faqs", title = "FAQs") =>
+export const faqList = (name = "faqs", title = "FAQs") =>
   defineField({
     name,
     title,

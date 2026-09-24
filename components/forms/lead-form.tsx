@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/app/actions";
+import { trackEvent } from "@/lib/analytics";
 import type { LeadKind, LeadState } from "@/lib/validators";
 
 const initialState: LeadState = { ok: false, message: "" };
@@ -36,10 +37,17 @@ export function LeadForm({
     if (state.ok) {
       toast.success(state.message);
       formRef.current?.reset();
+      // GA4 conversion — the one number the client's monthly report is built
+      // around. `form_kind` separates appraisal requests from other enquiries.
+      trackEvent("generate_lead", {
+        form_kind: kind,
+        listing,
+        page_path: window.location.pathname,
+      });
     } else if (!state.errors) {
       toast.error(state.message);
     }
-  }, [state]);
+  }, [state, kind, listing]);
 
   const label =
     submitLabel ??

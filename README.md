@@ -181,6 +181,7 @@ notification address is **not** in this repo — it's the `teamtoner` client's
 notify emails in the JXM Forms dashboard (Settings), set to
 `thetoners@arizto.co.nz` on 4 Sep 2026. Submissions the classifier marks as
 spam (e.g. gibberish test messages) are stored but not emailed.
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 measurement id (`G-…`). Unset = no analytics script and no events, so previews and local dev stay out of the production property. See "Analytics" below. |
 | `NEXT_PUBLIC_SITE_URL` | Origin for metadata, sitemap and robots. Defaults to `https://www.teamtoner.co.nz`. Production domain variants are normalised to HTTPS www to match Vercel's redirect, even with an old non-www setting. Preview/local origins remain configurable; paths, queries and trailing slashes are removed. |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project id — unset = site runs from fixtures. |
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset (default `production`). |
@@ -188,6 +189,48 @@ spam (e.g. gibberish test messages) are stored but not emailed.
 
 The pre-launch password gate (`proxy.ts` + `/password`, `SITE_PASSWORD*` vars)
 was removed at launch — the site is public and robots.txt allows crawling.
+
+## Analytics and conversion tracking (SEO programme, Sep 2026)
+
+`components/analytics.tsx` loads GA4 via `@next/third-parties` when
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` is set (never inside `/studio`) and sends:
+
+| Event | Fired when | Params |
+| --- | --- | --- |
+| `generate_lead` | any lead form succeeds (`components/forms/lead-form.tsx`) | `form_kind` = appraisal · contact · enquiry, `listing`, `page_path` |
+| `phone_click` | any `tel:` link is clicked, site-wide | `link_url`, `link_text`, `page_path` |
+| `email_click` | any `mailto:` link is clicked | same |
+| `youtube_subscribe_click` | the subscribe button under a video | same |
+
+Mark `generate_lead` and `phone_click` as **key events** in GA4 Admin →
+Events; link the GA4 property to the Search Console property. Helpers and the
+link-to-event mapping live in `lib/analytics.ts` (`npm test`).
+
+## Local SEO pages (SEO programme, Sep 2026)
+
+- **Area service pages** at `/appraisal/<area>` and `/sell/<area>` for the four
+  priority areas (Palmerston North, Feilding, Ashhurst, Manawatū —
+  `LOCAL_SERVICE_AREAS` in `lib/local-services.ts`). Copy defaults live in
+  `lib/content/local-services.ts`; each page has a CMS twin under
+  **`/studio` → Area service pages** that is deep-merged over the defaults, so
+  an empty field falls back to the shipped wording. Any other `/appraisal/x`
+  404s — do not add areas without search demand.
+- **Area pages** (`/suburbs/<area>`) now carry seller-intent titles
+  ("<Area> Real Estate Agents"), richer commentary and a **Local FAQs** field
+  (Suburbs in the studio) that replaces the template questions when filled.
+- Cross-links: footer "Areas we sell in", area strips on `/sell` and
+  `/appraisal`, appraisal/selling cards on every suburb page, and an "Own a home
+  in <suburb>?" block on every listing page.
+- To push the richer area commentary, FAQs and the eight service-page
+  documents into the live dataset:
+  `npx sanity exec scripts/patch-area-content.ts --with-user-token`
+  (`DRY_RUN=1` previews). Commentary is only replaced where the live text is
+  still the launch-day version, so studio edits survive.
+- The YouTube **Subscribe** button under every video reads the channel URL
+  from Site settings → Social; it disappears if that field is emptied.
+
+Tests: `npm test` needs Node ≥ 22.18 (or run
+`node --experimental-strip-types --test "lib/**/*.test.ts"` on older 22.x).
 
 ## Deploy to Vercel
 

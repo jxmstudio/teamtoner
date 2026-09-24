@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--", "-p", "3100"],
       "port": 3100
+    },
+    {
+      "name": "teamtoner-dev-cms",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "NEXT_PUBLIC_SANITY_PROJECT_ID=l0i206kw NEXT_PUBLIC_SANITY_DATASET=production npm run dev -- -p 3101"],
+      "port": 3101
     }
   ]
 }

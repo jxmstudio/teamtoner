@@ -344,3 +344,44 @@ export function ListingJsonLd({
     />
   );
 }
+
+/**
+ * A service offered in a named area — the markup for /appraisal/<area> and
+ * /sell/<area>. Ties the page to the business entity and states the area
+ * served, which is exactly the "who / what / where" a local query resolves.
+ * The appraisal is free, so it carries a zero-price Offer.
+ */
+export function ServiceJsonLd({
+  name,
+  description,
+  serviceType,
+  areaName,
+  path,
+  free,
+}: {
+  name: string;
+  description: string;
+  serviceType: string;
+  areaName: string;
+  path: string;
+  free?: boolean;
+}) {
+  return (
+    <JsonLd
+      data={defined({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name,
+        description,
+        serviceType,
+        url: `${siteConfig.url}${path}`,
+        provider: { "@id": ORG_ID },
+        areaServed: { "@type": "Place", name: areaName },
+        inLanguage: "en-NZ",
+        offers: free
+          ? { "@type": "Offer", price: "0", priceCurrency: "NZD", availability: "https://schema.org/InStock" }
+          : undefined,
+      })}
+    />
+  );
+}

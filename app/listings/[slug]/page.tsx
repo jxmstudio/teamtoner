@@ -17,8 +17,11 @@ import {
   formatListingAddress,
   getAllListingSlugs,
   getListingBySlug,
+  getServiceAreaFor,
+  getSiteConfig,
   getSuburbName,
 } from "@/lib/data";
+import { localServicePath, type LocalServiceArea } from "@/lib/local-services";
 
 // Listings are CMS-managed — refresh the static pages periodically so edits
 // in /studio appear without a redeploy.
@@ -84,7 +87,11 @@ export default async function ListingPage(
   const listing = await getListingBySlug(slug);
   if (!listing) notFound();
 
-  const suburbName = await getSuburbName(listing.suburb);
+  const [suburbName, serviceArea, { social }] = await Promise.all([
+    getSuburbName(listing.suburb),
+    getServiceAreaFor(listing.suburb),
+    getSiteConfig(),
+  ]);
   const sold = listing.status === "sold";
 
   return (
@@ -185,6 +192,7 @@ export default async function ListingPage(
                   <VideoEmbed
                     url={listing.video}
                     title={`Video tour — ${listing.address}, ${suburbName}`}
+                    subscribeUrl={social.youtube}
                     className="mt-4"
                   />
                 </div>
@@ -208,6 +216,42 @@ export default async function ListingPage(
                   </ul>
                 </div>
               )}
+
+              {/* Every listing page — sold ones especially — is a landing page
+                  for neighbours wondering what their own home is worth. */}
+              <div className="mt-10 rounded-xl border border-border bg-secondary/40 p-5">
+                <h2 className="font-semibold text-foreground">
+                  Own a home in {suburbName}?
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {sold
+                    ? "Find out what recent sales like this one mean for your property."
+                    : "Thinking of selling too? Start with a free, no-obligation appraisal."}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium">
+                  <Link
+                    href={
+                      serviceArea
+                        ? localServicePath("appraisal", serviceArea.slug as LocalServiceArea)
+                        : "/appraisal"
+                    }
+                    className="text-primary hover:underline"
+                  >
+                    Free appraisal{serviceArea ? ` in ${serviceArea.name}` : ""}
+                  </Link>
+                  <Link href={`/suburbs/${listing.suburb}`} className="text-primary hover:underline">
+                    {suburbName} real estate
+                  </Link>
+                  {serviceArea ? (
+                    <Link
+                      href={localServicePath("sell", serviceArea.slug as LocalServiceArea)}
+                      className="text-primary hover:underline"
+                    >
+                      Selling in {serviceArea.name}
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
             </div>
 
             <aside className="lg:col-span-1">

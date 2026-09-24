@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { HideOnStudio } from "@/components/hide-on-studio";
+import { Analytics } from "@/components/analytics";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { mainNav, siteConfig } from "@/lib/site";
 import { getSiteConfig, hasArticles } from "@/lib/data";
@@ -89,6 +90,8 @@ export default async function RootLayout({
           <SiteFooter />
         </HideOnStudio>
         <Toaster richColors position="top-center" />
+        {/* GA4 + conversion tracking; inert until NEXT_PUBLIC_GA_MEASUREMENT_ID is set. */}
+        <Analytics />
       </body>
     </html>
   );

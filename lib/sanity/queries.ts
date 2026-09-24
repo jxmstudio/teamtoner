@@ -126,7 +126,26 @@ export const SUBURBS_QUERY = groq`*[_type == "suburb" && defined(slug.current)] 
   name,
   parent,
   blurb,
-  "commentary": commentary
+  "commentary": commentary,
+  "faqs": faqs[]{ q, a }
+}`;
+
+/**
+ * The service × location pages (/appraisal/<area>, /sell/<area>). Each
+ * document is merged over its fixture twin in lib/data.ts, so a half-edited
+ * page falls back field by field rather than going blank.
+ */
+export const LOCAL_SERVICE_PAGES_QUERY = groq`*[_type == "localServicePage" && defined(service) && defined(area)] {
+  service,
+  area,
+  headline,
+  intro,
+  description,
+  whyTitle,
+  "commentary": commentary,
+  pointsTitle,
+  "points": points,
+  "faqs": faqs[]{ q, a }
 }`;
 
 /**

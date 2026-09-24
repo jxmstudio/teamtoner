@@ -9,6 +9,8 @@ import { Container, Section } from "@/components/brand/primitives";
 import { Breadcrumbs } from "@/components/brand/breadcrumbs";
 import { FaqJsonLd } from "@/components/seo/json-ld";
 import { FeeText } from "@/components/brand/commission";
+import { ArrowRight } from "lucide-react";
+import { SERVICE_META, localServicePath, type LocalServiceArea } from "@/lib/local-services";
 import {
   Accordion,
   AccordionContent,
@@ -24,6 +26,7 @@ import {
   getSiteConfig,
   getSoldBySuburb,
   getFeaturedTestimonials,
+  getServiceAreaFor,
 } from "@/lib/data";
 
 /**
@@ -74,15 +77,26 @@ export async function generateMetadata(
   const parent = suburb.parent ? await getSuburbBySlug(suburb.parent) : undefined;
   const scope = parent ? `${parent.name}` : "Manawatū";
 
-  return {
-    title: {
-      absolute: fitTitle([
+  // Area hubs (no parent) own the "<area> real estate agents" intent; the
+  // per-area appraisal and selling intents live on /appraisal/<area> and
+  // /sell/<area>. Individual suburbs keep the broader "<suburb> real estate".
+  const title = parent
+    ? [
         `${suburb.name} Real Estate | Team Toner ${scope}`,
         `${suburb.name} Real Estate | Team Toner`,
         `${suburb.name} Real Estate`,
-      ]),
-    },
-    description: `${suburb.name} property market insight, current listings and recent Team Toner sales. Get a free appraisal with Allan & Karen Toner.`,
+      ]
+    : [
+        `${suburb.name} Real Estate Agents | Team Toner`,
+        `${suburb.name} Real Estate Agents`,
+        `${suburb.name} Real Estate`,
+      ];
+
+  return {
+    title: { absolute: fitTitle(title) },
+    description: parent
+      ? `${suburb.name} property market insight, current listings and recent Team Toner sales. Get a free appraisal with Allan & Karen Toner.`
+      : `${suburb.name} real estate agents Allan & Karen Toner: local market insight, homes for sale, recent sales and a free, no-obligation property appraisal.`,
     alternates: { canonical: `/suburbs/${suburb.slug}` },
   };
 }
@@ -99,7 +113,9 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
   const siblings = parent
     ? (await getSuburbChildren(parent.slug)).filter((s) => s.slug !== suburb.slug)
     : [];
-  const faqs = suburbFaqs(suburb.name, await getSiteConfig());
+  // Location-specific FAQs from the CMS/fixtures win over the generic template.
+  const faqs = suburb.faqs?.length ? suburb.faqs : suburbFaqs(suburb.name, await getSiteConfig());
+  const serviceArea = await getServiceAreaFor(suburb.slug);
 
   const listings = await getListingsBySuburb(slug);
   const sold = await getSoldBySuburb(slug);
@@ -153,6 +169,32 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
               ))}
             </div>
           ) : null}
+
+          {/* Seller intents for this area — the two service pages that own
+              "property appraisal <area>" and "selling a house in <area>". */}
+          {serviceArea && (
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              {(["appraisal", "sell"] as const).map((service) => (
+                <Link
+                  key={service}
+                  href={localServicePath(service, serviceArea.slug as LocalServiceArea)}
+                  className="group flex items-center justify-between gap-3 rounded-xl border border-teal/30 bg-teal/10 px-5 py-4 transition-colors hover:border-teal hover:bg-teal/15"
+                >
+                  <span>
+                    <span className="block text-sm font-semibold uppercase tracking-[0.14em] text-teal">
+                      {service === "appraisal" ? "Free appraisal" : "Selling"}
+                    </span>
+                    <span className="mt-1 block font-semibold text-foreground group-hover:text-primary">
+                      {service === "appraisal"
+                        ? `What's your ${serviceArea.name} home worth?`
+                        : `${SERVICE_META.sell.label} in ${serviceArea.name}`}
+                    </span>
+                  </span>
+                  <ArrowRight className="size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Suburbs within this area */}
           {children.length > 0 && (

@@ -75,6 +75,8 @@ const structure: StructureResolver = (S) =>
             .defaultOrdering([{ field: "published", direction: "desc" }])
         ),
       S.documentTypeListItem("suburb").title("Suburbs"),
+      // /appraisal/<area> and /sell/<area> — one document per page.
+      S.documentTypeListItem("localServicePage").title("Area service pages"),
     ]);
 
 /**

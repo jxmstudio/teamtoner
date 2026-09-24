@@ -19,6 +19,8 @@ import { listings } from "../lib/content/listings";
 import { testimonials } from "../lib/content/testimonials";
 import { guides } from "../lib/content/guides";
 import { suburbs } from "../lib/content/suburbs";
+import { localServicePages } from "../lib/content/local-services";
+import { localServiceDocId } from "../lib/local-services";
 import { siteConfig } from "../lib/site";
 import {
   aboutCopy,
@@ -187,9 +189,38 @@ async function seedSuburbs() {
       ...(s.parent ? { parent: s.parent } : {}),
       blurb: s.blurb,
       ...(s.commentary ? { commentary: s.commentary } : {}),
+      ...(s.faqs ? { faqs: withSanityKeys(s.faqs, "faqs") } : {}),
     });
   }
   console.log(`  ${suburbs.length} suburbs imported.`);
+}
+
+/**
+ * The service × location pages (/appraisal/<area>, /sell/<area>). Keyed by
+ * service + area so the studio never holds two documents for one URL. The
+ * site merges each document over its fixture, so creating them empty would
+ * also work — seeding the copy just makes the studio show what's live.
+ */
+async function seedLocalServicePages() {
+  for (const page of localServicePages) {
+    const id = localServiceDocId(page.service, page.area);
+    console.log(`Importing ${id} …`);
+    await client.createIfNotExists({
+      _id: id,
+      _type: "localServicePage",
+      service: page.service,
+      area: page.area,
+      headline: page.headline,
+      intro: page.intro,
+      ...(page.description ? { description: page.description } : {}),
+      whyTitle: page.whyTitle,
+      commentary: page.commentary,
+      pointsTitle: page.pointsTitle,
+      points: page.points,
+      faqs: withSanityKeys(page.faqs, "faqs"),
+    });
+  }
+  console.log(`  ${localServicePages.length} area service pages imported.`);
 }
 
 /** Sanity object-array items need _key/_type; map field name → object type. */
@@ -319,6 +350,7 @@ async function main() {
   await seedTestimonials();
   await seedGuides();
   await seedSuburbs();
+  await seedLocalServicePages();
   await seedSiteSettings();
   await seedFeaturedListings();
   await seedPageCopy();

@@ -17,6 +17,7 @@ import {
 } from "@/components/brand/commission";
 import { RankingFootnote } from "@/components/brand/ranking-claim";
 import { FaqJsonLd } from "@/components/seo/json-ld";
+import { ServiceAreaLinks } from "@/components/brand/service-area-links";
 import { seoTitles } from "@/lib/site";
 import { getAppraisalCopy, getSiteConfig } from "@/lib/data";
 
@@ -143,6 +144,8 @@ export default async function AppraisalPage() {
           </Accordion>
         </Container>
       </Section>
+
+      <ServiceAreaLinks service="appraisal" />
     </>
   );
 }

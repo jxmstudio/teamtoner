@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { suburbs as fixtureSuburbs } from "../../lib/content/suburbs";
+import { faqList } from "./pageCopy";
 
 const areaOptions = fixtureSuburbs
   .filter((s) => !s.parent)
@@ -52,6 +53,11 @@ export const suburb = defineType({
       of: [{ type: "text", rows: 3 }],
       description: "Local market paragraphs — this is what makes the page worth reading. One entry per paragraph.",
     }),
+    {
+      ...faqList("faqs", "Local FAQs"),
+      description:
+        "Optional. Questions specific to this suburb or area (\"Who buys in Ashhurst?\"). Leave empty to show the standard selling questions. Write \u201c2% + GST\u201d and ranking \u201c*\u201ds literally.",
+    },
   ],
   preview: {
     select: { title: "name", subtitle: "blurb" },

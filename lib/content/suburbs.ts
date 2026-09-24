@@ -22,6 +22,30 @@ export const suburbs: Suburb[] = [
     commentary: [
       "Palmerston North draws buyers from across the lower North Island — students and staff at Massey and UCOL, Defence and health-sector families, and Wellington movers trading commute time for section size.",
       "That breadth of demand is why presentation and reach matter here. A well-marketed home in the right pocket regularly attracts buyers who were not originally looking in that street.",
+      "The city is really a set of suburb markets. Hokowhitu, Kelvin Grove, Terrace End, Highbury, Takaro, Awapuni and Milson each have their own buyer pool and price behaviour, and school zones, section size and the street itself can matter more than the house. That's why we appraise and price suburb by suburb, from the comparable sales that actually apply.",
+      "If you're weighing up a sale, start with a free appraisal. Allan and Karen both visit, show you the recent sales your range is built on, and talk through timing and method of sale — with no obligation.",
+    ],
+    faqs: [
+      {
+        q: "Which Palmerston North suburbs do Team Toner sell in?",
+        a: "All of them — Hokowhitu, Kelvin Grove, Terrace End, Roslyn, West End, Awapuni, Milson, Summerhill / Fitzherbert, Highbury, Takaro and Westbrook — as well as Ashhurst, Feilding and the wider Manawatū.",
+      },
+      {
+        q: "What does it cost to sell a house in Palmerston North with Team Toner?",
+        a: "A 2% + GST commission on the sale price, with No Upfront Costs and No Sale — No Fee. Your marketing package is included, so there's nothing to pay before you go to market. T's and C's apply.",
+      },
+      {
+        q: "How do I get a free property appraisal in Palmerston North?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both attend, the range is built from recent sales in your suburb, and there's no obligation to list.",
+      },
+      {
+        q: "Who is buying in Palmerston North right now?",
+        a: "Local families moving between suburbs, first-home buyers, Massey and UCOL staff, hospital and Defence families, and Wellington buyers trading commute time for section size. The mix varies by suburb, which is why we market each home to the buyers most likely to pay for it.",
+      },
+      {
+        q: "What marketing is included when selling in Palmerston North?",
+        a: "Professional property photography, free aerial photography, premium placement on the major property portals, signage, and Team Toner video and social marketing — all with No Upfront Costs.",
+      },
     ],
   },
   {
@@ -31,6 +55,27 @@ export const suburbs: Suburb[] = [
       "Award-winning town centre and a tight-knit rural community. Character homes, new subdivisions and lifestyle properties — Feilding continues to attract families and downsizers alike.",
     commentary: [
       "Feilding blends established character housing around the square with newer subdivisions on the town's edges, and it consistently appeals to families and downsizers wanting a genuine town centre on their doorstep.",
+      "Buyers come from three directions: families who want a real town with schools, sport and shops within walking distance; downsizers leaving lifestyle blocks for something easier; and Palmerston North buyers who get more house for their money a short drive up the road. Marketing a Feilding home well means reaching all three.",
+      "The housing stock is more varied than most towns of its size — villas and bungalows near the centre, post-war family homes, new builds on the edges and lifestyle properties a few minutes out. Two homes a street apart can sit in different price brackets, so we price from the right comparables rather than a town-wide average.",
+      "Thinking of selling in Feilding? A free appraisal from Allan and Karen gives you an evidence-based range from recent Feilding sales, with no obligation to list.",
+    ],
+    faqs: [
+      {
+        q: "Do Team Toner sell houses in Feilding?",
+        a: "Yes. Allan & Karen Toner sell in Feilding and the surrounding Manawatū towns — Halcombe, Sanson, Bunnythorpe and the lifestyle blocks between them — as well as across Palmerston North.",
+      },
+      {
+        q: "What does it cost to sell a house in Feilding with Team Toner?",
+        a: "A 2% + GST commission on the sale price, with No Upfront Costs and No Sale — No Fee. Marketing is included. T's and C's apply.",
+      },
+      {
+        q: "How do I get a free property appraisal in Feilding?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both visit, the range is built from recent Feilding sales, and there's no obligation.",
+      },
+      {
+        q: "Who buys in Feilding?",
+        a: "Families wanting a genuine town centre, downsizers leaving lifestyle blocks, and Palmerston North buyers looking for more house for their money. Character homes and lifestyle properties each draw their own buyers, and we market to them specifically.",
+      },
     ],
   },
   {
@@ -40,6 +85,31 @@ export const suburbs: Suburb[] = [
       "A friendly village on the doorstep of the Manawatū Gorge and Te Āpiti wind farm. Popular with commuters wanting space, community and easy access to Palmerston North.",
     commentary: [
       "Ashhurst suits buyers who want village life and a bigger section without giving up an easy run into Palmerston North. Sections here are typically generous, and outdoor access is a genuine selling point.",
+      "The village sits at the mouth of the Manawatū Gorge, with the Te Āpiti walking tracks, the river and the Pohangina Valley on its doorstep and Palmerston North about fifteen minutes away. That combination — space, community and a workable commute — is what brings buyers here, and it's what a good Ashhurst campaign leads with.",
+      "Ashhurst homes range from older village cottages and 1970s family homes on big sections to newer builds on the eastern edge and lifestyle properties on the roads out to Pohangina. Section size, garaging, sun and shelter from the Gorge wind all move the price, so we appraise from Ashhurst comparables rather than a Palmerston North formula.",
+      "Team Toner sell in Ashhurst regularly — you'll find recent sales below. If you're thinking about selling, a free appraisal from Allan and Karen gives you an honest range built from those sales, with no obligation to list.",
+    ],
+    faqs: [
+      {
+        q: "Do Team Toner sell houses in Ashhurst?",
+        a: "Yes. Allan & Karen Toner sell in Ashhurst regularly, alongside Palmerston North, Feilding and the wider Manawatū. Recent Ashhurst sales are listed on this page.",
+      },
+      {
+        q: "What does it cost to sell a house in Ashhurst with Team Toner?",
+        a: "A 2% + GST commission on the sale price, with No Upfront Costs and No Sale — No Fee. Your marketing package is included. T's and C's apply.",
+      },
+      {
+        q: "How do I get a free property appraisal in Ashhurst?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both visit your home, the range is built from recent Ashhurst sales, and there's no obligation.",
+      },
+      {
+        q: "Who buys in Ashhurst?",
+        a: "Palmerston North families looking for a bigger section and a village community, people relocating for Massey, Linton, the hospital and Defence roles, and locals moving within the village. Lifestyle buyers look to the roads out towards Pohangina.",
+      },
+      {
+        q: "How far is Ashhurst from Palmerston North?",
+        a: "About 15 kilometres east of the city centre — roughly a fifteen-minute drive along Napier Road — which is why so many Palmerston North workers choose to live here.",
+      },
     ],
   },
   {
@@ -49,6 +119,27 @@ export const suburbs: Suburb[] = [
       "Lifestyle blocks, rural holdings and small-town living across the wider Manawatū district. Local knowledge matters out here — and it's exactly where Team Toner shine.",
     commentary: [
       "Rural and lifestyle sales turn on details a city-only agent can miss: water supply, effluent and consents, shedding, soil type and realistic commute times. We price and market these properties on the evidence.",
+      "The district takes in Feilding and Ashhurst, the villages of Bunnythorpe, Halcombe, Sanson, Linton and Tokomaru, the coast at Foxton Beach and the farmland in between. Each has its own buyer pool: commuters wanting space near the city, lifestyle buyers after a few hectares, and locals moving within their own town.",
+      "Buyers for Manawatū properties come from Palmerston North, Wellington and further afield as often as from next door, so marketing reach matters — and aerial photography earns its keep on land. Our marketing package is included with No Upfront Costs.",
+      "If you're considering selling a home, lifestyle block or rural property in the Manawatū, a free appraisal from Allan and Karen gives you an evidence-based range and honest advice on timing, with no obligation.",
+    ],
+    faqs: [
+      {
+        q: "Which Manawatū towns do Team Toner sell in?",
+        a: "Feilding, Ashhurst, Bunnythorpe, Halcombe, Sanson, Linton, Tokomaru, Foxton and Foxton Beach, and the rural districts between them — as well as every Palmerston North suburb.",
+      },
+      {
+        q: "Do you sell lifestyle blocks and rural properties?",
+        a: "Yes. Lifestyle and rural properties across the Manawatū are a regular part of our work, appraised and marketed on their land, services and buildings as well as the house.",
+      },
+      {
+        q: "What does it cost to sell a property in the Manawatū with Team Toner?",
+        a: "A 2% + GST commission on the sale price, with No Upfront Costs and No Sale — No Fee. Marketing, including aerial photography, is included. T's and C's apply.",
+      },
+      {
+        q: "How do I get a free appraisal for a rural property?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Anything you have on water, effluent, consents and fencing helps, but nothing is required.",
+      },
     ],
   },
 

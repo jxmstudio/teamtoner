@@ -20,6 +20,7 @@ import {
   getFeaturedListings,
   getFeaturedTestimonials,
   getHomeCopy,
+  getSiteConfig,
   getSiteVideos,
   getSuburbs,
 } from "@/lib/data";
@@ -42,6 +43,7 @@ export default async function HomePage() {
   const areas = await getAreas();
   const localities = (await getSuburbs()).filter((s) => s.parent);
   const copy = await getHomeCopy();
+  const { social } = await getSiteConfig();
   return (
     <>
       <HomeHero />
@@ -158,6 +160,7 @@ export default async function HomePage() {
             <VideoEmbed
               url={videos[0].url}
               title={videos[0].title}
+              subscribeUrl={social.youtube}
               className="mx-auto mt-10 max-w-3xl"
             />
           </Container>

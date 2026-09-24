@@ -4,6 +4,13 @@ import { testimonials as fixtureTestimonials } from "@/lib/content/testimonials"
 import { guides as fixtureGuides } from "@/lib/content/guides";
 import { articles as fixtureArticles } from "@/lib/content/articles";
 import { suburbs as fixtureSuburbs } from "@/lib/content/suburbs";
+import { localServicePages as fixtureLocalServicePages } from "@/lib/content/local-services";
+import {
+  LOCAL_SERVICE_AREAS,
+  type LocalService,
+  type LocalServiceArea,
+  type LocalServicePage,
+} from "@/lib/local-services";
 import type { Article, Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
 import { byNewest, inCategory } from "@/lib/insights";
 import {
@@ -27,6 +34,7 @@ import {
   FEATURED_LISTINGS_QUERY,
   GUIDES_QUERY,
   LISTINGS_QUERY,
+  LOCAL_SERVICE_PAGES_QUERY,
   SITE_SETTINGS_QUERY,
   SITE_VIDEOS_QUERY,
   SUBURBS_QUERY,
@@ -329,4 +337,52 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
 /** Whether the Insights section has anything to show (drives its menu entry). */
 export async function hasArticles(): Promise<boolean> {
   return (await loadArticles()).length > 0;
+}
+
+/*
+ * Service × location pages. Unlike the other collections these don't fall
+ * back wholesale: every fixture page always exists, and a CMS document for
+ * the same service + area is merged over it field by field (like page copy).
+ */
+const loadLocalServiceDocs = cache(async (): Promise<unknown[]> => {
+  if (!sanityClient) return [];
+  try {
+    return await sanityClient.fetch<unknown[]>(LOCAL_SERVICE_PAGES_QUERY);
+  } catch (error) {
+    console.error("[sanity] local service pages fetch failed — serving defaults", error);
+    return [];
+  }
+});
+
+export async function getLocalServicePage(
+  service: LocalService,
+  area: LocalServiceArea
+): Promise<LocalServicePage | undefined> {
+  const fixture = fixtureLocalServicePages.find((p) => p.service === service && p.area === area);
+  if (!fixture) return undefined;
+  const docs = (await loadLocalServiceDocs()) as Partial<LocalServicePage>[];
+  const doc = docs.find((d) => d.service === service && d.area === area);
+  // Identity fields come from the fixture; the CMS may only override copy.
+  const merged = withOverrides(fixture, stripMeta(doc));
+  return { ...merged, service, area };
+}
+
+/** The areas that have service pages, as suburb records (for names and links). */
+export async function getLocalServiceAreas(): Promise<Suburb[]> {
+  const all = await loadSuburbs();
+  return LOCAL_SERVICE_AREAS.map((slug) => all.find((s) => s.slug === slug)).filter(
+    (s): s is Suburb => Boolean(s)
+  );
+}
+
+/**
+ * The area a location page belongs to for service-page links: the area
+ * itself when the slug is one, otherwise its parent — or undefined when the
+ * location sits outside the four service-page areas.
+ */
+export async function getServiceAreaFor(slug: string): Promise<Suburb | undefined> {
+  const suburb = await getSuburbBySlug(slug);
+  const areaSlug = suburb?.parent ?? suburb?.slug;
+  if (!areaSlug || !(LOCAL_SERVICE_AREAS as readonly string[]).includes(areaSlug)) return undefined;
+  return getSuburbBySlug(areaSlug);
 }

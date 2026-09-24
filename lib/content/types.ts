@@ -1,3 +1,9 @@
+/** A question/answer pair — page FAQs, suburb FAQs and the FAQPage markup. */
+export interface Faq {
+  q: string;
+  a: string;
+}
+
 export type ListingStatus = "for-sale" | "under-offer" | "sold";
 
 /** A per-listing document: an uploaded file's CDN URL or an external link. */
@@ -122,6 +128,13 @@ export interface Suburb {
    * this is what makes each suburb page worth indexing.
    */
   commentary?: string[];
+  /**
+   * Location-specific FAQs. When empty the page renders the generic template
+   * questions in app/suburbs/[slug]/page.tsx; the four priority areas ship
+   * with their own so the FAQPage markup says something Google can't get
+   * from every other agent's site.
+   */
+  faqs?: Faq[];
 }
 
 /** URL segment of an insights category; the labels live in lib/insights.ts. */
