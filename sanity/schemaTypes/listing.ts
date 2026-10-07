@@ -1,6 +1,7 @@
 import { defineField, defineType } from "sanity";
 import { OTHER_DOCUMENT_TITLE, PROPERTY_DOCUMENT_TITLES } from "../../lib/property-documents";
 import { SuburbInput } from "../components/suburb-input";
+import { PhotosInput } from "../components/photos-input";
 
 /**
  * A property listing. Mirrors the `Listing` type in lib/content/types.ts —
@@ -103,7 +104,7 @@ export const listing = defineType({
       title: "Display order",
       type: "number",
       description:
-        "Controls where this listing appears on the Listings page, suburb pages and the home page. Lower numbers show first (1 is the top spot). Leave blank to sort by newest after any numbered listings.",
+        "Controls where this listing appears on the Listings page, Sold page, suburb pages and the home page. Lower numbers show first (1 is the top spot). Leave blank to sort by newest after any numbered listings.",
       group: "details",
       validation: (rule) => rule.integer().min(1),
     }),
@@ -141,14 +142,15 @@ export const listing = defineType({
               name: "start",
               title: "Starts",
               type: "datetime",
-              options: { timeStep: 15 },
+              // No timeStep: Studio rounds every change down to the step, so
+              // the time picker's arrows and clock snap straight back and look
+              // broken (client call, 17 Sep 2026). Typed times work either way.
               validation: (rule) => rule.required(),
             }),
             defineField({
               name: "end",
               title: "Ends",
               type: "datetime",
-              options: { timeStep: 15 },
               validation: (rule) =>
                 rule.required().custom((value, context) => {
                   const start = (context.parent as { start?: string } | undefined)?.start;
@@ -189,8 +191,9 @@ export const listing = defineType({
       // Grid layout shows each photo as a large tile that can be dragged to
       // reorder — the default list rows are too small to tell photos apart.
       options: { layout: "grid" },
+      components: { input: PhotosInput },
       description:
-        "To add many photos at once, select them all in the file dialog via the Upload button, or drag them from your computer onto this box. Drag tiles to reorder — the first photo is the hero / card image.",
+        "To add many photos at once, click “Upload several photos…” and select them all, or drag them from your computer onto this box (not into a single photo). Drag tiles to reorder — the first photo is the hero / card image.",
       group: "media",
     }),
     defineField({

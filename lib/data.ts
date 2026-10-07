@@ -13,6 +13,7 @@ import {
 } from "@/lib/local-services";
 import type { Article, Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
 import { byNewest, inCategory } from "@/lib/insights";
+import { sortSoldListings } from "@/lib/sold-order";
 import {
   aboutCopy,
   appraisalCopy,
@@ -239,9 +240,7 @@ export async function getAllListingSlugs(): Promise<string[]> {
 }
 
 export async function getSoldListings(): Promise<Listing[]> {
-  return (await loadListings())
-    .filter((l) => l.status === "sold")
-    .sort((a, b) => (b.soldDate ?? "").localeCompare(a.soldDate ?? ""));
+  return sortSoldListings((await loadListings()).filter((l) => l.status === "sold"));
 }
 
 export async function getSuburbs(): Promise<Suburb[]> {
