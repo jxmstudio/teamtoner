@@ -78,6 +78,11 @@ export async function ListingCard({ listing }: { listing: Listing }) {
           {suburbName}
         </p>
         <h3 className="mt-1 font-semibold text-foreground">{listing.address}</h3>
+        {listing.title && (
+          <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
+            {listing.title}
+          </p>
+        )}
         <p className="mt-2 text-lg font-bold text-primary">
           {sold ? (listing.soldPrice ?? "Sold") : listing.priceDisplay}
         </p>

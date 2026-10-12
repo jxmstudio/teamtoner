@@ -111,6 +111,7 @@ export default async function ListingPage(
           </span>
         }
         title={listing.address}
+        description={listing.title || undefined}
       >
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <Badge

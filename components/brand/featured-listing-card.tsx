@@ -118,6 +118,11 @@ export async function FeaturedListingCard({
         >
           {listing.address}
         </h3>
+        {listing.title && (
+          <p className="mt-1 line-clamp-1 text-sm text-white/80">
+            {listing.title}
+          </p>
+        )}
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <p className={cn("font-bold", hero ? "text-xl" : "text-lg")}>
             {sold ? (listing.soldPrice ?? "Sold") : listing.priceDisplay}
