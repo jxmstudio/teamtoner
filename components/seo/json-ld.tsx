@@ -58,7 +58,9 @@ export async function OrganizationJsonLd() {
           description: config.description,
           url: config.url,
           email: contact.email,
-          telephone: contact.office,
+          // Must match the Google Business Profile's primary number, which
+          // Allan confirmed is his mobile (7 Oct 2026), not the office line.
+          telephone: agents.allan.phone,
           image: `${siteConfig.url}/team/allan-karen.jpg`,
           logo: `${siteConfig.url}/brand/team-toner-signature.png`,
           priceRange: business.priceRange,
