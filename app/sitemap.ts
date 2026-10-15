@@ -19,7 +19,7 @@ import { LOCAL_SERVICES, LOCAL_SERVICE_AREAS, localServicePath } from "@/lib/loc
  * it discounts it entirely. Bump this when content actually changes; pages that
  * carry their own real dates (guides, sold listings) use those instead.
  */
-const CONTENT_REVISED = "2026-09-17";
+const CONTENT_REVISED = "2026-10-15";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url;

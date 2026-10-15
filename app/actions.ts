@@ -20,6 +20,7 @@ export async function submitLead(
     email: str("email"),
     phone: str("phone"),
     address: str("address"),
+    timeframe: str("timeframe"),
     message: str("message"),
     listing: str("listing"),
     company: str("company"), // honeypot

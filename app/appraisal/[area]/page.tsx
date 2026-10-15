@@ -26,10 +26,22 @@ export async function generateMetadata(props: PageProps<"/appraisal/[area]">): P
   if (!isLocalServiceArea(area)) return { title: "Not found" };
   const [suburb, copy] = await Promise.all([getSuburbBySlug(area), getLocalServicePage("appraisal", area)]);
   if (!suburb || !copy) return { title: "Not found" };
+  const title = fitTitle(localServiceTitles("appraisal", suburb.name));
+  const description = copy.description ?? metaDescription(copy.intro);
   return {
-    title: { absolute: fitTitle(localServiceTitles("appraisal", suburb.name)) },
-    description: copy.description ?? metaDescription(copy.intro),
+    title: { absolute: title },
+    description,
     alternates: { canonical: `/appraisal/${area}` },
+    // Image comes from app/appraisal/opengraph-image.jpg.
+    openGraph: {
+      type: "website",
+      locale: "en_NZ",
+      siteName: "Team Toner",
+      url: `/appraisal/${area}`,
+      title,
+      description,
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

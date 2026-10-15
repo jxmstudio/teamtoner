@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/app/actions";
 import { trackEvent } from "@/lib/analytics";
-import type { LeadKind, LeadState } from "@/lib/validators";
+import { sellingTimeframes, type LeadKind, type LeadState } from "@/lib/validators";
 
 const initialState: LeadState = { ok: false, message: "" };
 
@@ -96,9 +96,35 @@ export function LeadForm({
       </Field>
 
       {isAppraisal ? (
-        <Field label="Property address" error={state.errors?.address}>
-          <Input name="address" autoComplete="street-address" placeholder="Address you'd like appraised" />
-        </Field>
+        <>
+          <Field label="Property address" error={state.errors?.address}>
+            <Input
+              name="address"
+              required
+              autoComplete="street-address"
+              placeholder="Address you'd like appraised"
+            />
+          </Field>
+          <Field
+            label="When are you thinking of selling?"
+            error={state.errors?.timeframe}
+            optional
+          >
+            {/* Native select: posts with the form and needs no client state. */}
+            <select
+              name="timeframe"
+              defaultValue=""
+              className="h-8 w-full rounded-lg border border-input bg-transparent px-2 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm dark:bg-input/30"
+            >
+              <option value="">Choose one</option>
+              {sellingTimeframes.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </>
       ) : null}
 
       <Field

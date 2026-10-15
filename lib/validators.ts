@@ -10,12 +10,22 @@ export const leadKindLabel: Record<LeadKind, string> = {
   enquiry: "Listing enquiry",
 };
 
+/** Answers to the appraisal form's optional "When are you thinking of selling?". */
+export const sellingTimeframes = [
+  "Within 3 months",
+  "3–6 months",
+  "6–12 months",
+  "More than 12 months",
+  "Not sure yet",
+] as const;
+
 const optionalText = (max: number) =>
   z.string().trim().max(max).optional().or(z.literal(""));
 
 /**
  * Contact requirements differ by lead type (client request, appraisal page):
- *  - appraisal: phone is required, email is optional ("if they have one").
+ *  - appraisal: phone and property address are required, email is optional
+ *    ("if they have one"); address required per the 23 Sep 2026 SEO email.
  *  - contact / enquiry: email is required, phone optional — unchanged.
  * Both are enforced in the refinement below rather than on the base fields.
  */
@@ -27,6 +37,7 @@ export const leadSchema = z
     phone: optionalText(30),
     // Appraisal-specific (optional otherwise)
     address: optionalText(200),
+    timeframe: z.enum(sellingTimeframes).optional().or(z.literal("")),
     message: optionalText(2000),
     // Context for enquiries
     listing: optionalText(200),
@@ -48,6 +59,13 @@ export const leadSchema = z
           code: "custom",
           path: ["phone"],
           message: "Please enter a phone number so we can arrange a time.",
+        });
+      }
+      if (!data.address) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["address"],
+          message: "Please enter the address you'd like appraised.",
         });
       }
       return;

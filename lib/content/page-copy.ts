@@ -147,7 +147,10 @@ export const sellCopy = {
 
 export const appraisalCopy = {
   headerEyebrow: "Free appraisal",
-  headerTitle: "What Could Your Property Sell For in Today's Market?",
+  // H1 and question per the client's 23 Sep 2026 SEO email: the H1 carries
+  // the search phrase, the original question stays as the secondary heading.
+  headerTitle: "Free Property Appraisal in Palmerston North & Manawatū",
+  headerQuestion: "What Could Your Property Sell For in Today's Market?",
   headerDescription:
     "Get a clear, evidence-based appraisal from Allan & Karen Toner — Team Toner, Arizto's No.1 agents in Palmerston North & Manawatū.",
   intro:
@@ -165,6 +168,11 @@ export const appraisalCopy = {
   sellingNoteTitle: "Thinking of selling?",
   sellingNote:
     "We can also explain our premium marketing approach, No Upfront Costs, and No Sale — No Fee — along with our competitive 2% + GST commission.",
+  localTitle: "Free property appraisals across Palmerston North & Manawatū",
+  localBody: [
+    "We appraise homes throughout Palmerston North, Feilding, Ashhurst and the wider Manawatū — first homes, family homes, townhouses and units, lifestyle blocks, rural properties and bare land.",
+    "Every appraisal is grounded in local market knowledge: recent comparable sales in your suburb or town, the buyer demand we’re seeing right now, and the homes currently on the market that a buyer would compare with yours. You’ll see the evidence behind the figure, not just a number.",
+  ],
   faqTitle: "Appraisal questions, answered",
   faqs: [
     {

@@ -26,6 +26,7 @@ export async function sendLead(lead: LeadInput): Promise<boolean> {
     `Email: ${lead.email}`,
     lead.phone ? `Phone: ${lead.phone}` : null,
     lead.address ? `Property address: ${lead.address}` : null,
+    lead.timeframe ? `Thinking of selling: ${lead.timeframe}` : null,
     lead.listing ? `Regarding listing: ${lead.listing}` : null,
     lead.message ? `\nMessage:\n${lead.message}` : null,
   ].filter(Boolean);

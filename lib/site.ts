@@ -293,7 +293,7 @@ export const seoTitles = {
   contact: "Contact Team Toner | Palmerston North Real Estate Agents",
   listings: "Homes for Sale | Team Toner Palmerston North & Manawatū",
   sold: "Recently Sold | Team Toner Palmerston North & Manawatū",
-  appraisal: "Free Property Appraisal | Team Toner Palmerston North",
+  appraisal: "Free Property Appraisal Palmerston North | Team Toner",
 } as const;
 
 export type NavItem = { title: string; href: string };

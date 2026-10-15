@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Bed, Bath, Car, CalendarDays, Check, FileText, MapPin } from "lucide-react";
+import { Bed, Bath, Car, CalendarDays, Check, FileText, House, LandPlot, MapPin } from "lucide-react";
 import { fitTitle } from "@/lib/site";
 import { formatOpenHome } from "@/lib/open-homes";
+import { formatArea, listingDocuments } from "@/lib/listing-details";
 import { PageHeader } from "@/components/brand/page-header";
 import { Container, Section } from "@/components/brand/primitives";
 import { ListingGallery } from "@/components/brand/listing-gallery";
@@ -93,6 +94,8 @@ export default async function ListingPage(
     getSiteConfig(),
   ]);
   const sold = listing.status === "sold";
+  const documents = listingDocuments(listing);
+  const hasRooms = listing.beds > 0 || listing.baths > 0 || listing.parking > 0;
 
   return (
     <>
@@ -111,8 +114,12 @@ export default async function ListingPage(
           </span>
         }
         title={listing.address}
-        description={listing.title || undefined}
       >
+        {listing.title ? (
+          <p className="mt-3 max-w-2xl text-xl font-semibold text-foreground">
+            {listing.title}
+          </p>
+        ) : null}
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <Badge
             className={
@@ -156,26 +163,43 @@ export default async function ListingPage(
                 alt={`${listing.address}, ${suburbName} — ${listing.beds > 0 ? `${listing.beds} bedroom home` : "property"} ${sold ? "sold" : "for sale"} with Team Toner`}
               />
 
-              {/* Bare-land listings have no bed/bath/car counts — skip the row. */}
-              {(listing.beds > 0 ||
-                listing.baths > 0 ||
-                listing.parking > 0) && (
-                <div className="mt-6 flex flex-wrap gap-6 border-y border-border py-5 text-foreground">
-                  <Spec
-                    icon={<Bed className="size-5" />}
-                    value={listing.beds}
-                    label="Beds"
-                  />
-                  <Spec
-                    icon={<Bath className="size-5" />}
-                    value={listing.baths}
-                    label="Baths"
-                  />
-                  <Spec
-                    icon={<Car className="size-5" />}
-                    value={listing.parking}
-                    label="Parking"
-                  />
+              {/* Bare-land listings have no bed/bath/car counts or house
+                  size — show only what the listing has. */}
+              {(hasRooms || listing.floorArea || listing.landArea) && (
+                <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 border-y border-border py-5 text-foreground">
+                  {hasRooms && (
+                    <>
+                      <Spec
+                        icon={<Bed className="size-5" />}
+                        value={listing.beds}
+                        label="Beds"
+                      />
+                      <Spec
+                        icon={<Bath className="size-5" />}
+                        value={listing.baths}
+                        label="Baths"
+                      />
+                      <Spec
+                        icon={<Car className="size-5" />}
+                        value={listing.parking}
+                        label="Parking"
+                      />
+                    </>
+                  )}
+                  {listing.floorArea ? (
+                    <Spec
+                      icon={<House className="size-5" />}
+                      value={formatArea(listing.floorArea)}
+                      label="House"
+                    />
+                  ) : null}
+                  {listing.landArea ? (
+                    <Spec
+                      icon={<LandPlot className="size-5" />}
+                      value={formatArea(listing.landArea)}
+                      label="Land"
+                    />
+                  ) : null}
                 </div>
               )}
 
@@ -298,14 +322,14 @@ export default async function ListingPage(
                   </Card>
                 )}
 
-                {(listing.documents?.length ?? 0) > 0 && (
+                {documents.length > 0 && (
                   <Card className="mt-6">
                     <CardContent className="pt-6">
                       <h2 className="text-lg font-semibold text-foreground">
                         Property documents
                       </h2>
                       <ul className="mt-4 space-y-1">
-                        {listing.documents!.map((doc) => (
+                        {documents.map((doc) => (
                           <li key={doc.url}>
                             <a
                               href={doc.url}
@@ -337,7 +361,7 @@ function Spec({
   label,
 }: {
   icon: React.ReactNode;
-  value: number;
+  value: number | string;
   label: string;
 }) {
   return (

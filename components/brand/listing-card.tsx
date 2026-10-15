@@ -79,7 +79,7 @@ export async function ListingCard({ listing }: { listing: Listing }) {
         </p>
         <h3 className="mt-1 font-semibold text-foreground">{listing.address}</h3>
         {listing.title && (
-          <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
+          <p className="mt-1 line-clamp-1 text-sm font-semibold text-foreground/80">
             {listing.title}
           </p>
         )}

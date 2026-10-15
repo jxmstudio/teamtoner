@@ -167,12 +167,15 @@ export const pageSell = page("pageSell", "Sell page", [
 
 export const pageAppraisal = page("pageAppraisal", "Appraisal page", [
   ...header("Appraisal"),
+  str("headerQuestion", "Header — secondary heading", "Shown under the main heading, e.g. “What Could Your Property Sell For in Today’s Market?”."),
   txt("intro", "Intro paragraph"),
   str("introNote", "Intro — bold closing line"),
   str("benefitsTitle", "“What you’ll get” — title"),
   strList("benefits", "“What you’ll get” — bullet points"),
   str("sellingNoteTitle", "“Thinking of selling?” — title"),
   txt("sellingNote", "“Thinking of selling?” — text", "Write “2% + GST” literally — the site links its asterisk automatically."),
+  str("localTitle", "Local appraisals — title"),
+  txtList("localBody", "Local appraisals — paragraphs", "One entry per paragraph. Shown above the FAQs, followed by links to the Palmerston North, Feilding, Ashhurst and Manawatū appraisal pages."),
   str("faqTitle", "FAQs — title"),
   faqList(),
 ]);

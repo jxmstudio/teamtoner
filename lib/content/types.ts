@@ -27,6 +27,10 @@ export interface Listing {
   beds: number;
   baths: number;
   parking: number;
+  /** House (floor) area in m². */
+  floorArea?: number;
+  /** Land (section) area in m²; shown in hectares from 10,000 m². */
+  landArea?: number;
   /** Display price or method of sale, e.g. "Enquiries over $749,000", "Auction 27 July", "Deadline Sale". */
   priceDisplay: string;
   description: string[];

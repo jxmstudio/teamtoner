@@ -49,11 +49,17 @@ function AccordionTrigger({
 function AccordionContent({
   className,
   children,
+  // Closed panels otherwise aren't rendered at all, so FAQ answers were
+  // missing from the HTML Google indexes (and from the FAQPage markup's
+  // visible-content match). hidden="until-found" keeps them in the page and
+  // findable with Ctrl+F.
+  hiddenUntilFound = true,
   ...props
 }: AccordionPrimitive.Panel.Props) {
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
+      hiddenUntilFound={hiddenUntilFound}
       className="overflow-hidden text-sm data-open:animate-accordion-down data-closed:animate-accordion-up"
       {...props}
     >

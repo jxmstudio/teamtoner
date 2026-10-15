@@ -30,7 +30,7 @@ export async function deliverLead(lead: LeadInput): Promise<boolean> {
     name: lead.name,
   };
   // Only send fields the visitor actually filled in.
-  for (const key of ["email", "phone", "address", "listing", "message"] as const) {
+  for (const key of ["email", "phone", "address", "timeframe", "listing", "message"] as const) {
     const value = lead[key];
     if (value) payload[key] = value;
   }

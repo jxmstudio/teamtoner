@@ -54,7 +54,8 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     type: "website",
     locale: "en_NZ",
-    url: siteConfig.url,
+    // No og:url here: pages that don't set their own would all inherit the
+    // home page's URL, and Facebook would collapse their shares onto it.
     siteName: config.name,
     title: `${config.name} — ${config.tagline}`,
     description: config.description,

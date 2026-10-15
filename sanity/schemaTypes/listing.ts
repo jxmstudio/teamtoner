@@ -92,6 +92,23 @@ export const listing = defineType({
       validation: (rule) => rule.required().min(0).integer(),
     }),
     defineField({
+      name: "floorArea",
+      title: "House size (m²)",
+      type: "number",
+      description: "Floor area in square metres, e.g. 180. Leave blank for bare land.",
+      group: "details",
+      validation: (rule) => rule.min(1),
+    }),
+    defineField({
+      name: "landArea",
+      title: "Land size (m²)",
+      type: "number",
+      description:
+        "Section size in square metres, e.g. 809. For lifestyle blocks enter m² too (1 hectare = 10,000 m²); the website shows hectares automatically from 10,000 m².",
+      group: "details",
+      validation: (rule) => rule.min(1),
+    }),
+    defineField({
       name: "priceDisplay",
       title: "Price / method of sale",
       type: "string",

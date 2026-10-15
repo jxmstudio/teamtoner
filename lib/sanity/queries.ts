@@ -19,6 +19,8 @@ export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)
   beds,
   baths,
   parking,
+  floorArea,
+  landArea,
   priceDisplay,
   "description": coalesce(description, []),
   "features": coalesce(features, []),

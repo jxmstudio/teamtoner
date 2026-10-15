@@ -21,11 +21,26 @@ import { ServiceAreaLinks } from "@/components/brand/service-area-links";
 import { seoTitles } from "@/lib/site";
 import { getAppraisalCopy, getSiteConfig } from "@/lib/data";
 
+const description =
+  "Discover what your home could sell for with a free property appraisal from Allan & Karen Toner. Experienced local real estate agents in Palmerston North & Manawatū.";
+
+// Page-specific sharing details (client SEO email, 23 Sep 2026). The image is
+// opengraph-image.jpg beside this file — Allan & Karen's own photo.
+const shareTitle = "Free Property Appraisal in Palmerston North & Manawatū | Team Toner";
+
 export const metadata: Metadata = {
   title: { absolute: seoTitles.appraisal },
-  description:
-    "What could your property sell for? Get a clear, evidence-based appraisal from Allan & Karen Toner — Arizto's No.1 agents in Palmerston North & Manawatū. No obligation.",
+  description,
   alternates: { canonical: "/appraisal" },
+  openGraph: {
+    type: "website",
+    locale: "en_NZ",
+    siteName: "Team Toner",
+    url: "/appraisal",
+    title: shareTitle,
+    description,
+  },
+  twitter: { card: "summary_large_image", title: shareTitle, description },
 };
 
 const tel = (n: string) => `tel:${n.replace(/\s/g, "")}`;
@@ -43,8 +58,15 @@ export default async function AppraisalPage() {
         compact
         eyebrow={copy.headerEyebrow}
         title={copy.headerTitle}
-        description={copy.headerDescription}
       >
+        {copy.headerQuestion ? (
+          <p className="mt-3 text-xl font-semibold text-foreground sm:text-2xl">
+            {copy.headerQuestion}
+          </p>
+        ) : null}
+        <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+          {copy.headerDescription}
+        </p>
         <p className="mt-3 max-w-2xl text-muted-foreground">{copy.intro}</p>
         <p className="mt-3 font-semibold text-foreground">{copy.introNote}</p>
       </PageHeader>
@@ -124,6 +146,19 @@ export default async function AppraisalPage() {
           <TermsFootnote />
         </Container>
       </Section>
+
+      {copy.localBody.length > 0 && (
+        <Section className="py-10 sm:py-12">
+          <Container className="max-w-3xl">
+            <h2 className="text-2xl font-bold text-foreground">{copy.localTitle}</h2>
+            <div className="mt-4 space-y-4 text-foreground/90">
+              {copy.localBody.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
 
       <Section className="bg-secondary/50">
         <Container className="max-w-3xl">

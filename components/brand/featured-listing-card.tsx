@@ -119,7 +119,7 @@ export async function FeaturedListingCard({
           {listing.address}
         </h3>
         {listing.title && (
-          <p className="mt-1 line-clamp-1 text-sm text-white/80">
+          <p className="mt-1 line-clamp-1 text-sm font-semibold text-white/90">
             {listing.title}
           </p>
         )}

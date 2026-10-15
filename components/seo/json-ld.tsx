@@ -332,6 +332,9 @@ export function ListingJsonLd({
         // Bare-land listings have no rooms; JSON.stringify drops the undefineds.
         numberOfBedrooms: listing.beds || undefined,
         numberOfBathroomsTotal: listing.baths || undefined,
+        floorSize: listing.floorArea
+          ? { "@type": "QuantitativeValue", value: listing.floorArea, unitCode: "MTK" }
+          : undefined,
         address: {
           "@type": "PostalAddress",
           streetAddress: listing.address,
