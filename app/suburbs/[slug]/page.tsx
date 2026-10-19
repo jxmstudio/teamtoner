@@ -104,7 +104,7 @@ export async function generateMetadata(
     description:
       suburb.seoDescription ||
       (agentsIntent
-        ? `${suburb.name} real estate agents Allan & Karen Toner: local market insight, homes for sale, recent sales and a free, no-obligation property appraisal.`
+        ? `${suburb.name} real estate agents Allan & Karen Toner: local market insight, recent sales, homes for sale and a free property appraisal.`
         : `${suburb.name} property market insight, current listings and recent Team Toner sales. Get a free appraisal with Allan & Karen Toner.`),
     alternates: { canonical: `/suburbs/${suburb.slug}` },
   };

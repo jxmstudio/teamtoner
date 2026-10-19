@@ -11,7 +11,7 @@ import { formatListingAddress, getSoldCopy, getSoldListings, getSuburbName } fro
 export const metadata: Metadata = {
   title: { absolute: seoTitles.sold },
   description:
-    "Properties recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the wider Manawatū — proven results from Arizto's No.1 agents in the region.",
+    "Homes recently sold by Team Toner across Palmerston North, Feilding, Ashhurst and the Manawatū — proven results from Arizto's No.1 agents.",
   alternates: { canonical: "/sold" },
 };
 

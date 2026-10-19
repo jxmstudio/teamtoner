@@ -13,7 +13,7 @@ import { getAreas, getSuburbChildren, getSuburbs, getSuburbsCopy } from "@/lib/d
 export const metadata: Metadata = {
   title: { absolute: seoTitles.suburbs },
   description:
-    "Local knowledge across Palmerston North and the Manawatū — Hokowhitu, Takaro, Highbury, Kelvin Grove, Terrace End, Awapuni, Milson, Feilding, Ashhurst, Sanson and more.",
+    "Local knowledge across Palmerston North and the Manawatū — Feilding, Kelvin Grove, Milson, Ashhurst, Takaro, West End, Hokowhitu and more.",
   alternates: { canonical: "/suburbs" },
 };
 

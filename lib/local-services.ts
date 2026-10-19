@@ -109,6 +109,9 @@ export function localServiceTitles(service: LocalService, areaName: string): str
 /** Google shows roughly this many characters of a description. */
 export const DESCRIPTION_MAX = 158;
 
+/** Where phones start truncating descriptions — the target for generated ones. */
+export const MOBILE_DESCRIPTION_MAX = 150;
+
 /**
  * Trim page copy to a meta description that ends cleanly: the longest run of
  * whole sentences that fits, else a whole-word cut with an ellipsis.

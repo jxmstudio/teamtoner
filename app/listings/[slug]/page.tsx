@@ -22,7 +22,12 @@ import {
   getSiteConfig,
   getSuburbName,
 } from "@/lib/data";
-import { localServicePath, type LocalServiceArea } from "@/lib/local-services";
+import {
+  MOBILE_DESCRIPTION_MAX,
+  localServicePath,
+  metaDescription,
+  type LocalServiceArea,
+} from "@/lib/local-services";
 
 // Listings are CMS-managed — refresh the static pages periodically so edits
 // in /studio appear without a redeploy.
@@ -45,28 +50,40 @@ export async function generateMetadata(
   const sold = listing.status === "sold";
   const full = formatListingAddress(listing.address, suburbName);
   // "Sold by Team Toner" already names the brand, so the usual "| Team Toner"
-  // suffix duplicated it. Addresses also vary a lot in length, so drop the
-  // brand rather than let Google truncate the street address.
+  // suffix duplicated it. Addresses also vary a lot in length: first drop the
+  // area appended to an address that already names its street suburb
+  // ("…Drive - Kelvin grove, Palmerston North"), and only then the brand,
+  // rather than let Google truncate the street address.
+  const short = listing.address;
   const title = fitTitle(
     sold
       ? [
           `${full} — Sold by Team Toner`,
           `${full} — Sold | Team Toner`,
+          `${short} — Sold by Team Toner`,
+          `${short} — Sold | Team Toner`,
           `${full} — Sold`,
+          `${short} — Sold`,
         ]
-      : [`${full} — For Sale | Team Toner`, `${full} — For Sale`],
+      : [
+          `${full} — For Sale | Team Toner`,
+          `${short} — For Sale | Team Toner`,
+          `${full} — For Sale`,
+          `${short} — For Sale`,
+        ],
   );
 
-  // Listing blurbs run short; pad to a useful SERP length with the concrete
-  // details a buyer scans for rather than leaving a 70-character description.
+  // The opening of the blurb plus the concrete details a buyer scans for.
+  // The blurb is trimmed to whole sentences or words so the spec always fits
+  // inside the ~150 characters a phone shows — a hard cut used to end the
+  // description mid-word and drop the price.
   const spec =
     listing.beds > 0 || listing.baths > 0 || listing.parking > 0
       ? `${listing.beds} bed, ${listing.baths} bath, ${listing.parking} car. ${listing.priceDisplay}.`
       : `${listing.priceDisplay}.`;
-  const description = [listing.description[0], spec]
-    .filter(Boolean)
-    .join(" ")
-    .slice(0, 158);
+  const room = MOBILE_DESCRIPTION_MAX - spec.length - 1;
+  const blurb = listing.description[0] && room >= 60 ? metaDescription(listing.description[0], room) : "";
+  const description = [blurb, spec].filter(Boolean).join(" ");
 
   return {
     title: { absolute: title },

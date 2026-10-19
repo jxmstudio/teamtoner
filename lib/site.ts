@@ -242,6 +242,9 @@ export function entitySameAs(config: SiteConfig = siteConfig): string[] {
 /** Google truncates SERP titles past roughly this many characters. */
 export const TITLE_MAX = 60;
 
+/** Where phones start truncating — the target for titles that can afford it. */
+export const MOBILE_TITLE_MAX = 55;
+
 /**
  * Pick the most informative title that still fits in the SERP.
  *
@@ -251,9 +254,9 @@ export const TITLE_MAX = 60;
  * gets truncated mid-word and no page silently loses its brand suffix when it
  * didn't need to.
  */
-export function fitTitle(candidates: string[]): string {
+export function fitTitle(candidates: string[], max = TITLE_MAX): string {
   return (
-    candidates.find((c) => c.length <= TITLE_MAX) ??
+    candidates.find((c) => c.length <= max) ??
     candidates[candidates.length - 1]
   );
 }

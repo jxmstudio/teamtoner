@@ -8,6 +8,7 @@ import { Container, Section } from "@/components/brand/primitives";
 import { Breadcrumbs } from "@/components/brand/breadcrumbs";
 import { GuideArticleJsonLd, HowToJsonLd } from "@/components/seo/json-ld";
 import { getGuideBySlug, getGuidesWithPages, getSiteConfig } from "@/lib/data";
+import { MOBILE_TITLE_MAX, fitTitle } from "@/lib/site";
 
 const nzDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-NZ", {
@@ -27,7 +28,14 @@ export async function generateMetadata(
   const guide = await getGuideBySlug(slug);
   if (!guide?.body?.length) return { title: "Guide not found" };
   return {
-    title: { absolute: `${guide.title} | Team Toner Palmerston North` },
+    // "Palmerston North" earns its place only when the title has room for it
+    // on a phone; the brand suffix always stays.
+    title: {
+      absolute: fitTitle(
+        [`${guide.title} | Team Toner Palmerston North`, `${guide.title} | Team Toner`],
+        MOBILE_TITLE_MAX
+      ),
+    },
     description: guide.description,
     alternates: { canonical: `/resources/${guide.slug}` },
   };
