@@ -32,7 +32,6 @@ export function Analytics() {
       trackEvent(name, {
         link_url: anchor.getAttribute("href") ?? undefined,
         link_text: anchor.textContent?.trim().slice(0, 80) || undefined,
-        page_path: window.location.pathname,
       });
     };
     document.addEventListener("click", onClick, { capture: true });

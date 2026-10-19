@@ -57,6 +57,7 @@ export async function submitLead(
 
   return {
     ok: true,
+    delivered: true,
     message: "Thanks — your message is on its way. We'll be in touch shortly.",
   };
 }

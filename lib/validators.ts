@@ -86,4 +86,9 @@ export type LeadState = {
   ok: boolean;
   message: string;
   errors?: Partial<Record<keyof LeadInput, string>>;
+  /**
+   * True only when a real lead was delivered — the honeypot path also answers
+   * `ok: true` (so bots learn nothing) but must not count as a conversion.
+   */
+  delivered?: boolean;
 };
