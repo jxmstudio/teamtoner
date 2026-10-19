@@ -294,7 +294,7 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
 
       {/* Recent Team Toner sales */}
       {(sold.length > 0 || areaSold.length > 0) && (
-        <Section>
+        <Section id="recent-sales">
           <Container>
             <div className="flex items-end justify-between gap-4">
               <h2 className="text-2xl font-bold text-foreground">

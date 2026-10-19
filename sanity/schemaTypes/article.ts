@@ -82,7 +82,8 @@ export const article = defineType({
               title: "Paragraphs",
               type: "array",
               of: [{ type: "text", rows: 3 }],
-              description: "One entry per paragraph.",
+              description:
+                "One entry per paragraph. To link to another page on the site, write [link text](/appraisal/ashhurst).",
               validation: (r) => r.required().min(1),
             }),
             defineField({

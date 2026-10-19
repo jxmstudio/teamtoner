@@ -226,7 +226,15 @@ export function InsightArticleJsonLd({ article, category }: { article: Article; 
         datePublished: article.published,
         dateModified: article.updated ?? article.published,
         inLanguage: "en-NZ",
-        author: { "@id": ORG_ID },
+        // Allan & Karen Toner, matching the visible byline — one Person each,
+        // as Google asks for multiple authors, tied to the business entity.
+        author: [siteConfig.agents.allan, siteConfig.agents.karen].map((agent) => ({
+          "@type": "Person",
+          name: agent.name,
+          jobTitle: agent.role,
+          url: `${siteConfig.url}/about`,
+          worksFor: { "@id": ORG_ID },
+        })),
         publisher: { "@id": ORG_ID },
         articleSection: category,
       })}

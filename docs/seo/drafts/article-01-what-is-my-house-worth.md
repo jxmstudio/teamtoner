@@ -4,7 +4,7 @@
 **Proposed URL:** /insights/what-is-my-house-worth-palmerston-north
 **Title:** What is my house worth? How a free property appraisal works in Palmerston North & Manawatū
 **Excerpt (card + Google description):** Wondering what your home would sell for? Here's what a free Team Toner appraisal involves, what it's based on, and how it differs from your RV or a registered valuation.
-**Publish in:** /studio → Property Insights → new document (paste each section as a heading + paragraphs). Add a cover photo of Allan & Karen at a property if available.
+**Publish in:** seeded as an unpublished draft by `scripts/seed-insight-drafts.ts` (19 Oct 2026: Highbury replaced with West End in the suburb list). In /studio → Property Insights, set the Published date, add a cover photo of Allan & Karen at a property if available, then Publish.
 
 ---
 
@@ -20,7 +20,7 @@ It is not a registered valuation. A registered valuation is a paid, formal repor
 
 ## What we base the number on
 
-Recent comparable sales, first and foremost. In Palmerston North that means sales in your suburb, not a city-wide average: Hokowhitu, Kelvin Grove, Terrace End, Highbury, Takaro, Awapuni and Milson each have their own buyer pool and price behaviour. In Feilding, Ashhurst and the wider Manawatū it means the town or village, adjusted for section, condition and position.
+Recent comparable sales, first and foremost. In Palmerston North that means sales in your suburb, not a city-wide average: Hokowhitu, Kelvin Grove, Terrace End, West End, Takaro, Awapuni and Milson each have their own buyer pool and price behaviour. In Feilding, Ashhurst and the wider Manawatū it means the town or village, adjusted for section, condition and position.
 
 Then the details that move the number: section size, garaging, sun and shelter, school zones, the state of the kitchen and bathrooms, and what's currently on the market competing with you. We show you the sales we used and the adjustments we made, so you understand the range rather than just receiving a figure.
 

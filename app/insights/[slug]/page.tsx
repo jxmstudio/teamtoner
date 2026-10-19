@@ -7,6 +7,7 @@ import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
 import { Breadcrumbs } from "@/components/brand/breadcrumbs";
 import { ArticleCard, nzDate } from "@/components/brand/article-card";
+import { TextWithLinks } from "@/components/brand/text-with-links";
 import { InsightArticleJsonLd } from "@/components/seo/json-ld";
 import { getArticleBySlug, getArticles, getArticlesByCategory, getSiteConfig } from "@/lib/data";
 import { categoryBySlug } from "@/lib/insights";
@@ -106,7 +107,9 @@ export default async function InsightArticlePage(props: PageProps<"/insights/[sl
                 <h2 className="text-2xl font-bold text-foreground">{section.heading}</h2>
                 <div className="mt-3 space-y-4 text-lg text-foreground/90">
                   {section.paragraphs.map((p, i) => (
-                    <p key={i}>{p}</p>
+                    <p key={i}>
+                      <TextWithLinks>{p}</TextWithLinks>
+                    </p>
                   ))}
                 </div>
                 {section.bullets?.length ? (
@@ -114,7 +117,9 @@ export default async function InsightArticlePage(props: PageProps<"/insights/[sl
                     {section.bullets.map((b) => (
                       <li key={b} className="flex gap-3">
                         <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-teal" />
-                        <span>{b}</span>
+                        <span>
+                          <TextWithLinks>{b}</TextWithLinks>
+                        </span>
                       </li>
                     ))}
                   </ul>
