@@ -126,6 +126,22 @@ function page(name: string, title: string, fields: FieldDefinition[]) {
 }
 
 export const pageHome = page("pageHome", "Home page", [
+  defineField({
+    name: "seoTitle",
+    title: "Google title",
+    type: "string",
+    description:
+      "The blue headline in Google results. Brand words first; keep it to about 55 characters so phones show it whole.",
+    validation: (rule) => rule.max(60).warning("Google cuts titles off after about 60 characters."),
+  }),
+  defineField({
+    name: "seoDescription",
+    title: "Google description",
+    type: "text",
+    rows: 3,
+    description: "The snippet under the title in Google results. Aim for 120–155 characters.",
+    validation: (rule) => rule.max(155).warning("Google shows about 155 characters."),
+  }),
   str("heroTitleStart", "Hero heading — start", "e.g. “A smarter way to”."),
   str("heroTitleHighlight", "Hero heading — highlighted words", "Rendered in the teal script font, e.g. “sell your home”."),
   str("heroTitleEnd", "Hero heading — end", "e.g. “in Palmerston North & Manawatū.”"),

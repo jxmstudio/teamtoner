@@ -12,7 +12,6 @@ import { TestimonialCarousel } from "@/components/brand/testimonial-carousel";
 import { FeeText } from "@/components/brand/commission";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
-import { seoTitles } from "@/lib/site";
 import { VideoEmbed } from "@/components/brand/video-embed";
 import { VideoObjectJsonLd } from "@/components/seo/json-ld";
 import {
@@ -28,13 +27,16 @@ import {
 // Listings and videos are CMS-managed — refresh the static page periodically.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: { absolute: seoTitles.home },
-  // Kept under 160 characters so Google shows it whole rather than truncating.
-  description:
-    "Palmerston North real estate agents Allan & Karen Toner — Arizto's No.1 agents in Palmerston North & Manawatū. Get a free appraisal.",
-  alternates: { canonical: "/" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // Title and description are editable in the studio (Home page → Google
+  // title / Google description); lib/content/page-copy.ts holds the defaults.
+  const { seoTitle, seoDescription } = await getHomeCopy();
+  return {
+    title: { absolute: seoTitle },
+    description: seoDescription,
+    alternates: { canonical: "/" },
+  };
+}
 
 export default async function HomePage() {
   const featured = await getFeaturedListings(3);

@@ -27,6 +27,13 @@ export interface LegalSection {
 }
 
 export const homeCopy = {
+  // Google result for the home page. Search Console (Oct 2026): ~205
+  // impressions a month for "arizto palmerston north" at position ~2.6 but
+  // almost no clicks, so the brand words lead. Keep the title ≤ 55 characters
+  // (mobile) and the description ≤ 155.
+  seoTitle: "Arizto Palmerston North — Allan & Karen | Team Toner",
+  seoDescription:
+    "Allan & Karen Toner, Arizto's No.1 agents in Manawatū. Free property appraisal and a 2% + GST commission in Palmerston North, Feilding & Ashhurst.",
   heroTitleStart: "A smarter way to",
   heroTitleHighlight: "sell your home",
   heroTitleEnd: "in Palmerston North & Manawatū.",

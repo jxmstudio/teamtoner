@@ -281,10 +281,10 @@ export function configuredSocials(config: SiteConfig = siteConfig) {
 
 /**
  * SEO page titles supplied by the client. These are set as `title.absolute`
- * so they replace (rather than append to) the "| Team Toner" template.
+ * so they replace (rather than append to) the "| Team Toner" template. The
+ * home page's title is studio-editable instead (homeCopy.seoTitle).
  */
 export const seoTitles = {
-  home: "Team Toner | Palmerston North Real Estate Agents | Arizto",
   about: "Allan & Karen Toner | Palmerston North Real Estate Agents",
   sell: "Sell Your Home | Team Toner Palmerston North Real Estate",
   suburbs: "Palmerston North & Manawatū Real Estate | Team Toner",
