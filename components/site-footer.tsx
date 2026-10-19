@@ -72,8 +72,9 @@ export async function SiteFooter() {
           </ul>
         </div>
 
-        {/* Areas — every page links the four area hubs and their appraisal
-            pages, so the local cluster is never more than one click away. */}
+        {/* Areas — every page links each service area's hub and appraisal
+            page (the four areas, then the priority Palmerston North
+            suburbs), so the local cluster is never more than one click away. */}
         {areas.length > 0 && (
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">

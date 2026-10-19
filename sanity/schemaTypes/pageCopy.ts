@@ -56,6 +56,21 @@ export const faqList = (name = "faqs", title = "FAQs") =>
     ],
   });
 
+/**
+ * "Draft copy" flag for documents seeded with agency-written copy. Not shown
+ * on the site — it marks the document in the studio list until Allan & Karen
+ * have read it and untick the box.
+ */
+export const needsReviewField = () =>
+  defineField({
+    name: "needsReview",
+    title: "Draft copy — awaiting Allan & Karen's review",
+    type: "boolean",
+    initialValue: false,
+    description:
+      "Ticked when the agency has written or updated this copy. It is already live on the site; read it through, edit anything that isn't right, then untick this box.",
+  });
+
 const stepList = (name: string, title: string, description?: string) =>
   defineField({
     name,
@@ -161,6 +176,7 @@ export const pageHome = page("pageHome", "Home page", [
   str("suburbsEyebrow", "Suburbs — eyebrow"),
   str("suburbsTitle", "Suburbs — title"),
   txt("suburbsDescription", "Suburbs — description"),
+  str("suburbsAppraisalLabel", "Suburbs — appraisal links label", "Shown before the row of links to each area's free appraisal page, e.g. “Free property appraisals in:”."),
 ]);
 
 export const pageAbout = page("pageAbout", "About page", [

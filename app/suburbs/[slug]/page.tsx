@@ -7,10 +7,15 @@ import { TestimonialCard } from "@/components/brand/testimonial-card";
 import { CtaSection } from "@/components/brand/cta-section";
 import { Container, Section } from "@/components/brand/primitives";
 import { Breadcrumbs } from "@/components/brand/breadcrumbs";
-import { FaqJsonLd } from "@/components/seo/json-ld";
+import { FaqJsonLd, ServiceJsonLd } from "@/components/seo/json-ld";
 import { FeeText } from "@/components/brand/commission";
 import { ArrowRight } from "lucide-react";
-import { SERVICE_META, localServicePath, type LocalServiceArea } from "@/lib/local-services";
+import {
+  SERVICE_META,
+  isLocalServiceArea,
+  localServicePath,
+  type LocalServiceArea,
+} from "@/lib/local-services";
 import {
   Accordion,
   AccordionContent,
@@ -77,26 +82,30 @@ export async function generateMetadata(
   const parent = suburb.parent ? await getSuburbBySlug(suburb.parent) : undefined;
   const scope = parent ? `${parent.name}` : "Manawatū";
 
-  // Area hubs (no parent) own the "<area> real estate agents" intent; the
-  // per-area appraisal and selling intents live on /appraisal/<area> and
-  // /sell/<area>. Individual suburbs keep the broader "<suburb> real estate".
-  const title = parent
+  // Areas and the priority suburbs that have their own appraisal and selling
+  // pages own the "<location> real estate agents" intent; those two intents
+  // live on /appraisal/<slug> and /sell/<slug>. Other suburbs keep the
+  // broader "<suburb> real estate".
+  const agentsIntent = !parent || isLocalServiceArea(suburb.slug);
+  const title = agentsIntent
     ? [
-        `${suburb.name} Real Estate | Team Toner ${scope}`,
-        `${suburb.name} Real Estate | Team Toner`,
+        `${suburb.name} Real Estate Agents | Team Toner`,
+        `${suburb.name} Real Estate Agents`,
         `${suburb.name} Real Estate`,
       ]
     : [
-        `${suburb.name} Real Estate Agents | Team Toner`,
-        `${suburb.name} Real Estate Agents`,
+        `${suburb.name} Real Estate | Team Toner ${scope}`,
+        `${suburb.name} Real Estate | Team Toner`,
         `${suburb.name} Real Estate`,
       ];
 
   return {
     title: { absolute: fitTitle(title) },
-    description: parent
-      ? `${suburb.name} property market insight, current listings and recent Team Toner sales. Get a free appraisal with Allan & Karen Toner.`
-      : `${suburb.name} real estate agents Allan & Karen Toner: local market insight, homes for sale, recent sales and a free, no-obligation property appraisal.`,
+    description:
+      suburb.seoDescription ||
+      (agentsIntent
+        ? `${suburb.name} real estate agents Allan & Karen Toner: local market insight, homes for sale, recent sales and a free, no-obligation property appraisal.`
+        : `${suburb.name} property market insight, current listings and recent Team Toner sales. Get a free appraisal with Allan & Karen Toner.`),
     alternates: { canonical: `/suburbs/${suburb.slug}` },
   };
 }
@@ -137,6 +146,16 @@ export default async function SuburbPage(props: PageProps<"/suburbs/[slug]">) {
 
   return (
     <>
+      {serviceArea?.slug === suburb.slug && (
+        <ServiceJsonLd
+          name={`${suburb.name} real estate agents`}
+          description={suburb.blurb}
+          serviceType="Real estate agent"
+          areaName={suburb.name}
+          containedIn={parent?.name}
+          path={`/suburbs/${suburb.slug}`}
+        />
+      )}
       <FaqJsonLd faqs={faqs} />
 
       <PageHeader

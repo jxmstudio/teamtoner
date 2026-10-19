@@ -375,13 +375,16 @@ export async function getLocalServiceAreas(): Promise<Suburb[]> {
 }
 
 /**
- * The area a location page belongs to for service-page links: the area
- * itself when the slug is one, otherwise its parent — or undefined when the
- * location sits outside the four service-page areas.
+ * The location whose service pages a location page should link to: the
+ * location itself when it has its own (an area, or a priority suburb such as
+ * Kelvin Grove), otherwise its parent area — or undefined when neither has
+ * service pages.
  */
 export async function getServiceAreaFor(slug: string): Promise<Suburb | undefined> {
   const suburb = await getSuburbBySlug(slug);
-  const areaSlug = suburb?.parent ?? suburb?.slug;
-  if (!areaSlug || !(LOCAL_SERVICE_AREAS as readonly string[]).includes(areaSlug)) return undefined;
+  if (!suburb) return undefined;
+  const hasPages = (s: string) => (LOCAL_SERVICE_AREAS as readonly string[]).includes(s);
+  const areaSlug = hasPages(suburb.slug) ? suburb.slug : suburb.parent;
+  if (!areaSlug || !hasPages(areaSlug)) return undefined;
   return getSuburbBySlug(areaSlug);
 }

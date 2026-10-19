@@ -129,7 +129,8 @@ export const SUBURBS_QUERY = groq`*[_type == "suburb" && defined(slug.current)] 
   parent,
   blurb,
   "commentary": commentary,
-  "faqs": faqs[]{ q, a }
+  "faqs": faqs[]{ q, a },
+  seoDescription
 }`;
 
 /**

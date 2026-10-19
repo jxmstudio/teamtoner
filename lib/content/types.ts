@@ -139,6 +139,11 @@ export interface Suburb {
    * from every other agent's site.
    */
   faqs?: Faq[];
+  /**
+   * Google description for /suburbs/<slug>. Falls back to a template built
+   * from the suburb name when empty.
+   */
+  seoDescription?: string;
 }
 
 /** URL segment of an insights category; the labels live in lib/insights.ts. */

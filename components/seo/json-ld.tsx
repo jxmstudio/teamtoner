@@ -352,15 +352,18 @@ export function ListingJsonLd({
 
 /**
  * A service offered in a named area — the markup for /appraisal/<area> and
- * /sell/<area>. Ties the page to the business entity and states the area
- * served, which is exactly the "who / what / where" a local query resolves.
- * The appraisal is free, so it carries a zero-price Offer.
+ * /sell/<area>, and on the matching /suburbs/<area> hub. Ties the page to the
+ * business entity and states the area served, which is exactly the "who /
+ * what / where" a local query resolves. A suburb names the city it sits in,
+ * so "West End" can't be mistaken for anywhere else. The appraisal is free, so
+ * it carries a zero-price Offer.
  */
 export function ServiceJsonLd({
   name,
   description,
   serviceType,
   areaName,
+  containedIn,
   path,
   free,
 }: {
@@ -368,6 +371,8 @@ export function ServiceJsonLd({
   description: string;
   serviceType: string;
   areaName: string;
+  /** The city or area a suburb sits in, e.g. "Palmerston North". */
+  containedIn?: string;
   path: string;
   free?: boolean;
 }) {
@@ -381,7 +386,11 @@ export function ServiceJsonLd({
         serviceType,
         url: `${siteConfig.url}${path}`,
         provider: { "@id": ORG_ID },
-        areaServed: { "@type": "Place", name: areaName },
+        areaServed: defined({
+          "@type": "Place",
+          name: areaName,
+          containedInPlace: containedIn ? { "@type": "City", name: containedIn } : undefined,
+        }),
         inLanguage: "en-NZ",
         offers: free
           ? { "@type": "Offer", price: "0", priceCurrency: "NZD", availability: "https://schema.org/InStock" }

@@ -27,11 +27,24 @@ test("every priority area has both service pages, and nothing else does", () => 
   assert.equal(localServicePages.length, LOCAL_SERVICES.length * LOCAL_SERVICE_AREAS.length);
 });
 
-test("service page areas are top-level suburb pages", () => {
+test("service page areas are the four areas plus the priority Palmerston North suburbs", () => {
   for (const area of LOCAL_SERVICE_AREAS) {
     const suburb = suburbs.find((s) => s.slug === area);
     assert.ok(suburb, `${area} has no suburb page`);
-    assert.equal(suburb.parent, undefined, `${area} must be an area, not a suburb`);
+    assert.ok(
+      suburb.parent === undefined || suburb.parent === "palmerston-north",
+      `${area} must be an area or a Palmerston North suburb`
+    );
+  }
+  for (const priority of ["kelvin-grove", "milson", "takaro", "west-end"]) {
+    assert.ok(isLocalServiceArea(priority), `${priority} should have service pages`);
+  }
+});
+
+test("deprioritised suburbs get no service pages (client, Oct 2026)", () => {
+  for (const slug of ["highbury", "sanson"]) {
+    assert.ok(!isLocalServiceArea(slug), `${slug} must not have service pages`);
+    assert.ok(!localServicePages.some((p) => p.area === (slug as string)), `${slug} fixture copy exists`);
   }
 });
 
@@ -46,6 +59,7 @@ test("type guards reject unknown routes so /appraisal/anything cannot render a p
   assert.ok(isLocalService("appraisal") && isLocalService("sell"));
   assert.ok(!isLocalService("buy"));
   assert.ok(isLocalServiceArea("feilding"));
+  assert.ok(isLocalServiceArea("west-end"));
   assert.ok(!isLocalServiceArea("hokowhitu"));
   assert.ok(!isLocalServiceArea("foxton"));
 });
@@ -81,6 +95,26 @@ test("priority area pages ship location-specific FAQs", () => {
     const suburb = suburbs.find((s) => s.slug === area)!;
     assert.ok((suburb.faqs?.length ?? 0) >= 4, `${area} needs its own FAQs`);
     assert.ok((suburb.commentary?.length ?? 0) >= 4, `${area} needs richer commentary`);
+  }
+});
+
+const words = (paragraphs: readonly string[]) => paragraphs.join(" ").split(/\s+/).filter(Boolean).length;
+
+test("priority suburb pages carry 150–300 words of local copy and their own Google description", () => {
+  for (const slug of ["kelvin-grove", "milson", "takaro", "west-end"]) {
+    const suburb = suburbs.find((s) => s.slug === slug)!;
+    const n = words(suburb.commentary ?? []);
+    assert.ok(n >= 150 && n <= 300, `/suburbs/${slug} has ${n} words`);
+    const d = suburb.seoDescription ?? "";
+    assert.ok(d.length >= 100 && d.length <= DESCRIPTION_MAX, `/suburbs/${slug} description is ${d.length} chars`);
+  }
+});
+
+test("Month 2 service pages carry 150–300 words of local commentary", () => {
+  const month2 = ["feilding", "kelvin-grove", "milson", "takaro", "west-end"];
+  for (const page of localServicePages.filter((p) => month2.includes(p.area))) {
+    const n = words(page.commentary);
+    assert.ok(n >= 150 && n <= 300, `/${page.service}/${page.area} has ${n} words`);
   }
 });
 

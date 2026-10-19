@@ -13,12 +13,14 @@ import { FeeText } from "@/components/brand/commission";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container, Section, SectionHeading } from "@/components/brand/primitives";
 import { VideoEmbed } from "@/components/brand/video-embed";
+import { localServicePath, type LocalServiceArea } from "@/lib/local-services";
 import { VideoObjectJsonLd } from "@/components/seo/json-ld";
 import {
   getAreas,
   getFeaturedListings,
   getFeaturedTestimonials,
   getHomeCopy,
+  getLocalServiceAreas,
   getSiteConfig,
   getSiteVideos,
   getSuburbs,
@@ -44,6 +46,7 @@ export default async function HomePage() {
   const reviews = await getFeaturedTestimonials(3);
   const areas = await getAreas();
   const localities = (await getSuburbs()).filter((s) => s.parent);
+  const appraisalAreas = await getLocalServiceAreas();
   const copy = await getHomeCopy();
   const { social } = await getSiteConfig();
   return (
@@ -221,6 +224,26 @@ export default async function HomePage() {
                 </li>
               ))}
             </ul>
+          )}
+
+          {/* Straight to the area appraisal pages (Feilding, Ashhurst, the
+              priority suburbs…) — the seller-intent pages the SEO work is
+              built around, one click from the strongest page on the site. */}
+          {appraisalAreas.length > 0 && (
+            <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">{copy.suburbsAppraisalLabel}</span>{" "}
+              {appraisalAreas.map((area, i) => (
+                <span key={area.slug}>
+                  {i > 0 && <span aria-hidden> · </span>}
+                  <Link
+                    href={localServicePath("appraisal", area.slug as LocalServiceArea)}
+                    className="font-medium text-primary hover:underline"
+                  >
+                    {area.name}
+                  </Link>
+                </span>
+              ))}
+            </p>
           )}
         </Container>
       </Section>

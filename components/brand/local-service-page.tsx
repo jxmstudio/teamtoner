@@ -34,6 +34,7 @@ import {
   getSellCopy,
   getSiteConfig,
   getSoldBySuburb,
+  getSuburbName,
 } from "@/lib/data";
 
 const tel = (n: string) => `tel:${n.replace(/\s/g, "")}`;
@@ -57,13 +58,14 @@ export async function LocalServicePage({
   copy: LocalServiceCopy;
 }) {
   const meta = SERVICE_META[service];
-  const [config, sold, listings, [testimonial], areas, sellCopy] = await Promise.all([
+  const [config, sold, listings, [testimonial], areas, sellCopy, parentName] = await Promise.all([
     getSiteConfig(),
     getSoldBySuburb(area.slug),
     getListingsBySuburb(area.slug),
     getFeaturedTestimonials(1),
     getLocalServiceAreas(),
     getSellCopy(),
+    area.parent ? getSuburbName(area.parent) : undefined,
   ]);
   const { agents, stats } = config;
   const otherAreas = areas.filter((a) => a.slug !== area.slug);
@@ -77,6 +79,7 @@ export async function LocalServicePage({
         description={copy.intro}
         serviceType={meta.schemaType}
         areaName={area.name}
+        containedIn={parentName}
         path={path}
         free={service === "appraisal"}
       />
@@ -294,8 +297,8 @@ export async function LocalServicePage({
       </Section>
 
       {/* Cross-links: the sibling service for this area, the area hub, and the
-          same service in the other areas — so the eight pages form a cluster
-          rather than eight dead ends. */}
+          same service in the other areas — so the service pages form a
+          cluster rather than a set of dead ends. */}
       <Section>
         <Container>
           <h2 className="text-2xl font-bold text-foreground">More for {area.name} homeowners</h2>

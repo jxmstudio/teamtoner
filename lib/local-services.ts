@@ -7,19 +7,34 @@ import type { Faq } from "./content/types";
  * area-qualified — "property appraisal Ashhurst", "selling a house in
  * Feilding" — and the area hub at /suburbs/<area> already owns the broader
  * "<area> real estate" intent. One page per intent per area, and only for the
- * four priority areas: rolling the template out to every suburb would be
- * doorway-page territory with no search volume behind it.
+ * four areas plus the four Palmerston North suburbs the client named as
+ * priorities (Month 2 brief, Oct 2026: Kelvin Grove, Milson, Takaro, West
+ * End). Each carries its own local copy; rolling the template out to every
+ * suburb would be doorway-page territory with no search volume behind it.
  */
 export const LOCAL_SERVICES = ["appraisal", "sell"] as const;
 export type LocalService = (typeof LOCAL_SERVICES)[number];
 
-/** Area slugs (top-level entries in lib/content/suburbs.ts) that get service pages. */
-export const LOCAL_SERVICE_AREAS = ["palmerston-north", "feilding", "ashhurst", "manawatu"] as const;
+/**
+ * Location slugs (entries in lib/content/suburbs.ts) that get service pages:
+ * the four top-level areas, then the priority Palmerston North suburbs.
+ * Highbury and Sanson are deliberately absent (client, Oct 2026).
+ */
+export const LOCAL_SERVICE_AREAS = [
+  "palmerston-north",
+  "feilding",
+  "ashhurst",
+  "manawatu",
+  "kelvin-grove",
+  "milson",
+  "takaro",
+  "west-end",
+] as const;
 export type LocalServiceArea = (typeof LOCAL_SERVICE_AREAS)[number];
 
 export interface LocalServicePage {
   service: LocalService;
-  /** Area slug — must match a top-level suburb page. */
+  /** Area slug — must match a suburb page. */
   area: LocalServiceArea;
   /** H1. */
   headline: string;

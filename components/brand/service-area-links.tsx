@@ -6,8 +6,8 @@ import { getLocalServiceAreas } from "@/lib/data";
 
 /**
  * "Choose your area" strip on the generic /sell and /appraisal pages, linking
- * each to its four area-specific pages. That link is what tells Google the
- * area pages are the canonical home for "<service> <area>" searches.
+ * each to its area-specific pages. That link is what tells Google the area
+ * pages are the canonical home for "<service> <area>" searches.
  */
 export async function ServiceAreaLinks({
   service,

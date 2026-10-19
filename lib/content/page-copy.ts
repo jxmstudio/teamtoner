@@ -59,6 +59,7 @@ export const homeCopy = {
   suburbsTitle: "Suburbs we know inside out",
   suburbsDescription:
     "Deep local knowledge across Palmerston North and the wider Manawatū.",
+  suburbsAppraisalLabel: "Free property appraisals in:",
 };
 
 export const aboutCopy = {

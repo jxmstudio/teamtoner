@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { suburbs as fixtureSuburbs } from "../../lib/content/suburbs";
-import { faqList } from "./pageCopy";
+import { faqList, needsReviewField } from "./pageCopy";
 
 const areaOptions = fixtureSuburbs
   .filter((s) => !s.parent)
@@ -53,13 +53,26 @@ export const suburb = defineType({
       of: [{ type: "text", rows: 3 }],
       description: "Local market paragraphs — this is what makes the page worth reading. One entry per paragraph.",
     }),
+    defineField({
+      name: "seoDescription",
+      title: "Google description",
+      type: "text",
+      rows: 2,
+      description:
+        "The snippet under the page title in Google results. Aim for 120–158 characters; leave empty to use the standard wording.",
+      validation: (rule) => rule.max(158).warning("Google shows about 158 characters."),
+    }),
     {
       ...faqList("faqs", "Local FAQs"),
       description:
         "Optional. Questions specific to this suburb or area (\"Who buys in Ashhurst?\"). Leave empty to show the standard selling questions. Write \u201c2% + GST\u201d and ranking \u201c*\u201ds literally.",
     },
+    needsReviewField(),
   ],
   preview: {
-    select: { title: "name", subtitle: "blurb" },
+    select: { title: "name", subtitle: "blurb", needsReview: "needsReview" },
+    prepare({ title, subtitle, needsReview }) {
+      return { title, subtitle: needsReview ? `Draft copy — please review · ${subtitle ?? ""}` : subtitle };
+    },
   },
 });

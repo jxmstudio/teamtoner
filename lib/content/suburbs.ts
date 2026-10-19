@@ -57,6 +57,7 @@ export const suburbs: Suburb[] = [
       "Feilding blends established character housing around the square with newer subdivisions on the town's edges, and it consistently appeals to families and downsizers wanting a genuine town centre on their doorstep.",
       "Buyers come from three directions: families who want a real town with schools, sport and shops within walking distance; downsizers leaving lifestyle blocks for something easier; and Palmerston North buyers who get more house for their money a short drive up the road. Marketing a Feilding home well means reaching all three.",
       "The housing stock is more varied than most towns of its size — villas and bungalows near the centre, post-war family homes, new builds on the edges and lifestyle properties a few minutes out. Two homes a street apart can sit in different price brackets, so we price from the right comparables rather than a town-wide average.",
+      "It's a town with a strong identity. Feilding is the seat of the Manawatū District and has won New Zealand's Most Beautiful Town award many times; the saleyards in the centre of town, Manfeild on its southern edge and the Edwardian buildings around Manchester Square all give it a character of its own. Feilding High School, Feilding Intermediate and primary schools including Lytton Street, Manchester Street and North Street mean families can stay in town through every stage of schooling.",
       "Thinking of selling in Feilding? A free appraisal from Allan and Karen gives you an evidence-based range from recent Feilding sales, with no obligation to list.",
     ],
     faqs: [
@@ -75,6 +76,14 @@ export const suburbs: Suburb[] = [
       {
         q: "Who buys in Feilding?",
         a: "Families wanting a genuine town centre, downsizers leaving lifestyle blocks, and Palmerston North buyers looking for more house for their money. Character homes and lifestyle properties each draw their own buyers, and we market to them specifically.",
+      },
+      {
+        q: "What schools are in Feilding?",
+        a: "Feilding High School (Years 9–13), Feilding Intermediate (Years 7–8) and several primary schools, including Lytton Street, Manchester Street, North Street, St Joseph's and Taonui. School zones change, so we confirm the zoning for your address before your home goes to market.",
+      },
+      {
+        q: "How far is Feilding from Palmerston North?",
+        a: "About 20 km north on State Highway 54, which is why Feilding suits people who work in the city and why Palmerston North buyers regularly look here. Our marketing reaches them as well as buyers already in Feilding.",
       },
     ],
   },
@@ -161,9 +170,32 @@ export const suburbs: Suburb[] = [
     parent: "palmerston-north",
     blurb:
       "A popular northern suburb mixing established family homes with newer subdivisions — consistently strong first-home and family buyer interest.",
+    // Month 2 copy (Oct 2026), draft for Allan & Karen's review.
+    seoDescription:
+      "Kelvin Grove real estate agents Allan & Karen Toner: recent Kelvin Grove sales, homes for sale and a free, no-obligation property appraisal.",
     commentary: [
-      "Kelvin Grove offers some of the city's best value for family living, with easy access to schools, shops and the northern arterial routes.",
-      "Newer subdivisions sit alongside established streets, so accurate comparable-sales evidence matters — two homes a block apart can sit in quite different price brackets.",
+      "Kelvin Grove sits on Palmerston North's north-eastern side, with the Manawatū River to the south, Roslyn to the west and Whakarongo to the east. Its first houses went up in the late 1960s, and the suburb has kept growing ever since — newer streets and subdivisions now sit right alongside the established ones.",
+      "That mix shapes the market. Established family homes on full sections are a few minutes from modern, low-maintenance builds, and the two attract different buyers at different prices. First-home buyers, growing families and people wanting a newer home without leaving the city all look here, so we price each home against genuinely comparable sales rather than a suburb-wide average.",
+      "Schools come up early in every Kelvin Grove conversation. Cornerstone Christian School and Te Kura Kaupapa Māori o Manawatu are in the suburb, and Whakarongo School is just over the boundary to the east. Kelvin Grove Park and Kaimanawa Park add green space, with the river pathways close by.",
+      "Thinking of selling in Kelvin Grove? A free appraisal from Allan and Karen gives you a price range built from recent Kelvin Grove sales, with no obligation to list.",
+    ],
+    faqs: [
+      {
+        q: "Who buys houses in Kelvin Grove?",
+        a: "Mostly first-home buyers, young families and people moving up to a newer home. Because established streets and recent subdivisions sit side by side, buyers can find very different homes a few blocks apart, so we market each property to the buyers its age and style suit.",
+      },
+      {
+        q: "What schools are near Kelvin Grove?",
+        a: "Cornerstone Christian School (Years 1–13) and Te Kura Kaupapa Māori o Manawatu are in Kelvin Grove, and Whakarongo School is next door in Whakarongo. School zones change, so we confirm the zoning for your address before your home goes to market.",
+      },
+      {
+        q: "Do Team Toner sell houses in Kelvin Grove?",
+        a: "Yes. Allan & Karen Toner sell throughout Palmerston North, including Kelvin Grove — our recent Kelvin Grove sales are listed on this page. You get two experienced agents working on your sale rather than one agent and an assistant.",
+      },
+      {
+        q: "How do I get a free property appraisal in Kelvin Grove?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both of us come to the appraisal, the range is built from recent Kelvin Grove sales, and there's no obligation to list.",
+      },
     ],
   },
   {
@@ -193,9 +225,32 @@ export const suburbs: Suburb[] = [
     parent: "palmerston-north",
     blurb:
       "Character bungalows and villas within walking distance of the Square — one of the city's most distinctive streetscapes.",
+    // Month 2 copy (Oct 2026), draft for Allan & Karen's review.
+    seoDescription:
+      "West End real estate agents Allan & Karen Toner: character homes, recent West End sales and a free, no-obligation property appraisal.",
     commentary: [
-      "West End is character-home territory, and buyers pay for the genuine article: original features, sympathetic renovation and a section that suits the home.",
-      "Its walkability to the Square, Victoria Esplanade and the hospital keeps demand broad across families, professionals and downsizers.",
+      "West End sits on the western side of Palmerston North's city centre, and it's one of the city's most distinctive streetscapes — character bungalows and villas on established streets, within easy reach of the Square and Massey University.",
+      "Its biggest drawcard is on the doorstep. The Victoria Esplanade, the Lido, Fitzherbert Park and Ongley Park are all in or beside West End, giving the suburb a lifestyle appeal few parts of the city can match.",
+      "West End School (Years 1–6) is in the suburb, and most students go on to Monrad Intermediate for Years 7 and 8. Families, professionals working in town or at Massey, and downsizers who want to be close to the Esplanade and the city centre all buy here.",
+      "Buyers pay for the genuine article in West End: original features, sympathetic renovation, insulation and heating that make an older home comfortable, and a section that suits the house. We price from recent West End sales and the character homes buyers will compare yours with.",
+    ],
+    faqs: [
+      {
+        q: "Who buys in West End?",
+        a: "Families wanting a character home near the Esplanade and West End School, professionals working in town or at Massey, and downsizers who want parks and the city centre within easy reach.",
+      },
+      {
+        q: "What schools are in West End?",
+        a: "West End School is a state primary for Years 1–6, and most students then go to Monrad Intermediate for Years 7 and 8. School zones change, so we confirm the zoning for your address before your home goes to market.",
+      },
+      {
+        q: "What sells best in West End?",
+        a: "Character homes that keep their original features while being warm and comfortable to live in. Buyers look closely at insulation, heating, the roof and any renovation work, so we gather those details before your home goes to market.",
+      },
+      {
+        q: "How do I get a free property appraisal in West End?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both of us come to the appraisal, the range is built from recent West End sales, and there's no obligation to list.",
+      },
     ],
   },
   {
@@ -214,8 +269,32 @@ export const suburbs: Suburb[] = [
     parent: "palmerston-north",
     blurb:
       "A tidy, settled northern suburb popular with families, downsizers and buyers wanting a low-maintenance home.",
+    // Month 2 copy (Oct 2026), draft for Allan & Karen's review.
+    seoDescription:
+      "Milson real estate agents Allan & Karen Toner: recent Milson sales, homes for sale and a free, no-obligation property appraisal from two local agents.",
     commentary: [
-      "Milson attracts buyers after a straightforward, well-kept home close to the airport, schools and the northern retail centres. Presentation and sensible pricing do the heavy lifting here.",
+      "Milson lies on Palmerston North's northern side, across the main trunk railway from the city, and it's home to Palmerston North Airport. The suburb began in 1926 as a railway settlement — around 70 houses were built for the workers on the Milson deviation, and most are still standing — and most of the rest of Milson was built from the 1950s onwards.",
+      "Today it's a settled suburb of family homes on decent sections, with streets and parks named on space and American-presidential themes: Apollo Parade, Apollo Park and its space-themed playground, and Kennedy Park. Buyers tend to want a straightforward, well-kept home in a quiet street, close to schools, the northern shops and an easy run into town.",
+      "Milson School (Years 1–6) and St Peter's College (Years 7–13) are both in the suburb, which keeps families coming back. Downsizers like it for the manageable sections and quiet streets, and first-home buyers for the value on the northern side of the railway.",
+      "Presentation and sensible pricing do the heavy lifting here. If you're weighing up a move, a free appraisal from Allan and Karen gives you a range built from recent Milson sales, with no obligation to list.",
+    ],
+    faqs: [
+      {
+        q: "Who buys in Milson?",
+        a: "Families who want to be close to Milson School and St Peter's College, first-home buyers looking for value north of the railway, and downsizers wanting an easy-care home in a quiet street. We market each Milson home to the buyers it suits best.",
+      },
+      {
+        q: "What schools are in Milson?",
+        a: "Milson School is a state primary for Years 1–6, and St Peter's College, a state-integrated Catholic school for Years 7–13, is also in Milson. We confirm the school details for your address before your home goes to market.",
+      },
+      {
+        q: "Do Team Toner sell houses in Milson?",
+        a: "Yes. Allan & Karen Toner sell throughout Palmerston North, including Milson — our recent Milson sales are listed on this page. You get two experienced agents working on your sale rather than one agent and an assistant.",
+      },
+      {
+        q: "How do I get a free property appraisal in Milson?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both of us come to the appraisal, the range is built from recent Milson sales, and there's no obligation to list.",
+      },
     ],
   },
   {
@@ -248,9 +327,32 @@ export const suburbs: Suburb[] = [
     parent: "palmerston-north",
     blurb:
       "Central, well-connected and consistently in demand — Takaro sits within easy reach of the Square, the Esplanade and the city's western schools.",
+    // Month 2 copy (Oct 2026), draft for Allan & Karen's review.
+    seoDescription:
+      "Takaro real estate agents Allan & Karen Toner: recent Takaro sales, homes for sale and a free, no-obligation property appraisal from two local agents.",
     commentary: [
-      "Takaro's appeal is position: flat, central and walkable or a short drive to almost everything in Palmerston North, with Takaro Park and the western sports grounds on the doorstep.",
-      "The housing is a mix of solid post-war family homes, tidy units and a growing number of renovated properties, which keeps buyer interest broad — first-home buyers, families trading up and investors all shop here.",
+      "Takaro sits just north of Palmerston North's city centre, beside the hospital, and its appeal is position: flat, central and close to almost everything the city offers. Takaro Park, Coronation Park and the Kawau Stream Reserve give it more green space than its central location suggests.",
+      "Schools are a big part of the draw. Takaro School and Our Lady of Lourdes School are primary schools in the suburb, and Palmerston North Boys' High School and Queen Elizabeth College are in Takaro too, so families can cover every stage of schooling close to home.",
+      "The housing is a mix of solid post-war family homes, tidy units and a growing number of renovated properties, which keeps buyer interest broad — first-home buyers, families trading up, investors and people who work nearby and want a short commute all look here.",
+      "Because condition and section size vary so much from street to street, a Takaro appraisal has to come from the right comparable sales. Allan and Karen will show you the recent Takaro sales behind your range — free, with no obligation to list.",
+    ],
+    faqs: [
+      {
+        q: "Who buys houses in Takaro?",
+        a: "First-home buyers, families wanting to be close to schools, investors, and people who work at the hospital or in town and want a short commute. A well-presented Takaro home often draws interest from more than one of those groups at once.",
+      },
+      {
+        q: "What schools are in Takaro?",
+        a: "Takaro School and Our Lady of Lourdes School (both primary), plus Palmerston North Boys' High School and Queen Elizabeth College, which has taken Years 7–13 since 2024. School zones change, so we confirm the zoning for your address before your home goes to market.",
+      },
+      {
+        q: "Is Takaro close to the city centre?",
+        a: "Yes. Takaro sits just north of the city centre, so the Square, the hospital and the city's shops are a short trip away — one of the main reasons buyers choose it.",
+      },
+      {
+        q: "How do I get a free property appraisal in Takaro?",
+        a: "Book online or call Allan on 027 255 8735 or Karen on 027 214 5700. Both of us come to the appraisal, the range is built from recent Takaro sales, and there's no obligation to list.",
+      },
     ],
   },
   {

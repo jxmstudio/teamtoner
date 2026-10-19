@@ -1,7 +1,7 @@
 import { defineField, defineType } from "sanity";
 import { suburbs as fixtureSuburbs } from "../../lib/content/suburbs";
 import { LOCAL_SERVICE_AREAS } from "../../lib/local-services";
-import { faqList } from "./pageCopy";
+import { faqList, needsReviewField } from "./pageCopy";
 
 const areaOptions = LOCAL_SERVICE_AREAS.map((slug) => ({
   title: fixtureSuburbs.find((s) => s.slug === slug)?.name ?? slug,
@@ -9,7 +9,8 @@ const areaOptions = LOCAL_SERVICE_AREAS.map((slug) => ({
 }));
 
 /**
- * One document per service × area page: /appraisal/<area> and /sell/<area>.
+ * One document per service × location page: /appraisal/<area> and
+ * /sell/<area>, for the areas and priority suburbs in LOCAL_SERVICE_AREAS.
  * Mirrors `LocalServicePage` in lib/local-services.ts. Every field is
  * optional here because lib/data.ts merges the document over the fixture
  * copy — an empty field shows the shipped wording, never a blank.
@@ -79,14 +80,15 @@ export const localServicePage = defineType({
       description: "Short bullet promises.",
     }),
     faqList(),
+    needsReviewField(),
   ],
   preview: {
-    select: { service: "service", area: "area", headline: "headline" },
-    prepare({ service, area, headline }) {
+    select: { service: "service", area: "area", headline: "headline", needsReview: "needsReview" },
+    prepare({ service, area, headline, needsReview }) {
       const areaName = areaOptions.find((o) => o.value === area)?.title ?? area;
       return {
         title: headline || `${service === "sell" ? "Selling" : "Appraisal"} — ${areaName}`,
-        subtitle: `/${service}/${area}`,
+        subtitle: `/${service}/${area}${needsReview ? " · Draft copy — please review" : ""}`,
       };
     },
   },
