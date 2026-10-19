@@ -1,5 +1,5 @@
 import { entitySameAs, siteConfig } from "@/lib/site";
-import { formatListingAddress, getSiteConfig, getSuburbs } from "@/lib/data";
+import { getSiteConfig, getSuburbs } from "@/lib/data";
 import { videoId } from "@/components/brand/video-embed";
 import type { Article, Guide, Listing, SiteVideo } from "@/lib/content/types";
 
@@ -22,6 +22,23 @@ function defined<T extends Record<string, unknown>>(obj: T): Partial<T> {
 }
 
 const ORG_ID = `${siteConfig.url}#organization`;
+
+/** Absolute URL for an image that may be a site path or already a CDN URL. */
+const absoluteUrl = (src: string) => (/^https?:\/\//.test(src) ? src : `${siteConfig.url}${src}`);
+
+/**
+ * Allan & Karen as Article authors, matching the visible "Written by" byline
+ * on guides and insights — one Person each, as Google asks for multiple
+ * authors, tied back to the business entity.
+ */
+const articleAuthors = () =>
+  [siteConfig.agents.allan, siteConfig.agents.karen].map((agent) => ({
+    "@type": "Person",
+    name: agent.name,
+    jobTitle: agent.role,
+    url: `${siteConfig.url}/about`,
+    worksFor: { "@id": ORG_ID },
+  }));
 
 /**
  * The Team Toner business entity, rendered site-wide from the root layout.
@@ -226,15 +243,7 @@ export function InsightArticleJsonLd({ article, category }: { article: Article; 
         datePublished: article.published,
         dateModified: article.updated ?? article.published,
         inLanguage: "en-NZ",
-        // Allan & Karen Toner, matching the visible byline — one Person each,
-        // as Google asks for multiple authors, tied to the business entity.
-        author: [siteConfig.agents.allan, siteConfig.agents.karen].map((agent) => ({
-          "@type": "Person",
-          name: agent.name,
-          jobTitle: agent.role,
-          url: `${siteConfig.url}/about`,
-          worksFor: { "@id": ORG_ID },
-        })),
+        author: articleAuthors(),
         publisher: { "@id": ORG_ID },
         articleSection: category,
       })}
@@ -255,7 +264,7 @@ export function GuideArticleJsonLd({ guide }: { guide: Guide }) {
         datePublished: guide.published,
         dateModified: guide.updated ?? guide.published,
         inLanguage: "en-NZ",
-        author: { "@id": ORG_ID },
+        author: articleAuthors(),
         publisher: { "@id": ORG_ID },
         about: guide.category,
       })}
@@ -335,10 +344,13 @@ export function ListingJsonLd({
       data={{
         "@context": "https://schema.org",
         "@type": "SingleFamilyResidence",
-        name: formatListingAddress(listing.address, suburbName),
+        // The visible H1; the suburb is in the address below.
+        name: listing.address,
         description: listing.description.join(" "),
         url: `${siteConfig.url}/listings/${listing.slug}`,
-        image: listing.images.map((src) => `${siteConfig.url}${src}`),
+        // CMS photos are already absolute CDN URLs; prefixing them with the
+        // site URL produced "https://www.teamtoner.co.nzhttps://cdn…".
+        image: listing.images.map(absoluteUrl),
         // Bare-land listings have no rooms; JSON.stringify drops the undefineds.
         numberOfBedrooms: listing.beds || undefined,
         numberOfBathroomsTotal: listing.baths || undefined,

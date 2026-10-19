@@ -20,6 +20,7 @@ import {
   getListingBySlug,
   getServiceAreaFor,
   getSiteConfig,
+  getSuburbBySlug,
   getSuburbName,
 } from "@/lib/data";
 import {
@@ -110,6 +111,10 @@ export default async function ListingPage(
     getServiceAreaFor(listing.suburb),
     getSiteConfig(),
   ]);
+  // The appraisal link goes to the listing's own suburb page when it has one
+  // (Kelvin Grove, Feilding…), else its area's, else Palmerston North's — never
+  // the generic /appraisal, so every listing feeds an area page.
+  const appraisalArea = serviceArea ?? (await getSuburbBySlug("palmerston-north"));
   const sold = listing.status === "sold";
   const documents = listingDocuments(listing);
   const hasRooms = listing.beds > 0 || listing.baths > 0 || listing.parking > 0;
@@ -273,13 +278,13 @@ export default async function ListingPage(
                 <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium">
                   <Link
                     href={
-                      serviceArea
-                        ? localServicePath("appraisal", serviceArea.slug as LocalServiceArea)
+                      appraisalArea
+                        ? localServicePath("appraisal", appraisalArea.slug as LocalServiceArea)
                         : "/appraisal"
                     }
                     className="text-primary hover:underline"
                   >
-                    Free appraisal{serviceArea ? ` in ${serviceArea.name}` : ""}
+                    Free appraisal{appraisalArea ? ` in ${appraisalArea.name}` : ""}
                   </Link>
                   <Link href={`/suburbs/${listing.suburb}`} className="text-primary hover:underline">
                     {suburbName} real estate
