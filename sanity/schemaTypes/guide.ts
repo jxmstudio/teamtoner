@@ -52,7 +52,7 @@ export const guide = defineType({
       title: "Display order",
       type: "number",
       description:
-        "Controls where this guide appears on the Guides page. Lower numbers show first (1 is the top spot). Leave blank to follow the numbered guides, oldest first.",
+        "The position this guide takes on the Guides page: 1 is the top spot, 2 is second, and so on. Give each guide its own number. Leave blank to fill the remaining spots, oldest first.",
       group: "guide",
       validation: (rule) => rule.integer().min(1),
     }),

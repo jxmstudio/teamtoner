@@ -35,8 +35,9 @@ const structure: StructureResolver = (S) =>
             )
         ),
       S.divider(),
-      // Listed in the order the site shows them: numbered listings first, then
-      // newest — the same ordering LISTINGS_QUERY applies.
+      // Numbered listings first, then newest — LISTINGS_QUERY's order. The
+      // site then treats each number as a position (lib/display-order.ts), so
+      // the two only differ when listings share a number.
       S.listItem()
         .title("Listings")
         .id("listing")

@@ -6,9 +6,10 @@ import groq from "groq";
  * about where content came from.
  */
 /**
- * Listings in site display order: hand-numbered ones first (lowest number on
- * top), then everything else newest first. The Sold page re-sorts by sold
- * date in lib/data.ts.
+ * Listings, numbered ones first and newest first within each number. This is
+ * only the fallback order: lib/data.ts splits current from sold and then
+ * treats each "Display order" number as a position (lib/display-order.ts),
+ * which relies on same-numbered and unnumbered listings arriving newest first.
  */
 export const LISTINGS_QUERY = groq`*[_type == "listing" && defined(slug.current)] | order(coalesce(sortOrder, 1000000) asc, coalesce(soldDate, _createdAt) desc) {
   "slug": slug.current,
@@ -78,8 +79,8 @@ export const TESTIMONIALS_QUERY = groq`*[_type == "testimonial"] | order(coalesc
 }`;
 
 /**
- * Guides in site display order: hand-numbered ones first (lowest number on
- * top), then the rest oldest first — the same scheme as listings.
+ * Guides, numbered ones first, then oldest first — the fallback order that
+ * getGuides in lib/data.ts lays out by position, the same scheme as listings.
  */
 export const GUIDES_QUERY = groq`*[_type == "guide" && defined(slug.current)] | order(coalesce(sortOrder, 1000000) asc, _createdAt asc) {
   "slug": slug.current,

@@ -66,9 +66,14 @@ onto it — creating the "Featured properties" document from the old
 **Listing order, featured grid and sold documents** (client requests from the
 2 Sep 2026 handover):
 
-- Every listing has a **Display order** number. Numbered listings come first
-  (1 on top) on the Listings page, suburb pages and the home page; unnumbered
-  ones follow, newest first. The studio's Listings list shows the same order.
+- Every listing has a **Display order** number, which is a position: 2 means
+  "show second" on the Listings page (suburb pages and the home page follow the
+  same order), counted among current listings only; sold listings are placed
+  the same way on the Sold page. Listings sharing a number: the newest takes
+  the spot and the rest follow it. Unnumbered ones fill the remaining spots,
+  newest first. The logic is `lib/display-order.ts`; the studio warns under the
+  field when a number is shared. The studio's Listings list sorts by number
+  only, so it can differ from the site when numbers repeat.
 - **Featured properties** (pinned under Site settings) picks the home page's
   large hero card and the two smaller cards, drag-to-reorder. Sold picks are
   skipped and empty cells are filled from the current listings in display
@@ -93,9 +98,9 @@ onto it — creating the "Featured properties" document from the old
 
 **Guide order, footer icons and menu labels** (client requests, 5 Sep 2026):
 
-- Every guide has a **Display order** number, like listings: numbered guides
-  come first (1 on top) on /resources, unnumbered ones follow oldest first.
-  The studio's Guides list shows the same order. `scripts/patch-guide-order.ts`
+- Every guide has a **Display order** number, like listings: the number is the
+  guide's position on /resources, and unnumbered ones fill the remaining spots
+  oldest first. `scripts/patch-guide-order.ts`
   applied the client's five-guide order (and cleared a stray `featured` flag
   that the studio reported as "Unknown field found").
 - Every profile filled in under **Site settings → Social & profiles** shows as

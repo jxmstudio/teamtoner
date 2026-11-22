@@ -2,6 +2,7 @@ import { defineField, defineType } from "sanity";
 import { OTHER_DOCUMENT_TITLE, PROPERTY_DOCUMENT_TITLES } from "../../lib/property-documents";
 import { SuburbInput } from "../components/suburb-input";
 import { PhotosInput } from "../components/photos-input";
+import { apiVersion } from "../env";
 
 /**
  * A property listing. Mirrors the `Listing` type in lib/content/types.ts —
@@ -121,9 +122,35 @@ export const listing = defineType({
       title: "Display order",
       type: "number",
       description:
-        "Controls where this listing appears on the Listings page, Sold page, suburb pages and the home page. Lower numbers show first (1 is the top spot). Leave blank to sort by newest after any numbered listings.",
+        "The position this listing takes on the Listings page (or the Sold page once it is sold): 1 is the top spot, 2 is second, and so on. Give each listing its own number. If two share a number, the newer one gets the spot and the other follows it. Leave blank to fill the remaining spots, newest first.",
       group: "details",
-      validation: (rule) => rule.integer().min(1),
+      validation: (rule) => [
+        rule.integer().min(1),
+        // Not an error — sharing a number still works (see
+        // lib/display-order.ts) — but it is the usual reason a listing isn't
+        // where its number says, so say so right under the field.
+        rule
+          .custom(async (value, context) => {
+            if (typeof value !== "number") return true;
+            const doc = context.document as { _id?: string; status?: string } | undefined;
+            const sold = doc?.status === "sold";
+            try {
+              const others = await context
+                .getClient({ apiVersion })
+                .withConfig({ perspective: "published" })
+                .fetch<number>(
+                  `count(*[_type == "listing" && sortOrder == $n && _id != $id && (status == "sold") == $sold])`,
+                  { n: value, id: (doc?._id ?? "").replace(/^drafts\./, ""), sold }
+                );
+              if (!others) return true;
+              const group = sold ? "sold" : "current";
+              return `${others} other ${group} listing${others === 1 ? " is" : "s are"} also on ${value}. The newest of them takes spot ${value} and the rest follow, so give this one a number of its own for an exact position.`;
+            } catch {
+              return true;
+            }
+          })
+          .warning(),
+      ],
     }),
     defineField({
       name: "description",
@@ -318,6 +345,17 @@ export const listing = defineType({
       description: "Orders the Sold page (newest first).",
       group: "sold",
       hidden: ({ document }) => document?.status !== "sold",
+      // A sale with no date counts as the newest so it never sinks to the
+      // bottom, which also means it stays above every dated sale until one is
+      // entered.
+      validation: (rule) =>
+        rule
+          .custom((value, context) =>
+            context.document?.status === "sold" && !value
+              ? "Add the sold date. Without one this sale stays above every dated sale on the Sold page."
+              : true
+          )
+          .warning(),
     }),
   ],
   orderings: [

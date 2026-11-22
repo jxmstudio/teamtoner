@@ -13,6 +13,7 @@ import {
 } from "@/lib/local-services";
 import type { Article, Guide, Listing, SiteVideo, Suburb, Testimonial } from "@/lib/content/types";
 import { byNewest, inCategory } from "@/lib/insights";
+import { placeByDisplayOrder } from "@/lib/display-order";
 import { sortSoldListings } from "@/lib/sold-order";
 import {
   aboutCopy,
@@ -182,8 +183,13 @@ export function formatListingAddress(address: string, suburbName: string): strin
     : `${address}, ${suburbName}`;
 }
 
+/**
+ * Current (unsold) listings in site order: newest first, with "Display order"
+ * numbers honoured as positions among the current listings only — a sold
+ * home's number never takes a spot on the Listings page.
+ */
 export async function getListings(): Promise<Listing[]> {
-  return (await loadListings()).filter((l) => l.status !== "sold");
+  return placeByDisplayOrder((await loadListings()).filter((l) => l.status !== "sold"));
 }
 
 type FeaturedPicks = { hero: string | null; others: string[] } | null;
@@ -300,15 +306,9 @@ export async function getFeaturedTestimonials(limit = 3): Promise<Testimonial[]>
   return (featured.length ? featured : all).slice(0, limit);
 }
 
-/** Numbered guides first (lowest on top), the rest in source order — the fixture-side twin of GUIDES_QUERY's ordering. */
-function byDisplayOrder(guides: Guide[]): Guide[] {
-  return [...guides].sort(
-    (a, b) => (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER)
-  );
-}
-
+/** Guides in site order: "Display order" numbers as positions, the rest oldest first (see placeByDisplayOrder). */
 export async function getGuides(): Promise<Guide[]> {
-  return byDisplayOrder(await loadGuides());
+  return placeByDisplayOrder(await loadGuides());
 }
 
 export async function getGuideBySlug(slug: string): Promise<Guide | undefined> {
